@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultLives - Nevathon 2.0</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel para JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        background: '#09090b',
+                        surface: '#121215',
+                        surfaceHighlight: '#1e1e24',
+                        accent: '#6366f1', // Indigo 500
+                        accentHover: '#4f46e5', // Indigo 600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #09090b;
+            color: #e2e8f0;
+            overflow: hidden;
+        }
+        
+        /* Scrollbar refinada */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46; 
+        }
+
+        /* Animações sutis */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .glass-header {
+            background: rgba(9, 9, 11, 0.75);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-glass {
+            background: rgba(18, 18, 21, 0.95);
+            border-left: 1px solid rgba(255, 255, 255, 0.06);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- Componentes de Ícones Minimalistas ---
+        const PlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
+        const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
+        const MaximizeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>;
+        const MessageIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>;
+        const MapIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>;
+        const LayoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>;
+        const TwitchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>;
+        const InstagramIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>;
+
+        const App = () => {
+            const [streamers, setStreamers] = useState([]);
+            const [inputVal, setInputVal] = useState("");
+            const [platform, setPlatform] = useState("twitch");
+            const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+            const [activeChatTab, setActiveChatTab] = useState("map");
+            const [hostname, setHostname] = useState("localhost");
+
+            useEffect(() => {
+                const saved = localStorage.getItem('multlives-streamers');
+                if (saved) {
+                    setStreamers(JSON.parse(saved));
+                }
+                const host = window.location.hostname;
+                setHostname(host || "localhost");
+            }, []);
+
+            useEffect(() => {
+                localStorage.setItem('multlives-streamers', JSON.stringify(streamers));
+            }, [streamers]);
+
+            const addStreamer = (e) => {
+                e.preventDefault();
+                if (!inputVal.trim()) return;
+
+                const cleanName = inputVal.trim().toLowerCase();
+                
+                if (streamers.some(s => s.name === cleanName && s.platform === platform)) {
+                    alert("Streamer já adicionado!");
+                    return;
+                }
+
+                const newStreamer = {
+                    id: Date.now().toString(),
+                    name: cleanName,
+                    platform: platform
+                };
+
+                const updatedList = [...streamers, newStreamer];
+                setStreamers(updatedList);
+                setInputVal("");
+                
+                if (updatedList.length === 1) {
+                    setActiveChatTab(newStreamer.id);
+                }
+            };
+
+            const removeStreamer = (id) => {
+                const newList = streamers.filter(s => s.id !== id);
+                setStreamers(newList);
+                if (activeChatTab === id) {
+                    setActiveChatTab("map");
+                }
+            };
+
+            const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+            const toggleFullscreen = () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            };
+
+            const getGridClass = () => {
+                const count = streamers.length;
+                if (count === 0) return "flex items-center justify-center";
+                if (count === 1) return "grid grid-cols-1";
+                if (count === 2) return "grid grid-cols-1 md:grid-cols-2";
+                if (count <= 4) return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2";
+                if (count <= 6) return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+                return "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+            };
+
+            return (
+                <div className="flex flex-col h-screen bg-background text-gray-100 font-sans selection:bg-accent selection:text-white">
+                    
+                    {/* --- HEADER --- */}
+                    <header className="h-16 glass-header px-6 flex items-center justify-between z-20 shrink-0 sticky top-0">
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+                                <span className="font-bold text-lg">M</span>
+                            </div>
+                            <div className="flex flex-col justify-center leading-none">
+                                <h1 className="font-bold text-lg tracking-tight text-white">MultLives</h1>
+                                <span className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">Nevathon 2.0</span>
+                            </div>
+                        </div>
+
+                        <form onSubmit={addStreamer} className="flex-1 max-w-xl mx-8 flex items-center gap-2">
+                            <div className="relative group">
+                                <select 
+                                    value={platform}
+                                    onChange={(e) => setPlatform(e.target.value)}
+                                    className="h-10 pl-3 pr-8 bg-surface border border-white/10 rounded-lg text-sm text-gray-300 focus:border-accent focus:ring-1 focus:ring-accent outline-none appearance-none cursor-pointer transition-all hover:bg-surfaceHighlight"
+                                >
+                                    <option value="twitch">Twitch</option>
+                                    <option value="kick">Kick</option>
+                                </select>
+                                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 text-[10px]">▼</div>
+                            </div>
+                            
+                            <div className="relative flex-1">
+                                <input
+                                    type="text"
+                                    value={inputVal}
+                                    onChange={(e) => setInputVal(e.target.value)}
+                                    placeholder="Adicionar streamer..."
+                                    className="w-full h-10 bg-surface border border-white/10 rounded-lg pl-4 pr-10 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder-gray-600 hover:bg-surfaceHighlight"
+                                />
+                            </div>
+
+                            <button 
+                                type="submit"
+                                className="h-10 px-4 flex items-center gap-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors text-sm active:scale-95"
+                                title="Adicionar Stream"
+                            >
+                                <PlusIcon /> <span className="hidden sm:inline">Adicionar</span>
+                            </button>
+                        </form>
+
+                        <div className="flex items-center gap-1 border-l border-white/10 pl-4">
+                            <button onClick={toggleSidebar} className={`p-2 rounded-lg hover:bg-white/10 transition-all ${!isSidebarOpen ? 'text-accent' : 'text-gray-400'}`} title={isSidebarOpen ? "Ocultar Chat" : "Mostrar Chat"}>
+                                <LayoutIcon />
+                            </button>
+                            <button onClick={toggleFullscreen} className="p-2 rounded-lg hover:bg-white/10 transition-all text-gray-400 hover:text-white" title="Tela Cheia">
+                                <MaximizeIcon />
+                            </button>
+                        </div>
+                    </header>
+
+                    {/* --- MAIN CONTENT --- */}
+                    <main className="flex-1 flex overflow-hidden">
+                        
+                        {/* STREAMS AREA */}
+                        <div className={`flex-1 relative bg-[#050507] transition-all duration-300 ${getGridClass()} gap-[2px] p-[2px] overflow-y-auto`}>
+                            {streamers.length === 0 ? (
+                                <div className="flex flex-col items-center text-center animate-fade-in">
+                                    <div className="p-8 rounded-2xl bg-surface/50 border border-white/5 backdrop-blur-sm max-w-md w-full mx-4">
+                                        <div className="w-16 h-16 mb-6 mx-auto rounded-2xl bg-gradient-to-tr from-surfaceHighlight to-surface border border-white/5 flex items-center justify-center shadow-2xl">
+                                            <svg className="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <h2 className="text-xl font-semibold text-white mb-2">Seu painel está vazio</h2>
+                                        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+                                            Adicione seus streamers favoritos da Twitch ou Kick usando a barra superior para criar seu layout personalizado.
+                                        </p>
+                                        
+                                        <div className="flex justify-center gap-3 text-xs font-medium text-gray-400">
+                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5">
+                                                <span className="text-[#9146ff]"><TwitchIcon /></span> Twitch
+                                            </div>
+                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5">
+                                                <span className="text-[#53fc18]"><TwitchIcon /></span> Kick
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                streamers.map((stream) => (
+                                    <div key={stream.id} className="relative group w-full h-full min-h-[300px] bg-black overflow-hidden shadow-2xl">
+                                        {/* Stream Header Overlay */}
+                                        <div className="absolute top-0 left-0 right-0 z-10 flex justify-between items-start p-3 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-gradient-to-b from-black/90 via-black/40 to-transparent pointer-events-none">
+                                            <div className="flex items-center gap-2">
+                                                <div className="px-2 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10 flex items-center gap-2">
+                                                    {stream.platform === 'twitch' ? 
+                                                        <span className="text-[#9146ff]"><TwitchIcon /></span> : 
+                                                        <span className="text-[#53fc18] text-[10px] font-bold">K</span>
+                                                    }
+                                                    <span className="text-xs font-medium text-white shadow-sm">{stream.name}</span>
+                                                </div>
+                                            </div>
+                                            <button 
+                                                onClick={() => removeStreamer(stream.id)}
+                                                className="pointer-events-auto p-1.5 bg-black/60 hover:bg-red-500/90 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md"
+                                                title="Remover"
+                                            >
+                                                <TrashIcon />
+                                            </button>
+                                        </div>
+                                        
+                                        {stream.platform === 'twitch' ? (
+                                            <iframe
+                                                src={`https://player.twitch.tv/?channel=${stream.name}&parent=${hostname}&muted=false`}
+                                                height="100%"
+                                                width="100%"
+                                                allowFullScreen={true}
+                                                className="w-full h-full"
+                                            ></iframe>
+                                        ) : (
+                                            <iframe
+                                                src={`https://player.kick.com/${stream.name}`}
+                                                height="100%"
+                                                width="100%"
+                                                allowFullScreen={true}
+                                                className="w-full h-full"
+                                            ></iframe>
+                                        )}
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        {/* SIDEBAR (CHAT & MAP) */}
+                        <div 
+                            className={`flex flex-col sidebar-glass transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarOpen ? 'w-[340px] translate-x-0' : 'w-0 translate-x-10 opacity-0 overflow-hidden'}`}
+                        >
+                            {/* Stylish Tabs */}
+                            <div className="flex bg-surface/50 border-b border-white/5 shrink-0 h-11 px-1 gap-1 items-center overflow-x-auto scrollbar-hide">
+                                <button
+                                    onClick={() => setActiveChatTab('map')}
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all ${
+                                        activeChatTab === 'map' 
+                                        ? 'bg-white/10 text-white shadow-sm' 
+                                        : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
+                                    }`}
+                                >
+                                    <MapIcon /> Mapa
+                                </button>
+
+                                <div className="w-[1px] h-4 bg-white/10 mx-1 shrink-0"></div>
+
+                                {streamers.map(s => (
+                                    <button
+                                        key={s.id}
+                                        onClick={() => setActiveChatTab(s.id)}
+                                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all max-w-[120px] ${
+                                            activeChatTab === s.id 
+                                            ? 'bg-white/10 text-white shadow-sm' 
+                                            : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
+                                        }`}
+                                    >
+                                        <span className={`w-1.5 h-1.5 rounded-full ${s.platform === 'twitch' ? 'bg-[#9146ff]' : 'bg-[#53fc18]'}`}></span>
+                                        <span className="truncate">{s.name}</span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Sidebar Content */}
+                            <div className="flex-1 relative bg-[#09090b]">
+                                {/* Map View */}
+                                <div className={`absolute inset-0 flex flex-col ${activeChatTab === 'map' ? 'z-10' : 'z-0 hidden'}`}>
+                                    <div className="py-2 px-3 bg-surface/30 border-b border-white/5 flex justify-between items-center">
+                                        <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Geolocalização</span>
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                    </div>
+                                    <iframe 
+                                        src="https://rtirl.com/twitch:119611214"
+                                        className="w-full flex-1 border-none grayscale-[30%] invert-[5%] contrast-125"
+                                        scrolling="no"
+                                    ></iframe>
+                                </div>
+
+                                {/* Chat Views */}
+                                {streamers.map(s => (
+                                    <div key={`chat-${s.id}`} className={`absolute inset-0 bg-[#0f0f13] ${activeChatTab === s.id ? 'z-10' : 'z-0 hidden'}`}>
+                                        {activeChatTab === s.id && (
+                                            s.platform === 'twitch' ? (
+                                                <iframe
+                                                    src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&darkpopout`}
+                                                    className="w-full h-full border-none"
+                                                ></iframe>
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center h-full p-8 text-center text-gray-500 bg-surface/20">
+                                                    <div className="w-12 h-12 rounded-full bg-surface border border-white/5 flex items-center justify-center mb-4 text-[#53fc18]">
+                                                        <MessageIcon />
+                                                    </div>
+                                                    <h3 className="text-sm font-medium text-white mb-1">Chat da Kick</h3>
+                                                    <p className="text-xs mb-4 max-w-[200px] leading-relaxed">A integração direta ainda não está disponível.</p>
+                                                    <a href={`https://kick.com/${s.name}/chat`} target="_blank" className="px-4 py-2 bg-[#53fc18] text-black text-xs font-bold rounded hover:opacity-90 transition-opacity">
+                                                        Abrir Chat Externo
+                                                    </a>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                ))}
+                                
+                                {streamers.length === 0 && activeChatTab !== 'map' && (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 gap-2">
+                                        <div className="w-8 h-8 rounded-full border border-dashed border-gray-700 flex items-center justify-center">?</div>
+                                        <span className="text-xs font-medium">Nenhum chat selecionado</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </main>
+
+                    {/* --- FOOTER --- */}
+                    <footer className="h-9 bg-[#050507] border-t border-white/5 flex items-center justify-center text-[11px] text-gray-500 shrink-0 z-30">
+                        <span className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">
+                            Desenvolvido por 
+                            <a 
+                                href="https://instagram.com/oeduardomacedo" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="text-white hover:text-accent flex items-center gap-1 font-medium transition-colors"
+                            >
+                                <InstagramIcon /> Eduardo Macêdo
+                            </a>
+                        </span>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
