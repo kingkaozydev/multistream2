@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MultLives - Nevathon 2.0</title>
     
-    <!-- Favicon (Novo Logo ML + Neve) -->
+    <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M20 3V7M22 5H18' stroke='%23a5f3fc' stroke-width='2' stroke-linecap='round' /><path d='M18.5 3.5L21.5 6.5M21.5 3.5L18.5 6.5' stroke='%23a5f3fc' stroke-width='1.5' stroke-linecap='round' /><path d='M2 19V5L8 13L14 5V19' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/><path d='M17 6V19H23' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 
     <!-- React & ReactDOM -->
@@ -37,7 +37,7 @@
                         surfaceHighlight: '#1e1e24',
                         accent: '#6366f1',
                         accentHover: '#4f46e5',
-                        ice: '#a5f3fc', // Cor de gelo para o Nevathon
+                        ice: '#a5f3fc',
                     },
                     animation: {
                         'spin-slow': 'spin 3s linear infinite',
@@ -52,8 +52,14 @@
             background-color: #09090b;
             color: #e2e8f0;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
         
+        iframe {
+            pointer-events: auto;
+        }
+
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
@@ -62,7 +68,6 @@
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Estilos Padrão do Header */
         .glass-header {
             background: rgba(9, 9, 11, 0.75);
             backdrop-filter: blur(16px);
@@ -70,14 +75,12 @@
             transition: all 0.5s ease;
         }
 
-        /* Modo Teatro: Header "Invisível" */
         .theater-header {
-            background: rgba(9, 9, 11, 0); /* Transparente */
+            background: rgba(9, 9, 11, 0);
             backdrop-filter: blur(0px);
             border-bottom: 1px solid rgba(255, 255, 255, 0);
         }
         
-        /* Efeito de Marca D'água no Modo Teatro */
         .theater-watermark {
             opacity: 0.3;
             filter: grayscale(80%);
@@ -86,7 +89,6 @@
             transition: all 0.5s ease;
         }
         
-        /* Ao passar o mouse no header em modo teatro, restaura um pouco a visibilidade */
         .theater-header:hover {
             background: rgba(9, 9, 11, 0.85);
             backdrop-filter: blur(12px);
@@ -101,7 +103,6 @@
             opacity: 1;
         }
 
-        /* Controles ocultos no modo teatro até hover */
         .theater-controls {
             opacity: 0.2;
             transition: opacity 0.3s ease;
@@ -112,75 +113,19 @@
             border-left: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        /* --- LOGO 3D FLIP & SNOW ANIMATIONS --- */
-        .logo-scene {
-            perspective: 1000px;
-            height: 40px; 
-            width: 140px; 
-        }
-        
-        .logo-spinner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: left;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-            animation: flipLogo 8s infinite cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes flipLogo {
-            0%, 45% { transform: rotateX(0deg); }
-            50%, 95% { transform: rotateX(180deg); }
-            100% { transform: rotateX(360deg); }
-        }
-
-        .logo-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .logo-back {
-            transform: rotateX(180deg);
-        }
-
-        .nevathon-text {
-            color: #fff;
-            text-shadow: 0 0 5px rgba(165, 243, 252, 0.8), 0 0 10px rgba(165, 243, 252, 0.5);
-            position: relative;
-            display: inline-block;
-        }
-        
-        .snow-particle {
-            position: absolute;
-            top: -10px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0;
-            pointer-events: none;
-            animation: fall linear infinite;
-        }
+        .logo-scene { perspective: 1000px; height: 40px; width: 140px; }
+        .logo-spinner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.8s; transform-style: preserve-3d; animation: flipLogo 8s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes flipLogo { 0%, 45% { transform: rotateX(0deg); } 50%, 95% { transform: rotateX(180deg); } 100% { transform: rotateX(360deg); } }
+        .logo-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; }
+        .logo-back { transform: rotateX(180deg); }
+        .nevathon-text { color: #fff; text-shadow: 0 0 5px rgba(165, 243, 252, 0.8), 0 0 10px rgba(165, 243, 252, 0.5); position: relative; display: inline-block; }
+        .snow-particle { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0; pointer-events: none; animation: fall linear infinite; }
         .snow-particle:nth-child(1) { left: 10%; width: 2px; height: 2px; animation-duration: 2s; animation-delay: 0s; }
         .snow-particle:nth-child(2) { left: 30%; width: 3px; height: 3px; animation-duration: 2.5s; animation-delay: 0.2s; }
         .snow-particle:nth-child(3) { left: 60%; width: 2px; height: 2px; animation-duration: 2s; animation-delay: 0.5s; }
         .snow-particle:nth-child(4) { left: 80%; width: 3px; height: 3px; animation-duration: 2.2s; animation-delay: 0.1s; }
-
-        @keyframes fall {
-            0% { transform: translateY(0); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(25px); opacity: 0; }
-        }
-
-        .tech-gradient {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-        }
-        
-        /* Cursor de Drag */
+        @keyframes fall { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(25px); opacity: 0; } }
+        .tech-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
         .cursor-grab { cursor: grab; }
         .cursor-grabbing { cursor: grabbing; }
     </style>
@@ -191,7 +136,6 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- Ícones ---
         const PlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
         const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
         const MaximizeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>;
@@ -201,7 +145,6 @@
         const TwitchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>;
         const YoutubeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>;
         const InstagramIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>;
-        
         const ExpandIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>;
         const CompressIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>;
         const MoveIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>;
@@ -221,34 +164,20 @@
             const [platform, setPlatform] = useState("twitch");
             const [isSidebarOpen, setIsSidebarOpen] = useState(true);
             const [activeChatTab, setActiveChatTab] = useState("map");
-            
-            // Estado para modo foco
             const [expandedStreamId, setExpandedStreamId] = useState(null);
-            
-            // Estado para modo teatro
             const [isTheaterMode, setIsTheaterMode] = useState(false);
-
-            // Refs para Drag & Drop
             const dragItem = useRef(null);
             const dragOverItem = useRef(null);
-
             const [hostname] = useState(() => {
-                if (typeof window !== 'undefined' && window.location.hostname) {
-                    return window.location.hostname;
-                }
+                if (typeof window !== 'undefined' && window.location.hostname) return window.location.hostname;
                 return "localhost";
             });
-
             const [isFileProtocol, setIsFileProtocol] = useState(false);
 
             useEffect(() => {
                 const saved = localStorage.getItem('multlives-streamers');
-                if (saved) {
-                    setStreamers(JSON.parse(saved));
-                }
-                if (window.location.protocol === 'file:') {
-                    setIsFileProtocol(true);
-                }
+                if (saved) setStreamers(JSON.parse(saved));
+                if (window.location.protocol === 'file:') setIsFileProtocol(true);
             }, []);
 
             useEffect(() => {
@@ -271,9 +200,7 @@
                 if (platform === 'youtube') {
                     const ytRegex = /(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/;
                     const match = cleanName.match(ytRegex);
-                    if (match) {
-                        cleanName = match[1];
-                    }
+                    if (match) cleanName = match[1];
                 } else {
                     cleanName = cleanName.toLowerCase();
                 }
@@ -290,9 +217,7 @@
                 const updatedList = [...streamers, newStreamer];
                 setStreamers(updatedList);
                 setInputVal("");
-                if (updatedList.length === 1) {
-                    setActiveChatTab(newStreamer.id);
-                }
+                if (updatedList.length === 1) setActiveChatTab(newStreamer.id);
             };
 
             const removeStreamer = (id) => {
@@ -306,7 +231,6 @@
                 setExpandedStreamId(expandedStreamId === id ? null : id);
             };
 
-            // Funções de Drag & Drop
             const handleDragStart = (e, index) => {
                 dragItem.current = index;
             };
@@ -318,63 +242,37 @@
             const handleDragEnd = () => {
                 const _streamers = [...streamers];
                 const draggedItemContent = _streamers[dragItem.current];
-                
-                // Remove o item da posição original
                 _streamers.splice(dragItem.current, 1);
-                
-                // Insere na nova posição
                 _streamers.splice(dragOverItem.current, 0, draggedItemContent);
-                
                 dragItem.current = null;
                 dragOverItem.current = null;
                 setStreamers(_streamers);
             };
 
-
             const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-            // Alternar Modo Teatro (Fullscreen + UI Limpa)
             const toggleTheaterMode = () => {
                 if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => {
-                        console.log(`Erro ao ativar tela cheia: ${err.message}`);
-                    });
+                    document.documentElement.requestFullscreen().catch(err => console.log(err));
                     setIsTheaterMode(true);
                 } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    }
+                    if (document.exitFullscreen) document.exitFullscreen();
                     setIsTheaterMode(false);
                 }
             };
 
-            // Escuta mudança de fullscreen nativo (esc/f11) para sincronizar estado
             useEffect(() => {
                 const handleFsChange = () => {
-                    if (!document.fullscreenElement) {
-                        setIsTheaterMode(false);
-                    } else {
-                        setIsTheaterMode(true);
-                    }
+                    setIsTheaterMode(!!document.fullscreenElement);
                 };
                 document.addEventListener('fullscreenchange', handleFsChange);
                 return () => document.removeEventListener('fullscreenchange', handleFsChange);
             }, []);
 
-            const getGridContainerClass = () => {
-                const count = streamers.length;
-                if (count === 0) return "flex items-center justify-center";
-                
-                // Se algum estiver expandido, usamos grid de 4 colunas para dar flexibilidade
-                if (expandedStreamId) return "grid grid-cols-1 md:grid-cols-4 gap-2 content-start";
-
-                if (count === 1) return "grid grid-cols-1 gap-2";
-                if (count === 2) return "grid grid-cols-1 md:grid-cols-2 gap-2";
-                if (count <= 4) return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2";
-                if (count <= 6) return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2";
-                return "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2";
-            };
-
+            // ----------------------------------------------------
+            // LÓGICA DE LAYOUT DINÂMICO FLEX (Smart Layout)
+            // ----------------------------------------------------
+            
             const getPlatformColor = (p) => {
                 if (p === 'twitch') return 'text-[#9146ff]';
                 if (p === 'kick') return 'text-[#53fc18]';
@@ -389,83 +287,141 @@
                 return null;
             }
 
-            const StreamPlayer = ({ stream, index }) => {
+            const StreamPlayer = ({ stream, index, widthClass, heightClass }) => {
                 const isExpanded = stream.id === expandedStreamId;
-                
-                // ASPECT-VIDEO é a chave para evitar bordas pretas verticais
-                const itemClass = isExpanded 
-                    ? "md:col-span-3 md:row-span-2 aspect-video" 
-                    : "col-span-1 aspect-video"; 
-                
                 const isDraggable = !expandedStreamId;
 
+                // Estilo inline para garantir proporções dinâmicas
+                // A classe 'aspect-video' é fundamental para manter 16:9
+                // Mas usamos flex-basis e height controlados pelo pai
+                
                 return (
                     <div 
-                        className={`relative group w-full bg-black overflow-hidden shadow-2xl ${itemClass}`}
+                        className={`relative group bg-black overflow-hidden shadow-2xl transition-all duration-300 aspect-video ${widthClass} ${heightClass}`}
+                        style={{
+                           // Em telas menores ou layouts específicos, o max-width impede que fique muito esticado
+                           // Mas o flex-grow permite preencher espaços
+                           flexGrow: 1,
+                           // Centralização
+                           margin: '0 auto', 
+                        }}
                         draggable={isDraggable}
                         onDragStart={(e) => isDraggable && handleDragStart(e, index)}
                         onDragEnter={(e) => isDraggable && handleDragEnter(e, index)}
                         onDragEnd={handleDragEnd}
                         onDragOver={(e) => e.preventDefault()}
                     >
-                        <div className={`absolute top-0 left-0 right-0 z-10 flex justify-between items-start p-2 transition-all duration-200 bg-gradient-to-b from-black/90 via-black/40 to-transparent pointer-events-none ${isExpanded ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                        <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 transition-all duration-200 bg-gradient-to-b from-black/90 via-black/40 to-transparent pointer-events-none ${isExpanded ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                             <div className="flex items-center gap-2 pointer-events-auto">
-                                {/* Ícone de Mover (Handle) */}
                                 {isDraggable && (
-                                    <div 
-                                        className="p-1.5 bg-black/60 text-white/50 hover:text-white rounded-md border border-white/10 cursor-grab active:cursor-grabbing hover:bg-white/10 transition-colors"
-                                        title="Arraste para mover"
-                                    >
+                                    <div className="p-1.5 bg-black/60 text-white/50 hover:text-white rounded-md border border-white/10 cursor-grab active:cursor-grabbing hover:bg-white/10 transition-colors">
                                         <MoveIcon />
                                     </div>
                                 )}
-                                
                                 <div className="px-2 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10 flex items-center gap-2">
-                                    <span className={getPlatformColor(stream.platform)}>
-                                        {getPlatformIcon(stream.platform)}
-                                    </span>
-                                    <span className="text-xs font-medium text-white shadow-sm max-w-[150px] truncate">
-                                        {stream.platform === 'youtube' ? `Vídeo: ${stream.name}` : stream.name}
-                                    </span>
+                                    <span className={getPlatformColor(stream.platform)}>{getPlatformIcon(stream.platform)}</span>
+                                    <span className="text-xs font-medium text-white shadow-sm max-w-[150px] truncate">{stream.platform === 'youtube' ? `Vídeo: ${stream.name}` : stream.name}</span>
                                 </div>
                             </div>
                             <div className="flex gap-1 pointer-events-auto">
-                                <button 
-                                    onClick={() => toggleFocusMode(stream.id)}
-                                    className="p-1.5 bg-black/60 hover:bg-indigo-600 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md"
-                                    title={isExpanded ? "Restaurar tamanho" : "Expandir (Foco)"}
-                                >
+                                <button onClick={() => toggleFocusMode(stream.id)} className="p-1.5 bg-black/60 hover:bg-indigo-600 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md">
                                     {isExpanded ? <CompressIcon /> : <ExpandIcon />}
                                 </button>
-                                <button 
-                                    onClick={() => removeStreamer(stream.id)}
-                                    className="p-1.5 bg-black/60 hover:bg-red-500/90 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md"
-                                    title="Remover Canal"
-                                >
+                                <button onClick={() => removeStreamer(stream.id)} className="p-1.5 bg-black/60 hover:bg-red-500/90 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md">
                                     <TrashIcon />
                                 </button>
                             </div>
                         </div>
                         <div className="w-full h-full pointer-events-none md:pointer-events-auto">
-                            {/* Bloqueia eventos do mouse no iframe enquanto arrasta para não bugar o drag */}
-                            {stream.platform === 'twitch' && (
-                                <iframe src={`https://player.twitch.tv/?channel=${stream.name}&parent=${hostname}&parent=localhost&muted=false`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full"></iframe>
-                            )}
-                            {stream.platform === 'kick' && (
-                                <iframe src={`https://player.kick.com/${stream.name}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full"></iframe>
-                            )}
-                            {stream.platform === 'youtube' && (
-                                <iframe src={`https://www.youtube.com/embed/${stream.name}?autoplay=1`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-                            )}
+                            {stream.platform === 'twitch' && <iframe src={`https://player.twitch.tv/?channel=${stream.name}&parent=${hostname}&parent=localhost&muted=false`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0"></iframe>}
+                            {stream.platform === 'kick' && <iframe src={`https://player.kick.com/${stream.name}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0"></iframe>}
+                            {stream.platform === 'youtube' && <iframe src={`https://www.youtube.com/embed/${stream.name}?autoplay=1`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>}
                         </div>
+                    </div>
+                );
+            };
+
+            // Função auxiliar para calcular classes de cada item com base no layout
+            const renderStreams = () => {
+                const count = streamers.length;
+                
+                // Modo Expandido/Foco (não foi alterado a pedido, mas mantendo funcionalidade)
+                if (expandedStreamId) {
+                    return (
+                         <div className="grid grid-cols-4 grid-rows-2 h-full w-full gap-0 bg-black">
+                            {streamers.map((s, idx) => {
+                                const isExp = s.id === expandedStreamId;
+                                return <StreamPlayer 
+                                    key={s.id} 
+                                    stream={s} 
+                                    index={idx}
+                                    widthClass={isExp ? "col-span-3 row-span-2 w-full h-full" : "col-span-1 row-span-1 w-full h-full"}
+                                    heightClass=""
+                                />
+                            })}
+                        </div>
+                    );
+                }
+
+                // Lógica de Linhas Flexíveis (Mosaico Smart)
+                // Usamos Flexbox com wrap, mas controlamos a largura (%) de cada item
+                // para simular as linhas da imagem de referência.
+                
+                return (
+                    <div className="flex flex-wrap justify-center content-center items-center w-full h-full bg-black gap-1 p-1">
+                        {streamers.map((s, index) => {
+                            let width = "w-full"; // Padrão 1
+                            let height = "h-full";
+                            
+                            // Lógica de dimensionamento (baseada na quantidade total)
+                            if (count === 2) {
+                                // 2 Lado a Lado
+                                width = "w-[49%]";
+                                height = "h-auto"; 
+                            } else if (count === 3) {
+                                // 2 em cima, 1 embaixo (centralizado)
+                                // Linha 1: index 0 e 1 (50% cada)
+                                // Linha 2: index 2 (50% - centralizado pelo flex container)
+                                width = "w-[49%]"; 
+                                height = "h-[49%]";
+                            } else if (count === 4) {
+                                // 2x2
+                                width = "w-[49%]";
+                                height = "h-[49%]";
+                            } else if (count === 5) {
+                                // 3 em cima, 2 embaixo
+                                if (index < 3) width = "w-[32.5%]"; // Linha de 3
+                                else width = "w-[49%]"; // Linha de 2
+                                height = "h-[49%]";
+                            } else if (count === 6) {
+                                // 3x2
+                                width = "w-[32.5%]";
+                                height = "h-[49%]";
+                            } else if (count === 7) {
+                                // 4 em cima, 3 embaixo (ou 3 em cima, 4 embaixo)
+                                // Para manter 16:9 sem ficar minusculo, talvez 3 linhas?
+                                // Vamos tentar 2 linhas: 4 e 3
+                                if (index < 4) width = "w-[24%]";
+                                else width = "w-[32.5%]";
+                                height = "h-[49%]";
+                            } else if (count === 8) {
+                                // 4x2
+                                width = "w-[24%]";
+                                height = "h-[49%]";
+                            } else if (count >= 9) {
+                                // 3x3
+                                width = "w-[32.5%]";
+                                height = "h-[32%]";
+                            }
+
+                            return <StreamPlayer key={s.id} stream={s} index={index} widthClass={width} heightClass={height} />;
+                        })}
                     </div>
                 );
             };
 
             return (
                 <div className="flex flex-col h-screen bg-background text-gray-100 font-sans selection:bg-accent selection:text-white">
-                    
-                    {/* --- HEADER --- */}
                     <header className={`h-16 px-6 flex items-center justify-between z-20 shrink-0 sticky top-0 ${isTheaterMode ? 'theater-header' : 'glass-header'}`}>
                         <div className={`flex items-center gap-4 ${isTheaterMode ? 'theater-watermark' : ''}`}>
                             <div className="w-10 h-10 tech-gradient rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 transform hover:scale-105 transition-transform duration-300 ring-1 ring-white/20">
@@ -478,171 +434,95 @@
                                         <span className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold leading-none mt-1">Streaming Hub</span>
                                     </div>
                                     <div className="logo-back logo-face flex items-center">
-                                        <h1 className="font-extrabold text-xl tracking-wide nevathon-text italic">
-                                            NEVATHON
-                                            <span className="snow-particle"></span>
-                                            <span className="snow-particle"></span>
-                                            <span className="snow-particle"></span>
-                                            <span className="snow-particle"></span>
-                                        </h1>
+                                        <h1 className="font-extrabold text-xl tracking-wide nevathon-text italic">NEVATHON<span className="snow-particle"></span><span className="snow-particle"></span><span className="snow-particle"></span><span className="snow-particle"></span></h1>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <form onSubmit={addStreamer} className={`flex-1 max-w-xl mx-8 flex items-center gap-2 ${isTheaterMode ? 'theater-controls' : ''}`}>
                             <div className="relative group">
-                                <select 
-                                    value={platform}
-                                    onChange={(e) => setPlatform(e.target.value)}
-                                    className="h-10 pl-3 pr-8 bg-surface border border-white/10 rounded-lg text-sm text-gray-300 focus:border-accent focus:ring-1 focus:ring-accent outline-none appearance-none cursor-pointer transition-all hover:bg-surfaceHighlight"
-                                >
+                                <select value={platform} onChange={(e) => setPlatform(e.target.value)} className="h-10 pl-3 pr-8 bg-surface border border-white/10 rounded-lg text-sm text-gray-300 focus:border-accent focus:ring-1 focus:ring-accent outline-none appearance-none cursor-pointer transition-all hover:bg-surfaceHighlight">
                                     <option value="twitch">Twitch</option>
                                     <option value="kick">Kick</option>
                                     <option value="youtube">YouTube</option>
                                 </select>
                                 <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 text-[10px]">▼</div>
                             </div>
-                            
                             <div className="relative flex-1">
-                                <input
-                                    type="text"
-                                    value={inputVal}
-                                    onChange={(e) => setInputVal(e.target.value)}
-                                    placeholder={getPlaceholder()}
-                                    className="w-full h-10 bg-surface border border-white/10 rounded-lg pl-4 pr-10 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder-gray-600 hover:bg-surfaceHighlight"
-                                />
+                                <input type="text" value={inputVal} onChange={(e) => setInputVal(e.target.value)} placeholder={getPlaceholder()} className="w-full h-10 bg-surface border border-white/10 rounded-lg pl-4 pr-10 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder-gray-600 hover:bg-surfaceHighlight" />
                             </div>
-
-                            <button 
-                                type="submit"
-                                className="h-10 px-4 flex items-center gap-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors text-sm active:scale-95"
-                                title="Adicionar Stream"
-                            >
+                            <button type="submit" className="h-10 px-4 flex items-center gap-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors text-sm active:scale-95" title="Adicionar Stream">
                                 <PlusIcon /> <span className="hidden sm:inline">Adicionar</span>
                             </button>
                         </form>
-
                         <div className={`flex items-center gap-1 border-l border-white/10 pl-4 ${isTheaterMode ? 'theater-controls' : ''}`}>
-                            <button onClick={toggleSidebar} className={`p-2 rounded-lg hover:bg-white/10 transition-all ${!isSidebarOpen ? 'text-accent' : 'text-gray-400'}`} title={isSidebarOpen ? "Ocultar Chat" : "Mostrar Chat"}>
-                                <LayoutIcon />
-                            </button>
-                            <button onClick={toggleTheaterMode} className={`p-2 rounded-lg hover:bg-white/10 transition-all ${isTheaterMode ? 'text-accent' : 'text-gray-400 hover:text-white'}`} title={isTheaterMode ? "Sair do Modo Teatro" : "Modo Teatro (Tela Cheia)"}>
-                                <MaximizeIcon />
-                            </button>
+                            <button onClick={toggleSidebar} className={`p-2 rounded-lg hover:bg-white/10 transition-all ${!isSidebarOpen ? 'text-accent' : 'text-gray-400'}`} title={isSidebarOpen ? "Ocultar Chat" : "Mostrar Chat"}><LayoutIcon /></button>
+                            <button onClick={toggleTheaterMode} className={`p-2 rounded-lg hover:bg-white/10 transition-all ${isTheaterMode ? 'text-accent' : 'text-gray-400 hover:text-white'}`} title={isTheaterMode ? "Sair do Modo Teatro" : "Modo Teatro (Tela Cheia)"}><MaximizeIcon /></button>
                         </div>
                     </header>
-
-                    {/* --- MAIN CONTENT --- */}
                     <main className="flex-1 flex overflow-hidden">
                         <div className="flex-1 relative bg-[#050507] overflow-hidden flex flex-col">
                             {streamers.length === 0 ? (
                                 <div className="flex-1 flex items-center justify-center text-center animate-fade-in">
                                     <div className="p-8 rounded-2xl bg-surface/50 border border-white/5 backdrop-blur-sm max-w-md w-full mx-4">
                                         <div className="w-16 h-16 mb-6 mx-auto rounded-2xl bg-gradient-to-tr from-surfaceHighlight to-surface border border-white/5 flex items-center justify-center shadow-2xl">
-                                            <svg className="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
+                                            <svg className="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                         </div>
                                         <h2 className="text-xl font-semibold text-white mb-2">Seu painel está vazio</h2>
                                         {isFileProtocol ? (
-                                            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-left max-w-sm">
-                                                <h3 className="text-red-400 font-bold text-sm mb-1">Aviso Importante</h3>
-                                                <p className="text-red-200/80 text-xs">Você abriu este arquivo diretamente no seu PC. Twitch e YouTube bloqueiam vídeos nesse modo. Para funcionar corretamente, hospede no Vercel ou use um servidor local.</p>
-                                            </div>
+                                            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-left max-w-sm"><h3 className="text-red-400 font-bold text-sm mb-1">Aviso Importante</h3><p className="text-red-200/80 text-xs">Você abriu este arquivo diretamente no seu PC. Twitch e YouTube bloqueiam vídeos nesse modo. Para funcionar corretamente, hospede no Vercel ou use um servidor local.</p></div>
                                         ) : (
                                             <p className="text-gray-500 text-sm mb-6 leading-relaxed">Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior para criar seu layout personalizado.</p>
                                         )}
                                         <div className="flex justify-center gap-3 text-xs font-medium text-gray-400">
-                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5">
-                                                <span className="text-[#9146ff]"><TwitchIcon /></span> Twitch
-                                            </div>
-                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5">
-                                                <span className="text-[#53fc18]"><TwitchIcon /></span> Kick
-                                            </div>
-                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5">
-                                                <span className="text-[#ff0000]"><YoutubeIcon /></span> YT
-                                            </div>
+                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5"><span className="text-[#9146ff]"><TwitchIcon /></span> Twitch</div>
+                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5"><span className="text-[#53fc18]"><TwitchIcon /></span> Kick</div>
+                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5"><span className="text-[#ff0000]"><YoutubeIcon /></span> YT</div>
                                         </div>
                                     </div>
                                 </div>
                             ) : (
-                                <div className={`w-full h-full ${getGridContainerClass()} p-2 overflow-y-auto`}>
-                                    {streamers.map((s, index) => (
-                                        <StreamPlayer key={s.id} stream={s} index={index} />
-                                    ))}
-                                </div>
+                                // Renderização do Layout Dinâmico
+                                renderStreams()
                             )}
                         </div>
-
-                        {/* SIDEBAR (CHAT & MAP) */}
                         <div className={`flex flex-col sidebar-glass transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarOpen ? 'w-[340px] translate-x-0' : 'w-0 translate-x-10 opacity-0 overflow-hidden'}`}>
                             <div className="flex bg-surface/50 border-b border-white/5 shrink-0 h-11 px-1 gap-1 items-center overflow-x-auto scrollbar-hide">
-                                <button onClick={() => setActiveChatTab('map')} className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all ${activeChatTab === 'map' ? 'bg-white/10 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}>
-                                    <MapIcon /> Mapa
-                                </button>
+                                <button onClick={() => setActiveChatTab('map')} className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all ${activeChatTab === 'map' ? 'bg-white/10 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}><MapIcon /> Mapa</button>
                                 <div className="w-[1px] h-4 bg-white/10 mx-1 shrink-0"></div>
                                 {streamers.map(s => (
                                     <button key={s.id} onClick={() => setActiveChatTab(s.id)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all max-w-[120px] ${activeChatTab === s.id ? 'bg-white/10 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}>
-                                        <span className={`flex items-center justify-center w-3 h-3 ${getPlatformColor(s.platform)}`}>
-                                           {s.platform === 'twitch' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}
-                                           {s.platform === 'kick' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}
-                                           {s.platform === 'youtube' && <YoutubeIcon />}
-                                        </span>
+                                        <span className={`flex items-center justify-center w-3 h-3 ${getPlatformColor(s.platform)}`}>{s.platform === 'twitch' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}{s.platform === 'kick' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}{s.platform === 'youtube' && <YoutubeIcon />}</span>
                                         <span className="truncate">{s.name}</span>
                                     </button>
                                 ))}
                             </div>
                             <div className="flex-1 relative bg-[#09090b]">
                                 <div className={`absolute inset-0 flex flex-col ${activeChatTab === 'map' ? 'z-10' : 'z-0 hidden'}`}>
-                                    <div className="py-2 px-3 bg-surface/30 border-b border-white/5 flex justify-between items-center">
-                                        <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Geolocalização</span>
-                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                                    </div>
+                                    <div className="py-2 px-3 bg-surface/30 border-b border-white/5 flex justify-between items-center"><span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Geolocalização</span><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div></div>
                                     <iframe src="https://rtirl.com/twitch:119611214" className="w-full flex-1 border-none grayscale-[30%] invert-[5%] contrast-125" scrolling="no"></iframe>
                                 </div>
                                 {streamers.map(s => (
                                     <div key={`chat-${s.id}`} className={`absolute inset-0 bg-[#0f0f13] ${activeChatTab === s.id ? 'z-10' : 'z-0 hidden'}`}>
                                         {activeChatTab === s.id && (
                                             <>
-                                                {s.platform === 'twitch' && (
-                                                    <iframe src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-none"></iframe>
-                                                )}
+                                                {s.platform === 'twitch' && <iframe src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-none"></iframe>}
                                                 {s.platform === 'youtube' && (
-                                                    <div className="w-full h-full flex flex-col">
-                                                         {isFileProtocol ? (
-                                                            <div className="flex-1 flex items-center justify-center text-center p-8 text-gray-500">Chat do YouTube não funciona em arquivos locais (file://).</div>
-                                                         ) : (
-                                                            <iframe src={`https://www.youtube.com/live_chat?v=${s.name}&embed_domain=${hostname}`} className="w-full h-full border-none"></iframe>
-                                                         )}
-                                                    </div>
+                                                    <div className="w-full h-full flex flex-col">{isFileProtocol ? <div className="flex-1 flex items-center justify-center text-center p-8 text-gray-500">Chat do YouTube não funciona em arquivos locais (file://).</div> : <iframe src={`https://www.youtube.com/live_chat?v=${s.name}&embed_domain=${hostname}`} className="w-full h-full border-none"></iframe>}</div>
                                                 )}
-                                                {s.platform === 'kick' && (
-                                                    <iframe src={`https://kick.com/popout/${s.name}/chat`} className="w-full h-full border-none" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
-                                                )}
+                                                {s.platform === 'kick' && <iframe src={`https://kick.com/popout/${s.name}/chat`} className="w-full h-full border-none" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>}
                                             </>
                                         )}
                                     </div>
                                 ))}
                                 {streamers.length === 0 && activeChatTab !== 'map' && (
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 gap-2">
-                                        <div className="w-8 h-8 rounded-full border border-dashed border-gray-700 flex items-center justify-center">?</div>
-                                        <span className="text-xs font-medium">Nenhum chat selecionado</span>
-                                    </div>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 gap-2"><div className="w-8 h-8 rounded-full border border-dashed border-gray-700 flex items-center justify-center">?</div><span className="text-xs font-medium">Nenhum chat selecionado</span></div>
                                 )}
                             </div>
                         </div>
                     </main>
-
-                    {/* --- FOOTER (Oculto no Modo Teatro) --- */}
                     <footer className={`h-9 bg-[#050507] border-t border-white/5 flex items-center justify-center text-[11px] text-gray-500 shrink-0 z-30 ${isTheaterMode ? 'hidden' : 'block'}`}>
-                        <span className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">
-                            Desenvolvido por 
-                            <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-white hover:text-accent flex items-center gap-1 font-medium transition-colors">
-                                <InstagramIcon /> Eduardo Macêdo
-                            </a>
-                        </span>
+                        <span className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">Desenvolvido por <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-white hover:text-accent flex items-center gap-1 font-medium transition-colors"><InstagramIcon /> Eduardo Macêdo</a></span>
                     </footer>
                 </div>
             );
