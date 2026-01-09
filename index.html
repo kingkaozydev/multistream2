@@ -88,23 +88,26 @@
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HEADER FLUTUANTE */
+        /* HEADER FLUTUANTE (Option 1) */
         .glass-header {
-            background: rgba(13, 13, 16, 0.7); 
+            background: rgba(13, 13, 16, 0.7); /* Mais transparente para efeito float */
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, width 0.3s ease;
             z-index: 50;
+            
+            /* Posicionamento Flutuante */
             position: fixed;
-            top: 1.5rem; 
+            top: 1.5rem; /* Afastado do topo */
             left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
+            transform: translateX(-50%); /* Centralização Perfeita */
+            width: 95%; /* Não ocupa 100% da largura */
             max-width: 1600px;
-            border-radius: 1.5rem;
+            border-radius: 1.5rem; /* Bordas bem arredondadas */
         }
 
+        /* Ajuste para mobile: menos flutuante para ganhar espaço */
         @media (max-width: 768px) {
             .glass-header {
                 width: 100%;
@@ -116,7 +119,9 @@
             }
         }
 
+        /* Estilos para o Header no Modo Teatro (Auto-hide) */
         .theater-mode-header {
+            /* No modo teatro, ele se esconde subindo */
             transform: translateX(-50%) translateY(-150%);
         }
         
@@ -129,6 +134,7 @@
             z-index: 51;
         }
 
+        /* Revela o header ao passar o mouse na área de trigger ou no próprio header */
         .header-trigger-area:hover ~ .glass-header,
         .glass-header:hover {
             transform: translateX(-50%) translateY(0);
@@ -146,18 +152,6 @@
             }
         }
 
-        /* Efeito Aurora de Fundo */
-        .aurora-blob {
-            position: absolute;
-            filter: blur(100px);
-            opacity: 0.3;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .aurora-cyan { background: #a5f3fc; }
-        .aurora-purple { background: #6366f1; }
-
-        /* Animações e Logo */
         .logo-scene { perspective: 1000px; height: 40px; width: 140px; }
         .logo-spinner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.8s; transform-style: preserve-3d; animation: flipLogo 8s infinite cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes flipLogo { 0%, 45% { transform: rotateX(0deg); } 50%, 95% { transform: rotateX(180deg); } 100% { transform: rotateX(360deg); } }
@@ -179,6 +173,17 @@
             100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
         }
         .animate-snow-screen { animation: snowfall-screen linear infinite; }
+
+        /* Efeito Aurora de Fundo */
+        .aurora-blob {
+            position: absolute;
+            filter: blur(100px);
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .aurora-cyan { background: #a5f3fc; }
+        .aurora-purple { background: #6366f1; }
 
         .tech-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
         .cursor-grab { cursor: grab; }
@@ -498,7 +503,7 @@
                     onDragEnd={onDragEnd}
                     onDragOver={(e) => e.preventDefault()}
                 >
-                    <div className={`w-full aspect-video relative shadow-2xl bg-transparent transition-all duration-300 ${isExpanded ? 'ring-1 ring-white/20 w-auto h-auto max-w-full max-h-full m-auto' : ''}`}>
+                    <div className={`relative shadow-2xl bg-transparent transition-all duration-300 ${isExpanded ? 'w-full h-full ring-1 ring-white/20' : 'w-full aspect-video'}`}>
                         {/* Header do Player - Revertido para comportamento padrão (group-hover) */}
                         <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-200 pointer-events-none ${isExpanded ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                             <div className="flex items-center gap-2 pointer-events-auto">
