@@ -503,7 +503,7 @@
                     onDragEnd={onDragEnd}
                     onDragOver={(e) => e.preventDefault()}
                 >
-                    <div className={`relative shadow-2xl bg-transparent transition-all duration-300 ${isExpanded ? 'w-full h-full ring-1 ring-white/20' : 'w-full aspect-video'}`}>
+                    <div className={`relative shadow-2xl bg-transparent transition-all duration-300 ${isExpanded ? 'w-full h-full ring-1 ring-white/20 aspect-video' : 'w-full aspect-video'}`}>
                         {/* Header do Player - Revertido para comportamento padrão (group-hover) */}
                         <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-200 pointer-events-none ${isExpanded ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                             <div className="flex items-center gap-2 pointer-events-auto">
@@ -825,14 +825,14 @@
                             </div>
                             
                             {otherStreams.length > 0 && (
-                                <div className="w-full md:w-1/5 h-1/3 md:h-full flex flex-row md:flex-col bg-transparent overflow-x-auto md:overflow-y-auto md:overflow-x-hidden">
+                                <div className="w-full md:w-1/5 h-1/3 md:h-full flex flex-row md:flex-col bg-transparent overflow-x-auto md:overflow-y-auto md:overflow-x-hidden p-1 gap-1">
                                     {otherStreams.map((s, idx) => (
                                         <StreamPlayer 
                                             key={s.id} 
                                             stream={s} 
                                             index={streamers.findIndex(st => st.id === s.id)}
-                                            widthClass="w-1/2 md:w-full min-w-[150px] md:min-w-0"
-                                            heightClass="h-full md:flex-1"
+                                            widthClass="w-full h-auto min-h-[150px] aspect-video"
+                                            heightClass="h-auto"
                                             isExpanded={false}
                                             isDraggable={false}
                                             onDragStart={handleDragStart}
