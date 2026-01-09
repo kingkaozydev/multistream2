@@ -112,6 +112,14 @@
             background: rgba(18, 18, 21, 0.95);
             border-left: 1px solid rgba(255, 255, 255, 0.06);
         }
+        
+        /* Ajuste de borda para mobile */
+        @media (max-width: 768px) {
+            .sidebar-glass {
+                border-left: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.06);
+            }
+        }
 
         .logo-scene { perspective: 1000px; height: 40px; width: 140px; }
         .logo-spinner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.8s; transform-style: preserve-3d; animation: flipLogo 8s infinite cubic-bezier(0.4, 0, 0.2, 1); }
@@ -359,9 +367,9 @@
                     if (!expandedStream) return null;
 
                     return (
-                        <div className="flex w-full h-full bg-black">
+                        <div className="flex flex-col md:flex-row w-full h-full bg-black">
                             {/* Stream Principal Expandida (Palco) */}
-                            <div className={`relative ${otherStreams.length > 0 ? 'w-4/5 border-r border-white/5' : 'w-full'} h-full transition-all duration-300`}>
+                            <div className={`relative ${otherStreams.length > 0 ? 'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5' : 'w-full'} h-2/3 md:h-full transition-all duration-300`}>
                                 <StreamPlayer 
                                     key={expandedStream.id} 
                                     stream={expandedStream} 
@@ -381,14 +389,14 @@
                             
                             {/* Lista Lateral das Outras Streams */}
                             {otherStreams.length > 0 && (
-                                <div className="w-1/5 h-full flex flex-col bg-black">
+                                <div className="w-full md:w-1/5 h-1/3 md:h-full flex flex-row md:flex-col bg-black overflow-x-auto md:overflow-y-auto md:overflow-x-hidden">
                                     {otherStreams.map((s, idx) => (
                                         <StreamPlayer 
                                             key={s.id} 
                                             stream={s} 
                                             index={streamers.findIndex(st => st.id === s.id)}
-                                            widthClass="w-full"
-                                            heightClass="flex-1" // Distribui altura igualmente
+                                            widthClass="w-1/2 md:w-full min-w-[150px] md:min-w-0"
+                                            heightClass="h-full md:flex-1" // Distribui altura igualmente
                                             isExpanded={false}
                                             isDraggable={false}
                                             onDragStart={handleDragStart}
@@ -413,31 +421,31 @@
                             let height = "h-full";
                             
                             if (count === 2) {
-                                width = "w-[49%]";
-                                height = "h-auto"; 
+                                width = "w-full md:w-[49%]";
+                                height = "h-[49%] md:h-auto"; 
                             } else if (count === 3) {
-                                width = "w-[49%]"; 
-                                height = "h-[49%]";
+                                width = "w-full md:w-[49%]"; 
+                                height = "h-[32%] md:h-[49%]";
                             } else if (count === 4) {
                                 width = "w-[49%]";
                                 height = "h-[49%]";
                             } else if (count === 5) {
                                 if (index < 3) width = "w-[32.5%]";
                                 else width = "w-[49%]";
-                                height = "h-[49%]";
+                                height = "h-[32%] md:h-[49%]";
                             } else if (count === 6) {
-                                width = "w-[32.5%]";
-                                height = "h-[49%]";
+                                width = "w-[49%] md:w-[32.5%]";
+                                height = "h-[32%] md:h-[49%]";
                             } else if (count === 7) {
-                                if (index < 4) width = "w-[24%]";
+                                if (index < 4) width = "w-[49%] md:w-[24%]";
                                 else width = "w-[32.5%]";
-                                height = "h-[49%]";
+                                height = "h-[24%] md:h-[49%]";
                             } else if (count === 8) {
-                                width = "w-[24%]";
-                                height = "h-[49%]";
+                                width = "w-[49%] md:w-[24%]";
+                                height = "h-[24%] md:h-[49%]";
                             } else if (count >= 9) {
                                 width = "w-[32.5%]";
-                                height = "h-[32%]";
+                                height = "h-[20%] md:h-[32%]";
                             }
 
                             return <StreamPlayer 
@@ -467,7 +475,7 @@
                             <div className="w-10 h-10 tech-gradient rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 transform hover:scale-105 transition-transform duration-300 ring-1 ring-white/20">
                                 <LogoML />
                             </div>
-                            <div className="logo-scene">
+                            <div className="logo-scene hidden sm:block">
                                 <div className="logo-spinner">
                                     <div className="logo-face flex flex-col justify-center">
                                         <h1 className="font-bold text-lg tracking-tight text-white leading-none">MultLives</h1>
@@ -479,8 +487,8 @@
                                 </div>
                             </div>
                         </div>
-                        <form onSubmit={addStreamer} className={`flex-1 max-w-xl mx-8 flex items-center gap-2 ${isTheaterMode ? 'theater-controls' : ''}`}>
-                            <div className="relative group">
+                        <form onSubmit={addStreamer} className={`flex-1 max-w-xl mx-2 md:mx-8 flex items-center gap-2 ${isTheaterMode ? 'theater-controls' : ''}`}>
+                            <div className="relative group hidden sm:block">
                                 <select value={platform} onChange={(e) => setPlatform(e.target.value)} className="h-10 pl-3 pr-8 bg-surface border border-white/10 rounded-lg text-sm text-gray-300 focus:border-accent focus:ring-1 focus:ring-accent outline-none appearance-none cursor-pointer transition-all hover:bg-surfaceHighlight">
                                     <option value="twitch">Twitch</option>
                                     <option value="kick">Kick</option>
@@ -496,7 +504,7 @@
                             </button>
                         </form>
                         
-                        <div className={`flex items-center gap-3 border-l border-white/10 pl-6 ${isTheaterMode ? 'theater-controls' : ''}`}>
+                        <div className={`flex items-center gap-3 border-l border-white/10 pl-2 md:pl-6 ${isTheaterMode ? 'theater-controls' : ''}`}>
                             <button 
                                 onClick={toggleSidebar} 
                                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all shadow-lg ${
@@ -524,8 +532,8 @@
                             </button>
                         </div>
                     </header>
-                    <main className="flex-1 flex overflow-hidden">
-                        <div className="flex-1 relative bg-[#050507] overflow-hidden flex flex-col">
+                    <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+                        <div className="flex-1 relative bg-[#050507] overflow-hidden flex flex-col min-h-[30vh]">
                             {streamers.length === 0 ? (
                                 <div className="flex-1 flex items-center justify-center text-center animate-fade-in">
                                     <div className="p-8 rounded-2xl bg-surface/50 border border-white/5 backdrop-blur-sm max-w-md w-full mx-4">
@@ -549,7 +557,12 @@
                                 renderStreams()
                             )}
                         </div>
-                        <div className={`flex flex-col sidebar-glass transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarOpen ? 'w-[340px] translate-x-0' : 'w-0 translate-x-10 opacity-0 overflow-hidden'}`}>
+                        <div className={`flex flex-col sidebar-glass transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] z-30
+                            ${isSidebarOpen 
+                                ? 'w-full h-[45vh] md:h-auto md:w-[340px] translate-y-0 md:translate-x-0 opacity-100' 
+                                : 'w-full h-0 md:h-auto md:w-0 translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden'
+                            }
+                        `}>
                             <div className="flex bg-surface/50 border-b border-white/5 shrink-0 h-11 px-1 gap-1 items-center overflow-x-auto scrollbar-hide">
                                 <button onClick={() => setActiveChatTab('map')} className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all ${activeChatTab === 'map' ? 'bg-white/10 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}><MapIcon /> Mapa</button>
                                 <div className="w-[1px] h-4 bg-white/10 mx-1 shrink-0"></div>
