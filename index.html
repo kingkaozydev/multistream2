@@ -19,8 +19,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -43,6 +43,19 @@
                     },
                     animation: {
                         'spin-slow': 'spin 3s linear infinite',
+                        'aurora-1': 'aurora 20s infinite alternate',
+                        'aurora-2': 'aurora 25s infinite alternate-reverse',
+                        'toast-in': 'toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                    },
+                    keyframes: {
+                        aurora: {
+                            '0%': { transform: 'translate(0, 0) rotate(0deg)' },
+                            '100%': { transform: 'translate(10%, 10%) rotate(10deg)' },
+                        },
+                        toastIn: {
+                            '0%': { transform: 'translateX(100%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        }
                     },
                     cursor: {
                         'col-resize': 'col-resize',
@@ -66,45 +79,59 @@
             pointer-events: auto;
         }
 
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        /* Scrollbar Refinada (Quase invisível) */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* HEADER FLUTUANTE */
         .glass-header {
-            background: rgba(9, 9, 11, 0.85);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+            background: rgba(13, 13, 16, 0.7); 
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, width 0.3s ease;
             z-index: 50;
+            position: fixed;
+            top: 1.5rem; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            max-width: 1600px;
+            border-radius: 1.5rem;
         }
 
-        /* Estilos para o Header no Modo Teatro (Auto-hide) */
+        @media (max-width: 768px) {
+            .glass-header {
+                width: 100%;
+                top: 0;
+                border-radius: 0 0 1.5rem 1.5rem;
+                border-top: none;
+                border-left: none;
+                border-right: none;
+            }
+        }
+
         .theater-mode-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            transform: translateY(-100%); /* Escondido por padrão */
+            transform: translateX(-50%) translateY(-150%);
         }
         
-        /* Área de trigger invisível no topo para revelar o header */
         .header-trigger-area {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 10px;
+            height: 20px;
             z-index: 51;
         }
 
-        /* Revela o header ao passar o mouse na área de trigger ou no próprio header */
-        .header-trigger-area:hover ~ .theater-mode-header,
-        .theater-mode-header:hover {
-            transform: translateY(0);
+        .header-trigger-area:hover ~ .glass-header,
+        .glass-header:hover {
+            transform: translateX(-50%) translateY(0);
         }
 
         .sidebar-glass {
@@ -119,6 +146,18 @@
             }
         }
 
+        /* Efeito Aurora de Fundo */
+        .aurora-blob {
+            position: absolute;
+            filter: blur(100px);
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .aurora-cyan { background: #a5f3fc; }
+        .aurora-purple { background: #6366f1; }
+
+        /* Animações e Logo */
         .logo-scene { perspective: 1000px; height: 40px; width: 140px; }
         .logo-spinner { position: relative; width: 100%; height: 100%; text-align: left; transition: transform 0.8s; transform-style: preserve-3d; animation: flipLogo 8s infinite cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes flipLogo { 0%, 45% { transform: rotateX(0deg); } 50%, 95% { transform: rotateX(180deg); } 100% { transform: rotateX(360deg); } }
@@ -159,7 +198,37 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, memo, useCallback } = React;
 
-        // Dicionário de Traduções
+        // --- SISTEMA DE TOAST ---
+        const useToast = () => {
+            const [toasts, setToasts] = useState([]);
+
+            const addToast = (message, type = 'info') => {
+                const id = Date.now();
+                setToasts(prev => [...prev, { id, message, type }]);
+                setTimeout(() => {
+                    setToasts(prev => prev.filter(t => t.id !== id));
+                }, 3000);
+            };
+
+            return { toasts, addToast };
+        };
+
+        const ToastContainer = ({ toasts }) => {
+            return (
+                <div className="fixed bottom-20 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
+                    {toasts.map(toast => (
+                        <div key={toast.id} className="animate-toast-in bg-black/80 backdrop-blur-md border border-white/10 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 min-w-[200px]">
+                            {toast.type === 'error' && <span className="text-red-400">✕</span>}
+                            {toast.type === 'success' && <span className="text-green-400">✓</span>}
+                            {toast.type === 'info' && <span className="text-ice">ℹ</span>}
+                            <span className="text-sm font-medium">{toast.message}</span>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        // Traduções
         const translations = {
             pt: {
                 welcome: "Bem vindos ao",
@@ -167,16 +236,16 @@
                 subtitle_highlight: "SUBATHON EXTREMO",
                 subtitle_p2: "DOS STREAMERS",
                 add_btn: "Adicionar",
-                placeholder_twitch: "Nome do canal...",
-                placeholder_kick: "Nome do canal...",
-                placeholder_yt: "Link ou ID do vídeo...",
+                placeholder_twitch: "Nome do canal Twitch...",
+                placeholder_kick: "Nome do canal Kick...",
+                placeholder_yt: "Link ou ID do vídeo YT...",
                 placeholder_default: "Adicionar...",
                 map_btn: "Mapa",
                 hide_btn: "Ocultar",
                 realtime_loc: "Localização em Tempo Real",
                 no_chat: "Nenhum chat selecionado",
                 empty_title: "Seu painel está vazio",
-                empty_desc: "Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior para criar seu layout personalizado.",
+                empty_desc: "Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior flutuante.",
                 dev_by: "Desenvolvido por",
                 lights: "Luzes",
                 chat_btn: "Chat",
@@ -190,7 +259,11 @@
                 chat_visible: "Chat Visível",
                 chat_hidden: "Mostrar Chat",
                 warning_title: "Aviso Importante",
-                warning_text: "Você abriu este arquivo diretamente no seu PC. Twitch e YouTube bloqueiam vídeos nesse modo. Para funcionar corretamente, hospede no Vercel ou use um servidor local."
+                warning_text: "Você abriu este arquivo diretamente no seu PC. Twitch e YouTube bloqueiam vídeos nesse modo. Para funcionar corretamente, hospede no Vercel ou use um servidor local.",
+                switch_platform: "Clique para trocar a plataforma",
+                toast_added: "Streamer adicionado!",
+                toast_exists: "Streamer já está na lista!",
+                toast_empty: "Digite o nome do canal!"
             },
             en: {
                 welcome: "Welcome to",
@@ -198,16 +271,16 @@
                 subtitle_highlight: "EXTREME SUBATHON",
                 subtitle_p2: "OF STREAMERS",
                 add_btn: "Add",
-                placeholder_twitch: "Channel name...",
-                placeholder_kick: "Channel name...",
-                placeholder_yt: "Video Link or ID...",
+                placeholder_twitch: "Twitch channel name...",
+                placeholder_kick: "Kick channel name...",
+                placeholder_yt: "YT Video Link or ID...",
                 placeholder_default: "Add...",
                 map_btn: "Map",
                 hide_btn: "Hide",
                 realtime_loc: "Real-time Location",
                 no_chat: "No chat selected",
                 empty_title: "Your dashboard is empty",
-                empty_desc: "Add Twitch, Kick channels, or YouTube videos using the top bar to create your custom layout.",
+                empty_desc: "Add Twitch, Kick channels, or YouTube videos using the floating top bar.",
                 dev_by: "Developed by",
                 lights: "Lights",
                 chat_btn: "Chat",
@@ -221,7 +294,11 @@
                 chat_visible: "Chat Visible",
                 chat_hidden: "Show Chat",
                 warning_title: "Important Notice",
-                warning_text: "You opened this file directly on your PC. Twitch and YouTube block videos in this mode. For it to work correctly, host it on Vercel or use a local server."
+                warning_text: "You opened this file directly on your PC. Twitch and YouTube block videos in this mode. For it to work correctly, host it on Vercel or use a local server.",
+                switch_platform: "Click to switch platform",
+                toast_added: "Streamer added!",
+                toast_exists: "Streamer already listed!",
+                toast_empty: "Enter channel name!"
             }
         };
 
@@ -352,10 +429,68 @@
             }
         };
 
+        // Componente de Dropdown Customizado (PlatformSelector)
+        const PlatformSelector = ({ selected, onSelect }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            const dropdownRef = useRef(null);
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                        setIsOpen(false);
+                    }
+                };
+                document.addEventListener("mousedown", handleClickOutside);
+                return () => document.removeEventListener("mousedown", handleClickOutside);
+            }, []);
+
+            const platforms = [
+                { id: 'twitch', name: 'Twitch', color: 'text-[#9146ff]', icon: <TwitchIcon /> },
+                { id: 'kick', name: 'Kick', color: 'text-[#53fc18]', icon: <span className="font-bold text-xs translate-y-[1px]">K</span> },
+                { id: 'youtube', name: 'YouTube', color: 'text-[#ff0000]', icon: <YoutubeIcon /> },
+            ];
+
+            const current = platforms.find(p => p.id === selected);
+
+            return (
+                <div className="relative" ref={dropdownRef}>
+                    <button
+                        type="button"
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="h-10 pl-3 pr-3 bg-white/5 border border-white/10 rounded-lg flex items-center gap-2 transition-all hover:bg-white/10 min-w-[110px] justify-between"
+                    >
+                        <div className="flex items-center gap-2">
+                            <span className={current.color}>{current.icon}</span>
+                            <span className={`text-sm font-medium ${current.color}`}>{current.name}</span>
+                        </div>
+                        <span className="text-[10px] text-gray-500">▼</span>
+                    </button>
+
+                    {isOpen && (
+                        <div className="absolute top-full left-0 mt-1 w-full min-w-[140px] bg-[#121215] border border-white/10 rounded-lg shadow-xl overflow-hidden z-50 flex flex-col animate-fade-in">
+                            {platforms.map(p => (
+                                <button
+                                    key={p.id}
+                                    onClick={() => {
+                                        onSelect(p.id);
+                                        setIsOpen(false);
+                                    }}
+                                    className="flex items-center gap-2 px-3 py-2.5 hover:bg-white/5 transition-colors text-left"
+                                >
+                                    <span className={p.color}>{p.icon}</span>
+                                    <span className={`text-sm font-medium ${p.color}`}>{p.name}</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
         const StreamPlayer = memo(({ stream, index, widthClass, heightClass, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, isResizingAny }) => {
             return (
                 <div 
-                    className={`relative group bg-black overflow-hidden shadow-2xl transition-all duration-300 ${widthClass} ${heightClass} flex items-center justify-center`}
+                    className={`relative group bg-transparent overflow-hidden shadow-2xl transition-all duration-300 ${widthClass} ${heightClass} flex items-center justify-center`}
                     style={{ flexGrow: 1, margin: '0 auto' }}
                     draggable={isDraggable}
                     onDragStart={(e) => isDraggable && onDragStart(e, index)}
@@ -363,8 +498,9 @@
                     onDragEnd={onDragEnd}
                     onDragOver={(e) => e.preventDefault()}
                 >
-                    <div className={`w-full aspect-video relative shadow-2xl bg-black transition-all duration-300 ${isExpanded ? 'ring-1 ring-white/20' : ''}`}>
-                        <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 transition-all duration-200 bg-gradient-to-b from-black/90 via-black/40 to-transparent pointer-events-none ${isExpanded ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                    <div className={`w-full aspect-video relative shadow-2xl bg-transparent transition-all duration-300 ${isExpanded ? 'ring-1 ring-white/20' : ''}`}>
+                        {/* Header do Player - Revertido para comportamento padrão (group-hover) */}
+                        <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-200 pointer-events-none ${isExpanded ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                             <div className="flex items-center gap-2 pointer-events-auto">
                                 {isDraggable && (
                                     <div className="p-1.5 bg-black/60 text-white/50 hover:text-white rounded-md border border-white/10 cursor-grab active:cursor-grabbing hover:bg-white/10 transition-colors">
@@ -389,6 +525,7 @@
                             </div>
                         </div>
                         <div className={`w-full h-full pointer-events-none md:pointer-events-auto ${isResizingAny ? 'pointer-events-none' : ''}`}>
+                            {/* Key combinada força o reload do iframe quando refreshKey muda */}
                             {stream.platform === 'twitch' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://player.twitch.tv/?channel=${stream.name}&parent=${hostname}&parent=localhost&muted=${isGlobalMuted}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0"></iframe>}
                             {stream.platform === 'kick' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://player.kick.com/${stream.name}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0"></iframe>}
                             {stream.platform === 'youtube' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://www.youtube.com/embed/${stream.name}?autoplay=1&mute=${isGlobalMuted ? 1 : 0}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>}
@@ -415,17 +552,20 @@
             const [inputVal, setInputVal] = useState("");
             const [platform, setPlatform] = useState("twitch");
             const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-            const [activeChatTab, setActiveChatTab] = useState(null);
-            const [showMap, setShowMap] = useState(true);
+            const [activeChatTab, setActiveChatTab] = useState(null); // Iniciado como null para evitar erro de hidratação
+            const [showMap, setShowMap] = useState(true); // Estado do Mapa (Visível por padrão)
             const [expandedStreamId, setExpandedStreamId] = useState(null);
             const [isTheaterMode, setIsTheaterMode] = useState(false);
             const [loading, setLoading] = useState(true);
             const [sidebarWidth, setSidebarWidth] = useState(340);
             const [isResizing, setIsResizing] = useState(false);
             const [isGlobalMuted, setIsGlobalMuted] = useState(false);
-            const [mapHeight, setMapHeight] = useState(300);
+            const [mapHeight, setMapHeight] = useState(300); // Altura inicial do mapa em pixels
             const [isResizingMap, setIsResizingMap] = useState(false);
             const [lang, setLang] = useState('pt'); // Estado de idioma (pt ou en)
+            const { toasts, addToast } = useToast(); // Hook de Toast
+            const [draggedTabIndex, setDraggedTabIndex] = useState(null);
+            const [sidebarOrder, setSidebarOrder] = useState([]); // Estado para ordem das abas
 
             const dragItem = useRef(null);
             const dragOverItem = useRef(null);
@@ -446,6 +586,7 @@
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     setStreamers(parsed);
+                    setSidebarOrder(parsed.map(s => s.id)); // Inicializa a ordem das abas
                     if (parsed.length > 0) setActiveChatTab(parsed[0].id);
                 }
                 if (window.location.protocol === 'file:') setIsFileProtocol(true);
@@ -534,7 +675,10 @@
 
             const addStreamer = (e) => {
                 e.preventDefault();
-                if (!inputVal.trim()) return;
+                if (!inputVal.trim()) {
+                    addToast(t('toast_empty'), 'info');
+                    return;
+                }
                 let cleanName = inputVal.trim();
                 if (platform === 'youtube') {
                     const ytRegex = /(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/;
@@ -545,7 +689,7 @@
                 }
 
                 if (streamers.some(s => s.name === cleanName && s.platform === platform)) {
-                    alert("Streamer já adicionado!");
+                    addToast(t('toast_exists'), 'error');
                     return;
                 }
                 const newStreamer = {
@@ -556,8 +700,11 @@
                 };
                 const updatedList = [...streamers, newStreamer];
                 setStreamers(updatedList);
+                setSidebarOrder(prev => [...prev, newStreamer.id]); // Adiciona à ordem das abas
                 setInputVal("");
                 if (updatedList.length === 1) setActiveChatTab(newStreamer.id);
+                
+                addToast(t('toast_added'), 'success');
             };
 
             const removeStreamer = useCallback((id) => {
@@ -571,6 +718,7 @@
                     }
                     return newList;
                 });
+                setSidebarOrder(prev => prev.filter(sid => sid !== id)); // Remove da ordem das abas
             }, [expandedStreamId, activeChatTab]);
 
             const toggleFocusMode = useCallback((id) => {
@@ -596,6 +744,27 @@
                 dragItem.current = null;
                 dragOverItem.current = null;
             }, []);
+
+            const handleTabDragStart = (e, index) => {
+                setDraggedTabIndex(index);
+            };
+
+            const handleTabDragOver = (e, index) => {
+                e.preventDefault();
+                if (draggedTabIndex === null || draggedTabIndex === index) return;
+                
+                const newOrder = [...sidebarOrder];
+                const draggedId = newOrder[draggedTabIndex];
+                newOrder.splice(draggedTabIndex, 1);
+                newOrder.splice(index, 0, draggedId);
+                
+                setSidebarOrder(newOrder);
+                setDraggedTabIndex(index);
+            };
+
+            const handleTabDragEnd = () => {
+                setDraggedTabIndex(null);
+            };
 
             const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
@@ -628,7 +797,7 @@
                     if (!expandedStream) return null;
 
                     return (
-                        <div className="flex flex-col md:flex-row w-full h-full bg-black">
+                        <div className="flex flex-col md:flex-row w-full h-full bg-transparent" style={{ paddingTop: isTheaterMode ? '0' : '' }}>
                             <div className={`relative ${otherStreams.length > 0 ? 'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5' : 'w-full'} h-2/3 md:h-full transition-all duration-300`}>
                                 <StreamPlayer 
                                     key={expandedStream.id} 
@@ -651,7 +820,7 @@
                             </div>
                             
                             {otherStreams.length > 0 && (
-                                <div className="w-full md:w-1/5 h-1/3 md:h-full flex flex-row md:flex-col bg-black overflow-x-auto md:overflow-y-auto md:overflow-x-hidden">
+                                <div className="w-full md:w-1/5 h-1/3 md:h-full flex flex-row md:flex-col bg-transparent overflow-x-auto md:overflow-y-auto md:overflow-x-hidden">
                                     {otherStreams.map((s, idx) => (
                                         <StreamPlayer 
                                             key={s.id} 
@@ -679,7 +848,7 @@
                 }
 
                 return (
-                    <div className="flex flex-wrap justify-center content-center items-center w-full h-full bg-black gap-1 p-1">
+                    <div className="flex flex-wrap justify-center content-center items-center w-full h-full bg-transparent gap-1 p-1" style={{ paddingTop: isTheaterMode ? '0' : '' }}>
                         {streamers.map((s, index) => {
                             let width = "w-full"; 
                             let height = "h-full";
@@ -717,8 +886,15 @@
             };
 
             return (
-                <div className="flex flex-col h-screen bg-background text-gray-100 font-sans selection:bg-accent selection:text-white relative">
+                <div className="flex flex-col h-screen bg-background text-gray-100 font-sans selection:bg-accent selection:text-white relative overflow-hidden">
+                    {/* Aurora Background */}
+                    <div className="fixed inset-0 z-0 pointer-events-none">
+                        <div className="aurora-blob aurora-cyan w-[600px] h-[600px] rounded-full top-[-100px] left-[-100px] animate-aurora-1"></div>
+                        <div className="aurora-blob aurora-purple w-[500px] h-[500px] rounded-full bottom-[-100px] right-[-100px] animate-aurora-2"></div>
+                    </div>
+
                     <LoadingScreen isLoading={loading} lang={lang} />
+                    <ToastContainer toasts={toasts} />
                     
                     {(isResizing || isResizingMap) && (
                         <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>
@@ -726,7 +902,7 @@
 
                     {isTheaterMode && <div className="header-trigger-area"></div>}
 
-                    <header className={`h-16 px-6 flex items-center justify-between shrink-0 ${isTheaterMode ? 'theater-mode-header glass-header' : 'glass-header sticky top-0'}`}>
+                    <header className={`h-16 px-6 flex items-center justify-between shrink-0 ${isTheaterMode ? 'theater-mode-header glass-header' : 'glass-header'}`}>
                         <div className={`flex items-center gap-4`}>
                             <div className="w-10 h-10 tech-gradient rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 transform hover:scale-105 transition-transform duration-300 ring-1 ring-white/20">
                                 <LogoML />
@@ -745,15 +921,11 @@
                         </div>
                         <form onSubmit={addStreamer} className={`flex-1 max-w-xl mx-2 md:mx-8 flex items-center gap-2`}>
                             <div className="relative group hidden sm:block">
-                                <select value={platform} onChange={(e) => setPlatform(e.target.value)} className="h-10 pl-3 pr-8 bg-surface border border-white/10 rounded-lg text-sm text-gray-300 focus:border-accent focus:ring-1 focus:ring-accent outline-none appearance-none cursor-pointer transition-all hover:bg-surfaceHighlight">
-                                    <option value="twitch">Twitch</option>
-                                    <option value="kick">Kick</option>
-                                    <option value="youtube">YouTube</option>
-                                </select>
-                                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 text-[10px]">▼</div>
+                                {/* Substituído o <select> nativo pelo componente PlatformSelector */}
+                                <PlatformSelector selected={platform} onSelect={setPlatform} />
                             </div>
                             <div className="relative flex-1 min-w-0">
-                                <input type="text" value={inputVal} onChange={(e) => setInputVal(e.target.value)} placeholder={getPlaceholder()} className="w-full h-10 bg-surface border border-white/10 rounded-lg pl-4 pr-10 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder-gray-600 hover:bg-surfaceHighlight min-w-0" />
+                                <input type="text" value={inputVal} onChange={(e) => setInputVal(e.target.value)} placeholder={getPlaceholder()} className="w-full h-10 bg-white/5 backdrop-blur-sm rounded-lg pl-4 pr-10 text-sm focus:bg-white/10 outline-none transition-all placeholder-gray-500 min-w-0" />
                             </div>
                             <button type="submit" className="h-10 px-4 flex items-center gap-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors text-sm active:scale-95 shrink-0" title={t('tt_add')}>
                                 <PlusIcon /> <span className="hidden sm:inline">{t('add_btn')}</span>
@@ -809,8 +981,8 @@
                             </button>
                         </div>
                     </header>
-                    <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
-                        <div className="flex-1 relative bg-[#050507] overflow-hidden flex flex-col min-h-[30vh]">
+                    <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-24 ${isTheaterMode ? '!pt-0' : ''} z-10 relative`}>
+                        <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-[30vh]">
                             {streamers.length === 0 ? (
                                 <div className="flex-1 flex items-center justify-center text-center animate-fade-in">
                                     <div className="p-8 rounded-2xl bg-surface/50 border border-white/5 backdrop-blur-sm max-w-md w-full mx-4">
@@ -900,12 +1072,28 @@
                                         
                                         <div className="w-[1px] h-4 bg-white/10 mx-1 shrink-0"></div>
                                         
-                                        {streamers.map(s => (
-                                            <button key={s.id} onClick={() => setActiveChatTab(s.id)} className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all max-w-[120px] border-b-2 ${activeChatTab === s.id ? getActiveTabStyle(s.platform) : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}>
+                                        {sidebarOrder.map((streamId, idx) => {
+                                            const s = streamers.find(st => st.id === streamId);
+                                            if (!s) return null;
+                                            const isActive = activeChatTab === s.id;
+                                            return (
+                                            <button 
+                                                key={s.id} 
+                                                onClick={() => setActiveChatTab(s.id)} 
+                                                draggable={true}
+                                                onDragStart={(e) => handleTabDragStart(e, idx)}
+                                                onDragOver={(e) => handleTabDragOver(e, idx)}
+                                                onDragEnd={handleTabDragEnd}
+                                                className={`group flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${isActive ? getActiveTabStyle(s.platform) : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}
+                                            >
                                                 <span className={`flex items-center justify-center w-3 h-3 ${getPlatformColor(s.platform)}`}>{s.platform === 'twitch' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}{s.platform === 'kick' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}{s.platform === 'youtube' && <YoutubeIcon />}</span>
-                                                <span className="truncate">{s.name}</span>
+                                                {/* Efeito Acordeão: Mostra nome completo se ativo, ou expande no hover se inativo */}
+                                                <span className={`truncate transition-all duration-300 ease-in-out ${isActive ? 'max-w-[120px] opacity-100' : 'max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100'}`}>
+                                                    {s.name}
+                                                </span>
                                             </button>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
 
                                     <div className="flex-1 relative bg-[#09090b]">
@@ -938,9 +1126,16 @@
                             </div>
                         </div>
                     </main>
-                    <footer className={`h-9 bg-[#050507] border-t border-white/5 flex items-center justify-center text-[11px] text-gray-500 shrink-0 z-30 ${isTheaterMode ? 'hidden' : 'block'}`}>
-                        <span className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">{t('dev_by')} <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-white hover:text-accent flex items-center gap-1 font-medium transition-colors"><InstagramIcon /> Eduardo Macêdo</a></span>
-                    </footer>
+                    
+                    {/* Rodapé "Assinatura Neon" - Opção C */}
+                    <div className="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-none z-40">
+                        <div className="pointer-events-auto flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">
+                            <span className="text-[10px] uppercase font-bold text-ice drop-shadow-[0_0_5px_rgba(165,243,252,0.5)] tracking-widest">{t('dev_by')}</span>
+                            <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white flex items-center gap-1 font-display font-black text-sm transition-transform hover:scale-105" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>
+                                <InstagramIcon width={14} height={14} /> EDUARDO MACÊDO
+                            </a>
+                        </div>
+                    </div>
                 </div>
             );
         };
