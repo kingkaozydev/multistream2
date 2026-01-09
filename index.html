@@ -676,12 +676,21 @@
                                                 )}
                                                 {s.platform === 'kick' && (
                                                     <div className="w-full h-full relative group/kick">
-                                                        <div className="absolute top-2 right-2 z-20 opacity-0 group-hover/kick:opacity-100 transition-opacity pointer-events-none group-hover/kick:pointer-events-auto">
-                                                            <a href="https://kick.com" target="_blank" rel="noopener noreferrer" className="bg-[#53fc18] hover:bg-[#42ca13] text-black text-[10px] font-bold px-3 py-1.5 rounded-md shadow-lg flex items-center gap-2 transition-colors">
-                                                                <span>⚠ Problemas no login?</span>
+                                                        {/* Botão de Ajuda de Login - Melhorado */}
+                                                        <div className="absolute top-2 right-2 z-20 opacity-0 group-hover/kick:opacity-100 transition-opacity duration-300 pointer-events-none group-hover/kick:pointer-events-auto flex flex-col items-end gap-2">
+                                                            <div className="bg-black/90 text-white text-[10px] p-2 rounded border border-white/10 max-w-[150px] text-center shadow-xl backdrop-blur-md">
+                                                                <p className="mb-1 text-gray-300">Erro de senha?</p>
+                                                                <p className="leading-tight">Navegadores bloqueiam login aqui dentro.</p>
+                                                            </div>
+                                                            <a href="https://kick.com" target="_blank" rel="noopener noreferrer" className="bg-[#53fc18] hover:bg-[#42ca13] text-black text-[10px] font-bold px-3 py-1.5 rounded-md shadow-lg flex items-center gap-2 transition-colors cursor-pointer">
+                                                                <span>Abrir Kick.com & Logar</span>
                                                             </a>
                                                         </div>
-                                                        <iframe src={`https://kick.com/popout/${s.name}/chat`} className="w-full h-full border-none"></iframe>
+                                                        <iframe 
+                                                            src={`https://kick.com/popout/${s.name}/chat`} 
+                                                            className="w-full h-full border-none"
+                                                            sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
+                                                        ></iframe>
                                                     </div>
                                                 )}
                                             </>
