@@ -6,7 +6,7 @@
     <meta name="referrer" content="no-referrer">
     <title>MultLives - Nevethon (Ultimate)</title>
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M5 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M19 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M5 5L12 13L19 5' stroke='%23a5f3fc' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' /></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M5 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M19 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M19 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M5 5L12 13L19 5' stroke='%23a5f3fc' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' /></svg>">
 
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -269,19 +269,7 @@
         }
 
         /* HEADER HIDDEN MODE (AUTO-COLLAPSE NO MODO NORMAL) */
-        /* Esta classe será aplicada quando o mouse não estiver no topo */
-        .header-hidden-active .hero-brand {
-            transform: translateY(-50px) scale(0.8);
-            opacity: 0;
-            max-height: 0 !important;
-            height: 0 !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin: 0 !important;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
+        
         .header-hidden-active .command-bar-container {
             transform: translateX(-50%) translateY(-150%);
             opacity: 0;
@@ -767,19 +755,6 @@
                     )}
 
                     {status === 'loaded' && (
-                        <div className="absolute top-0 left-0 right-0 h-8 bg-[#0b0e11]/90 backdrop-blur text-white flex items-center justify-between px-3 z-40 border-b border-[#53fc18]/20 opacity-0 group-hover/kick:opacity-100 transition-opacity">
-                            <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#53fc18]"></span>
-                                <span className="text-[9px] font-bold text-[#53fc18]">KICK CHAT</span>
-                            </div>
-                            <div className="flex gap-2">
-                                <button onClick={refreshIframe} className="text-white hover:text-[#53fc18]" title="Recarregar"><RefreshCwIcon /></button>
-                                <button onClick={openNativeWindow} className="text-white hover:text-[#53fc18]" title="Abrir Janela"><ExpandIcon /></button>
-                            </div>
-                        </div>
-                    )}
-
-                    {status === 'loaded' && (
                         <iframe 
                             id={`kick-iframe-${streamName}${idSuffix}`}
                             src={`https://kick.com/popout/${streamName}/chat`} 
@@ -843,7 +818,7 @@
         const MoveIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>;
         const MoonIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>;
         const SunIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41-1.41"/></svg>;
-        const RefreshCwIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg>;
+        const RefreshCwIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 14} height={height || 14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg>;
         const Volume2Icon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>;
         const VolumeXIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>;
         const SplitIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="12" x2="21" y2="12"></line></svg>;
@@ -852,13 +827,13 @@
 
         const GridIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>;
         const LayoutTemplateIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="21" y1="9" x2="3" y2="9"></line><line x1="9" y1="9" x2="9" y2="21"></line></svg>;
-        const UsersIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
+        const UsersIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 16} height={height || 16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
         const SaveIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>;
-        const XIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
-        const SettingsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>;
-        const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>;
+        const XIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 14} height={height || 14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
+        const SettingsIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 20} height={height || 20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>;
+        const ExternalLinkIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 16} height={height || 16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>;
         const ScaleIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"></path><path d="M7 9v2"></path><path d="M11 9v2"></path><path d="M15 9v2"></path></svg>;
-        const ChatIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>;
+        const ChatIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 16} height={height || 16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>;
         const HeartIcon = ({ className, width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 20} height={height || 20} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>;
 
         const CarIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>;
@@ -1265,11 +1240,31 @@
             );
         };
 
+        const ChatHeader = ({ stream, onReload, onPopout }) => (
+            <div className="h-9 bg-[#121215] border-b border-white/5 flex items-center justify-between px-3 shrink-0 z-20 shadow-sm">
+                <div className="flex items-center gap-2">
+                     <div className={`flex items-center justify-center w-5 h-5 rounded bg-white/5 ${getPlatformColor(stream.platform)}`}>
+                        {getPlatformIcon(stream.platform)}
+                     </div>
+                     <span className="text-xs font-bold text-white tracking-tight">{stream.name}</span>
+                     <span className="text-[9px] uppercase tracking-widest text-gray-500 border border-white/10 px-1.5 rounded bg-white/5">{stream.platform} chat</span>
+                </div>
+                <div className="flex items-center gap-1">
+                     <button onClick={onReload} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors" title="Recarregar Chat"><RefreshCwIcon width={12} height={12}/></button>
+                     <button onClick={onPopout} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors" title="Abrir em Janela"><ExternalLinkIcon width={12} height={12}/></button>
+                </div>
+            </div>
+        );
+
         const App = () => {
             const [streamers, setStreamers] = useState([]);
             const [inputVal, setInputVal] = useState("");
             const [platform, setPlatform] = useState("twitch");
-            const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+            // STATE: Start closed on mobile, open on desktop
+            const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+                if (typeof window !== 'undefined') return window.innerWidth > 768;
+                return true;
+            });
             const [activeChatTab, setActiveChatTab] = useState(null);
             
             // HEADER AUTO-HIDE STATE
@@ -1298,6 +1293,7 @@
             const [squads, setSquads] = useState([]);
             const [showSquadMenu, setShowSquadMenu] = useState(false);
             const [showDonatePopup, setShowDonatePopup] = useState(false);
+            const [chatRefreshTriggers, setChatRefreshTriggers] = useState({});
             
             // TOOLBAR ACTIVE STATE
             const [isToolbarActive, setIsToolbarActive] = useState(false);
@@ -1506,6 +1502,20 @@
             const refreshStream = useCallback((id) => {
                 setStreamers(prev => prev.map(s => s.id === id ? { ...s, refreshKey: Date.now() } : s));
             }, []);
+            
+            const handleChatReload = (id) => {
+                 setChatRefreshTriggers(prev => ({ ...prev, [id]: Date.now() }));
+            };
+            
+            const handleChatPopout = (stream) => {
+                 if (stream.platform === 'twitch') {
+                     window.open(`https://www.twitch.tv/popout/${stream.name}/chat`, `chat-${stream.name}`, "width=400,height=600");
+                 } else if (stream.platform === 'kick') {
+                      window.open(`https://kick.com/popout/${stream.name}/chat`, `chat-${stream.name}`, "width=400,height=600");
+                 } else if (stream.platform === 'youtube') {
+                     window.open(`https://www.youtube.com/live_chat?v=${stream.name}`, `chat-${stream.name}`, "width=400,height=600");
+                 }
+            };
 
             const toggleGlobalMute = () => setIsGlobalMuted(!isGlobalMuted);
             const toggleLang = () => setLang(prev => prev === 'pt' ? 'en' : 'pt');
@@ -1687,12 +1697,24 @@
 
             const toolbarVisible = isToolbarActive || showSquadMenu;
             const isHeaderHidden = !isHeaderVisible && streamers.length > 0 && !isTheaterMode;
+            const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+
+            // Determinar a stream ativa para mostrar no header
+            const activeStream = streamers.find(s => s.id === activeChatTab);
 
             return (
                 <div className={`flex flex-col h-screen transition-all duration-700 ${isTheaterMode ? 'bg-[#020203] theater-mode-active' : 'bg-background'} ${isHeaderHidden ? 'header-hidden-active' : ''} text-gray-100 font-sans selection:bg-accent selection:text-white relative overflow-hidden`}>
                     <div className="blackout-overlay"></div>
                     <LoadingScreen isLoading={loading} lang={lang} />
                     <ToastContainer toasts={toasts} />
+                    
+                    {/* LANGUAGE BUTTON */}
+                    <button 
+                        onClick={toggleLang} 
+                        className="fixed top-4 left-4 z-[60] bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full px-3 py-1.5 text-xs font-bold text-white/80 hover:text-white transition-all border border-white/5 active:scale-95"
+                    >
+                        {lang === 'pt' ? '🇺🇸 EN' : '🇧🇷 PT'}
+                    </button>
                     
                     {/* DONATE POPUP RENDER */}
                     {showDonatePopup && <DonatePopup onClose={() => setShowDonatePopup(false)} />}
@@ -1730,16 +1752,15 @@
                                 <PlusIcon />
                             </button>
 
-                            {/* Separator */}
-                            <div className="w-[1px] h-6 bg-white/10 mx-1"></div>
-
-                            {/* Utility Buttons inside Command Bar now */}
-                            <button type="button" onClick={toggleGlobalMute} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${isGlobalMuted ? 'bg-red-500/20 text-red-400' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isGlobalMuted ? t('tt_unmute_all') : t('tt_mute_all')}>
-                                {isGlobalMuted ? <VolumeXIcon /> : <Volume2Icon />}
-                            </button>
-                            <button type="button" onClick={toggleSidebar} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${!isSidebarOpen ? 'bg-indigo-500/20 text-indigo-400' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}>
-                                <LayoutIcon />
-                            </button>
+                            {/* Utility Buttons: Hidden on Mobile */}
+                            <div className="hidden md:flex items-center gap-1 ml-1 border-l border-white/10 pl-1">
+                                <button type="button" onClick={toggleGlobalMute} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${isGlobalMuted ? 'bg-red-500/20 text-red-400' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isGlobalMuted ? t('tt_unmute_all') : t('tt_mute_all')}>
+                                    {isGlobalMuted ? <VolumeXIcon /> : <Volume2Icon />}
+                                </button>
+                                <button type="button" onClick={toggleSidebar} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${!isSidebarOpen ? 'bg-indigo-500/20 text-indigo-400' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}>
+                                    <LayoutIcon />
+                                </button>
+                            </div>
                         </form>
                     </div>
 
@@ -1753,6 +1774,14 @@
                         onTouchStart={handleToolbarEnter}
                         style={{ marginLeft: isSidebarOpen && window.innerWidth >= 768 ? `-${sidebarWidth/2}px` : '0' }}
                     >
+                        {/* Mobile Chat Toggle Added Here */}
+                        <div className="md:hidden flex items-center">
+                            <button onClick={(e) => { e.stopPropagation(); toggleSidebar(); }} className={`p-2 rounded-full transition-all ${isSidebarOpen ? 'bg-indigo-500 text-white shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}>
+                                <ChatIcon width={16} height={16} />
+                            </button>
+                            <div className="w-[1px] h-5 bg-white/10 mx-1"></div>
+                        </div>
+
                         <button onClick={(e) => { e.stopPropagation(); toggleTheaterMode(); }} className={`flex items-center justify-center p-2 rounded-full transition-all transform active:scale-90 shrink-0 ${isTheaterMode ? 'bg-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white'}`} title={isTheaterMode ? t('tt_cinema_exit') : t('tt_cinema_enter')}>
                             {isTheaterMode ? <SunIcon width={16} height={16} /> : <MoonIcon width={16} height={16} />}
                         </button>
@@ -1789,7 +1818,7 @@
                             ) : renderContent()}
                         </div>
                         
-                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen ? 'translate-y-0 md:translate-x-0 opacity-100' : 'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden'}`} style={{ width: isSidebarOpen ? (window.innerWidth < 768 ? '100%' : `${sidebarWidth}px`) : '0px', height: window.innerWidth < 768 && isSidebarOpen ? '45vh' : '100%', transitionDuration: isResizing ? '0s' : '300ms' }}>
+                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen ? 'translate-y-0 md:translate-x-0 opacity-100' : (window.innerWidth < 768 ? 'translate-y-0' : 'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden')}`} style={{ width: window.innerWidth < 768 ? '100%' : (isSidebarOpen ? `${sidebarWidth}px` : '0px'), height: window.innerWidth < 768 ? (isSidebarOpen ? '45vh' : '0px') : '100%', transitionDuration: isResizing ? '0s' : '300ms' }}>
                             <div className="hidden md:flex absolute left-0 top-0 bottom-0 w-1.5 hover:w-3 items-center justify-center -ml-1.5 z-50 cursor-col-resize group/resizer" onMouseDown={startResizing} onTouchStart={startResizing}><div className="h-8 w-1 rounded-full bg-white/20 group-hover/resizer:bg-accent/80 transition-colors"></div></div>
                             <div className="flex flex-col h-full w-full overflow-hidden">
                                 <div className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col relative group bg-black/40 border-b border-white/5`} style={{ height: showMap ? `${mapHeight}px` : '0px', transitionDuration: isResizingMap ? '0s' : '300ms' }}>
@@ -1819,9 +1848,20 @@
                                         </button>
                                     </div>
                                     <div className="flex-1 flex flex-col min-h-0 bg-[#09090b] overflow-hidden">
-                                        <div className={`flex-1 relative ${secondaryChatTab ? 'border-b border-white/10' : ''}`}>
-                                            {streamers.map(s => (<div key={`chat-${s.id}`} className={`absolute inset-0 ${activeChatTab === s.id ? 'z-10' : 'hidden'}`}>{s.platform === 'kick' ? <KickChatEmbed streamName={s.name} isResizing={isResizing} idSuffix="-primary"/> : s.platform === 'youtube' ? <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT Indisponível em File</div> : <iframe src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0" />}</div>))}
-                                            {streamers.length === 0 && <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-xs">Sem Chat</div>}
+                                        <div className={`flex-1 relative flex flex-col ${secondaryChatTab ? 'border-b border-white/10' : ''}`}>
+                                            {/* ACTIVE CHAT HEADER */}
+                                            {activeStream && (
+                                                <ChatHeader 
+                                                    stream={activeStream} 
+                                                    onReload={() => handleChatReload(activeStream.id)}
+                                                    onPopout={() => handleChatPopout(activeStream)}
+                                                />
+                                            )}
+                                            
+                                            <div className="flex-1 relative">
+                                                {streamers.map(s => (<div key={`chat-${s.id}`} className={`absolute inset-0 ${activeChatTab === s.id ? 'z-10' : 'hidden'}`}>{s.platform === 'kick' ? <KickChatEmbed key={chatRefreshTriggers[s.id] || 'init'} streamName={s.name} isResizing={isResizing} idSuffix="-primary"/> : s.platform === 'youtube' ? <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT Indisponível em File</div> : <iframe key={chatRefreshTriggers[s.id] || 'init'} src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0" />}</div>))}
+                                                {streamers.length === 0 && <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-xs">Sem Chat</div>}
+                                            </div>
                                         </div>
                                         {secondaryChatTab && (
                                             <div className="flex-1 relative flex flex-col">
