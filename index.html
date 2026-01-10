@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MultLives - Nevethon 2.0</title>
     
     <!-- Favicon -->
@@ -116,6 +116,8 @@
                 border-top: none;
                 border-left: none;
                 border-right: none;
+                padding-left: 0.75rem; /* Menos padding */
+                padding-right: 0.75rem;
             }
         }
 
@@ -241,16 +243,16 @@
                 subtitle_highlight: "SUBATHON EXTREMO",
                 subtitle_p2: "DOS STREAMERS",
                 add_btn: "Adicionar",
-                placeholder_twitch: "Nome do canal Twitch...",
-                placeholder_kick: "Nome do canal Kick...",
-                placeholder_yt: "Link ou ID do vídeo YT...",
-                placeholder_default: "Adicionar...",
+                placeholder_twitch: "Canal Twitch",
+                placeholder_kick: "Canal Kick",
+                placeholder_yt: "Vídeo YT",
+                placeholder_default: "Canal",
                 map_btn: "Mapa",
                 hide_btn: "Ocultar",
                 realtime_loc: "Localização em Tempo Real",
                 no_chat: "Nenhum chat selecionado",
                 empty_title: "Seu painel está vazio",
-                empty_desc: "Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior flutuante.",
+                empty_desc: "Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior.",
                 dev_by: "Desenvolvido por",
                 lights: "Luzes",
                 chat_btn: "Chat",
@@ -276,16 +278,16 @@
                 subtitle_highlight: "EXTREME SUBATHON",
                 subtitle_p2: "OF STREAMERS",
                 add_btn: "Add",
-                placeholder_twitch: "Twitch channel name...",
-                placeholder_kick: "Kick channel name...",
-                placeholder_yt: "YT Video Link or ID...",
-                placeholder_default: "Add...",
+                placeholder_twitch: "Twitch Channel",
+                placeholder_kick: "Kick Channel",
+                placeholder_yt: "YT Video",
+                placeholder_default: "Channel",
                 map_btn: "Map",
                 hide_btn: "Hide",
                 realtime_loc: "Real-time Location",
                 no_chat: "No chat selected",
                 empty_title: "Your dashboard is empty",
-                empty_desc: "Add Twitch, Kick channels, or YouTube videos using the floating top bar.",
+                empty_desc: "Add Twitch, Kick channels, or YouTube videos using the top bar.",
                 dev_by: "Developed by",
                 lights: "Lights",
                 chat_btn: "Chat",
@@ -434,6 +436,7 @@
         };
 
         // Componente de Dropdown Customizado (PlatformSelector)
+        // Alterado para ser responsivo: Ícone apenas no mobile, Completo no Desktop
         const PlatformSelector = ({ selected, onSelect }) => {
             const [isOpen, setIsOpen] = useState(false);
             const dropdownRef = useRef(null);
@@ -461,17 +464,18 @@
                     <button
                         type="button"
                         onClick={() => setIsOpen(!isOpen)}
-                        className="h-10 pl-3 pr-3 bg-white/5 border border-white/10 rounded-lg flex items-center gap-2 transition-all hover:bg-white/10 min-w-[110px] justify-between"
+                        className="h-10 pl-2 pr-2 sm:pl-3 sm:pr-3 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1 sm:gap-2 transition-all hover:bg-white/10 w-10 sm:w-auto sm:min-w-[110px] justify-center sm:justify-between"
+                        title="Selecionar Plataforma"
                     >
                         <div className="flex items-center gap-2">
                             <span className={current.color}>{current.icon}</span>
-                            <span className={`text-sm font-medium ${current.color}`}>{current.name}</span>
+                            <span className={`text-sm font-medium ${current.color} hidden sm:block`}>{current.name}</span>
                         </div>
-                        <span className="text-[10px] text-gray-500">▼</span>
+                        <span className="text-[10px] text-gray-500 hidden sm:block">▼</span>
                     </button>
 
                     {isOpen && (
-                        <div className="absolute top-full left-0 mt-1 w-full min-w-[140px] bg-[#121215] border border-white/10 rounded-lg shadow-xl overflow-hidden z-50 flex flex-col animate-fade-in">
+                        <div className="absolute top-full left-0 mt-1 w-auto min-w-[120px] sm:min-w-[140px] bg-[#121215] border border-white/10 rounded-lg shadow-xl overflow-hidden z-50 flex flex-col animate-fade-in">
                             {platforms.map(p => (
                                 <button
                                     key={p.id}
@@ -492,6 +496,20 @@
         };
 
         const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, isResizingAny }) => {
+            
+            // Helper para gerar URL da Twitch robusta (Correção para evitar parent vazio)
+            const getTwitchUrl = () => {
+                // Remove duplicatas e strings vazias para evitar erros de configuração
+                const rawParents = [hostname, "localhost", window.location.hostname];
+                const validParents = rawParents.filter((h, i) => h && h !== "" && rawParents.indexOf(h) === i);
+                
+                // Se nenhum host for detectado (ex: file://), tenta garantir ao menos localhost
+                if (validParents.length === 0) validParents.push("localhost");
+
+                const parentQuery = validParents.map(p => `parent=${p}`).join("&");
+                return `https://player.twitch.tv/?channel=${stream.name}&${parentQuery}&muted=${isGlobalMuted}`;
+            };
+
             return (
                 <div 
                     className={`relative group bg-transparent overflow-hidden shadow-2xl transition-all duration-300 ${widthClass} ${heightClass || ''} flex items-center justify-center p-1`}
@@ -530,7 +548,7 @@
                         </div>
                         <div className={`w-full h-full pointer-events-none md:pointer-events-auto ${isResizingAny ? 'pointer-events-none' : ''}`}>
                             {/* Key combinada força o reload do iframe quando refreshKey muda */}
-                            {stream.platform === 'twitch' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://player.twitch.tv/?channel=${stream.name}&parent=${hostname}&parent=localhost&muted=${isGlobalMuted}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0"></iframe>}
+                            {stream.platform === 'twitch' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={getTwitchUrl()} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0"></iframe>}
                             {stream.platform === 'kick' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://player.kick.com/${stream.name}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0"></iframe>}
                             {stream.platform === 'youtube' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://www.youtube.com/embed/${stream.name}?autoplay=1&mute=${isGlobalMuted ? 1 : 0}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>}
                         </div>
@@ -913,12 +931,12 @@
 
                     {isTheaterMode && <div className="header-trigger-area"></div>}
 
-                    <header className={`h-16 px-6 flex items-center justify-between shrink-0 ${isTheaterMode ? 'theater-mode-header glass-header' : 'glass-header'}`}>
-                        <div className={`flex items-center gap-4`}>
-                            <div className="w-10 h-10 tech-gradient rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 transform hover:scale-105 transition-transform duration-300 ring-1 ring-white/20">
+                    <header className={`h-16 px-3 sm:px-6 flex items-center justify-between shrink-0 ${isTheaterMode ? 'theater-mode-header glass-header' : 'glass-header'}`}>
+                        <div className={`flex items-center gap-2 sm:gap-4`}>
+                            <div className="w-10 h-10 tech-gradient rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 transform hover:scale-105 transition-transform duration-300 ring-1 ring-white/20 shrink-0">
                                 <LogoML />
                             </div>
-                            <div className="logo-scene hidden sm:block">
+                            <div className="logo-scene hidden md:block">
                                 <div className="logo-spinner">
                                     <div className="logo-face flex flex-col justify-center">
                                         <h1 className="font-bold text-lg tracking-tight text-white leading-none">MultLives</h1>
@@ -930,24 +948,24 @@
                                 </div>
                             </div>
                         </div>
-                        <form onSubmit={addStreamer} className={`flex-1 max-w-xl mx-2 md:mx-8 flex items-center gap-2`}>
-                            <div className="relative group hidden sm:block">
-                                {/* Substituído o <select> nativo pelo componente PlatformSelector */}
+                        <form onSubmit={addStreamer} className={`flex-1 max-w-xl mx-2 md:mx-8 flex items-center gap-1 sm:gap-2`}>
+                            {/* Ajuste no PlatformSelector: Removido 'hidden sm:block' para aparecer em mobile, agora é controlado dentro do componente */}
+                            <div className="relative group shrink-0">
                                 <PlatformSelector selected={platform} onSelect={setPlatform} />
                             </div>
                             <div className="relative flex-1 min-w-0">
-                                <input type="text" value={inputVal} onChange={(e) => setInputVal(e.target.value)} placeholder={getPlaceholder()} className="w-full h-10 bg-white/5 backdrop-blur-sm rounded-lg pl-4 pr-10 text-sm focus:bg-white/10 outline-none transition-all placeholder-gray-500 min-w-0" />
+                                <input type="text" value={inputVal} onChange={(e) => setInputVal(e.target.value)} placeholder={getPlaceholder()} className="w-full h-10 bg-white/5 backdrop-blur-sm rounded-lg pl-3 sm:pl-4 pr-3 sm:pr-10 text-xs sm:text-sm focus:bg-white/10 outline-none transition-all placeholder-gray-500 min-w-0" />
                             </div>
-                            <button type="submit" className="h-10 px-4 flex items-center gap-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors text-sm active:scale-95 shrink-0" title={t('tt_add')}>
+                            <button type="submit" className="h-10 px-3 sm:px-4 flex items-center gap-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors text-sm active:scale-95 shrink-0" title={t('tt_add')}>
                                 <PlusIcon /> <span className="hidden sm:inline">{t('add_btn')}</span>
                             </button>
                         </form>
                         
-                        <div className={`flex items-center gap-3 border-l border-white/10 pl-2 md:pl-6`}>
-                            {/* Botão de Idioma */}
+                        <div className={`flex items-center gap-1 sm:gap-3 border-l border-white/10 pl-2 md:pl-6 shrink-0`}>
+                            {/* Botão de Idioma - Escondido no Mobile para economizar espaço */}
                             <button 
                                 onClick={toggleLang}
-                                className="p-2 rounded-lg bg-surface hover:bg-white/10 border border-white/5 transition-all active:scale-95 flex items-center justify-center w-9 h-9"
+                                className="hidden sm:flex p-2 rounded-lg bg-surface hover:bg-white/10 border border-white/5 transition-all active:scale-95 items-center justify-center w-9 h-9"
                                 title={lang === 'pt' ? "Mudar para Inglês" : "Switch to Portuguese"}
                             >
                                 {lang === 'pt' ? <FlagBR /> : <FlagUS />}
