@@ -115,6 +115,7 @@
                     cursor: {
                         'col-resize': 'col-resize',
                         'row-resize': 'row-resize',
+                        'nwse-resize': 'nwse-resize',
                     }
                 }
             }
@@ -398,6 +399,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef, memo, useCallback } = React;
+        const { createPortal } = ReactDOM;
 
         const useToast = () => {
             const [toasts, setToasts] = useState([]);
@@ -464,7 +466,13 @@
                 squad_name_ph: "Nome do Grupo",
                 squad_saved: "Squad Salvo!",
                 squad_deleted: "Squad Removido!",
-                skip_intro: "Pular Intro"
+                skip_intro: "Pular Intro",
+                pip_active: "Super PiP Ativo",
+                pip_desc: "Os vídeos estão numa janela flutuante.",
+                pip_bring_back: "Trazer de Volta",
+                tt_pip: "Abrir em Janela Flutuante (Todos)",
+                pip_error: "Seu navegador não suporta Super PiP ou foi bloqueado.",
+                tt_reset_size: "Redefinir Tamanho"
             },
             en: {
                 welcome: "Welcome to",
@@ -507,7 +515,13 @@
                 squad_name_ph: "Group Name",
                 squad_saved: "Squad Saved!",
                 squad_deleted: "Squad Deleted!",
-                skip_intro: "Skip Intro"
+                skip_intro: "Skip Intro",
+                pip_active: "Super PiP Active",
+                pip_desc: "Videos are in a floating window.",
+                pip_bring_back: "Bring Back",
+                tt_pip: "Open in Floating Window (All)",
+                pip_error: "Your browser does not support Super PiP or it was blocked.",
+                tt_reset_size: "Reset Size"
             }
         };
 
@@ -653,6 +667,8 @@
         const SaveIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>;
         const XIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
         const SettingsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>;
+        const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>;
+        const ScaleIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"></path><path d="M7 9v2"></path><path d="M11 9v2"></path><path d="M15 9v2"></path></svg>;
 
         const CarIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>;
         const BrokenCarIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M10 16H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1l2-4h8l2 4h1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-1"/><circle cx="7" cy="16" r="3"/><circle cx="17" cy="16" r="3"/><path d="M15 8l-2 3" strokeWidth="2"/><path d="M9 8l2 3" strokeWidth="2"/></svg>;
@@ -865,7 +881,7 @@
             );
         };
 
-        const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, isResizingAny, isTheaterMode }) => {
+        const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, isResizingAny, isTheaterMode, isDragging, onResizeStart, onResetSize }) => {
             const getTwitchUrl = () => {
                 const candidates = [hostname, "localhost", "127.0.0.1", window.location.hostname, window.location.host];
                 const uniqueParents = [...new Set(candidates.filter(h => h && h.trim() !== ""))];
@@ -875,11 +891,18 @@
                 const parentQuery = finalParents.map(p => `parent=${p}`).join("&");
                 return `https://player.twitch.tv/?channel=${stream.name}&${parentQuery}&muted=${isGlobalMuted}`;
             };
+            
+            // Width Logic: Use customWidth if available, otherwise use className
+            const finalStyle = {
+                flexGrow: 0,
+                width: stream.customWidth ? `${stream.customWidth}px` : undefined,
+                ...style
+            };
 
             return (
                 <div 
-                    className={`relative group bg-transparent overflow-hidden transition-all duration-300 ${widthClass} ${heightClass || ''} flex items-center justify-center p-1 z-10`}
-                    style={{ flexGrow: 0, ...style }} 
+                    className={`relative group bg-transparent overflow-hidden transition-all duration-300 ${!stream.customWidth ? widthClass : ''} ${heightClass || ''} flex items-center justify-center p-1 z-10`}
+                    style={finalStyle} 
                     draggable={isDraggable}
                     onDragStart={(e) => isDraggable && onDragStart(e, index)}
                     onDragEnter={(e) => isDraggable && onDragEnter(e, index)}
@@ -887,6 +910,19 @@
                     onDragOver={(e) => e.preventDefault()}
                 >
                     <div className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded ? 'ring-1 ring-white/20 cinema-glow-expanded' : ''}`}>
+                         {/* CRITICAL: Drag Mask to fix iframe drag issues */}
+                        {(isDragging || isResizingAny) && <div className="absolute inset-0 z-50 bg-transparent"></div>}
+                        
+                        {/* RESIZE HANDLE - Bottom Right */}
+                        {!isExpanded && (
+                            <div 
+                                className="absolute bottom-0 right-0 w-4 h-4 z-40 cursor-nwse-resize opacity-0 group-hover:opacity-100 transition-opacity"
+                                onMouseDown={(e) => onResizeStart(e, stream.id)}
+                            >
+                                <div className="absolute bottom-1 right-1 w-0 h-0 border-l-[6px] border-l-transparent border-b-[6px] border-b-white/50 transform rotate-0"></div>
+                            </div>
+                        )}
+
                         <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-200 pointer-events-none ${isExpanded ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                             <div className="flex items-center gap-2 pointer-events-auto">
                                 {isDraggable && (
@@ -900,6 +936,11 @@
                                 </div>
                             </div>
                             <div className="flex gap-1 pointer-events-auto">
+                                {stream.customWidth && (
+                                    <button onClick={() => onResetSize(stream.id)} className="p-1.5 bg-black/60 hover:bg-white/20 text-yellow-400 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md" title="Redefinir Tamanho">
+                                        <ScaleIcon />
+                                    </button>
+                                )}
                                 <button onClick={() => onRefresh(stream.id)} className="p-1.5 bg-black/60 hover:bg-blue-500 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md" title="Recarregar Player">
                                     <RefreshCwIcon />
                                 </button>
@@ -920,7 +961,7 @@
                 </div>
             );
         }, (prev, next) => {
-            return prev.stream.id === next.stream.id && prev.stream.refreshKey === next.stream.refreshKey && prev.widthClass === next.widthClass && prev.heightClass === next.heightClass && prev.isExpanded === next.isExpanded && prev.isDraggable === next.isDraggable && prev.index === next.index && prev.isGlobalMuted === next.isGlobalMuted && prev.isResizingAny === next.isResizingAny && prev.isTheaterMode === next.isTheaterMode;
+            return prev.stream.id === next.stream.id && prev.stream.refreshKey === next.stream.refreshKey && prev.widthClass === next.widthClass && prev.heightClass === next.heightClass && prev.isExpanded === next.isExpanded && prev.isDraggable === next.isDraggable && prev.index === next.index && prev.isGlobalMuted === next.isGlobalMuted && prev.isResizingAny === next.isResizingAny && prev.isTheaterMode === next.isTheaterMode && prev.isDragging === next.isDragging && prev.stream.customWidth === next.stream.customWidth;
         });
 
         // SQUADS MENU
@@ -1012,11 +1053,21 @@
             const [squads, setSquads] = useState([]);
             const [showSquadMenu, setShowSquadMenu] = useState(false);
             const [isToolbarExpanded, setIsToolbarExpanded] = useState(false);
+            
+            // DND & Resizing State
+            const [isDragging, setIsDragging] = useState(false);
+            const [resizingStreamId, setResizingStreamId] = useState(null);
+            
+            // PiP State
+            const [pipWindow, setPipWindow] = useState(null);
 
             const { toasts, addToast } = useToast();
             const sidebarRef = useRef(null);
             const dragItem = useRef(null);
             const dragOverItem = useRef(null);
+            const startResizeX = useRef(0);
+            const startResizeWidth = useRef(0);
+            
             const [hostname] = useState(() => {
                 if (typeof window !== 'undefined' && window.location.hostname) return window.location.hostname;
                 return "localhost";
@@ -1048,24 +1099,58 @@
 
             const startResizing = useCallback((e) => { if(e.type === 'mousedown') e.preventDefault(); setIsResizing(true); }, []);
             const startMapResizing = useCallback((e) => { if(e.type === 'mousedown') e.preventDefault(); setIsResizingMap(true); }, []);
-            const stopResizing = useCallback(() => { setIsResizing(false); setIsResizingMap(false); }, []);
+            const stopResizing = useCallback(() => { 
+                setIsResizing(false); 
+                setIsResizingMap(false); 
+                setResizingStreamId(null);
+            }, []);
+
+            // STREAM RESIZE HANDLERS
+            const handleStreamResizeStart = (e, id) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setResizingStreamId(id);
+                startResizeX.current = e.clientX;
+                // Find current width or calculate from element if null
+                const stream = streamers.find(s => s.id === id);
+                if (stream.customWidth) {
+                    startResizeWidth.current = stream.customWidth;
+                } else {
+                    // Estimate width if not set (fallback)
+                    // Better approach: reset to a px value on start
+                    const el = e.target.closest('.group');
+                    if(el) startResizeWidth.current = el.getBoundingClientRect().width;
+                }
+            };
+            
+            const resetStreamSize = (id) => {
+                 setStreamers(prev => prev.map(s => s.id === id ? { ...s, customWidth: null } : s));
+            };
 
             const resize = useCallback((event) => {
                 let clientX, clientY;
                 if (event.type.startsWith('touch')) { clientX = event.touches[0].clientX; clientY = event.touches[0].clientY; } 
                 else { clientX = event.clientX; clientY = event.clientY; }
 
+                // Sidebar Resize
                 if (isResizing) {
                     const newWidth = window.innerWidth - clientX;
                     const maxWidth = Math.max(window.innerWidth * 0.8, 300);
                     if (newWidth > 250 && newWidth < maxWidth) setSidebarWidth(newWidth);
                 }
+                // Map Resize
                 if (isResizingMap && sidebarRef.current) {
                     const sidebarRect = sidebarRef.current.getBoundingClientRect();
                     const newHeight = clientY - sidebarRect.top;
                     if (newHeight > 100 && newHeight < (sidebarRect.height - 150)) setMapHeight(newHeight);
                 }
-            }, [isResizing, isResizingMap]);
+                // Stream Player Resize
+                if (resizingStreamId) {
+                    const deltaX = clientX - startResizeX.current;
+                    const newWidth = Math.max(200, startResizeWidth.current + deltaX);
+                    setStreamers(prev => prev.map(s => s.id === resizingStreamId ? { ...s, customWidth: newWidth } : s));
+                }
+            }, [isResizing, isResizingMap, resizingStreamId]);
 
             useEffect(() => {
                 window.addEventListener("mousemove", resize); window.addEventListener("mouseup", stopResizing);
@@ -1075,6 +1160,54 @@
                     window.removeEventListener("touchmove", resize); window.removeEventListener("touchend", stopResizing);
                 };
             }, [resize, stopResizing]);
+
+            // Copy Styles to PiP Window
+            const copyStylesToPip = useCallback((win) => {
+                [...document.styleSheets].forEach((styleSheet) => {
+                    try {
+                        const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
+                        const style = win.document.createElement('style');
+                        style.textContent = cssRules;
+                        win.document.head.appendChild(style);
+                    } catch (e) {
+                        try {
+                            const link = win.document.createElement('link');
+                            link.rel = 'stylesheet';
+                            link.type = 'text/css';
+                            link.href = styleSheet.href;
+                            win.document.head.appendChild(link);
+                        } catch (e2) {}
+                    }
+                });
+                const tailwindScript = document.querySelector('script[src*="tailwindcss"]');
+                if(tailwindScript) {
+                     const script = win.document.createElement('script');
+                     script.src = tailwindScript.src;
+                     win.document.head.appendChild(script);
+                }
+                win.document.body.className = "bg-[#09090b] text-white overflow-hidden";
+            }, []);
+
+            const togglePip = useCallback(async () => {
+                if (pipWindow) {
+                    pipWindow.close();
+                    setPipWindow(null);
+                    return;
+                }
+                if (!('documentPictureInPicture' in window)) {
+                    addToast(t('pip_error'), 'error');
+                    return;
+                }
+                try {
+                    const win = await window.documentPictureInPicture.requestWindow({ width: 800, height: 600 });
+                    copyStylesToPip(win);
+                    win.addEventListener("pagehide", () => { setPipWindow(null); });
+                    setPipWindow(win);
+                } catch (error) {
+                    addToast(t('pip_error'), 'error');
+                }
+            }, [pipWindow, copyStylesToPip, t, addToast]);
+
 
             const refreshStream = useCallback((id) => {
                 setStreamers(prev => prev.map(s => s.id === id ? { ...s, refreshKey: Date.now() } : s));
@@ -1102,7 +1235,7 @@
                 } else { cleanName = cleanName.toLowerCase(); }
 
                 if (streamers.some(s => s.name === cleanName && s.platform === platform)) { addToast(t('toast_exists'), 'error'); return; }
-                const newStreamer = { id: Date.now().toString(), name: cleanName, platform: platform, refreshKey: Date.now() };
+                const newStreamer = { id: Date.now().toString(), name: cleanName, platform: platform, refreshKey: Date.now(), customWidth: null };
                 const updatedList = [...streamers, newStreamer];
                 setStreamers(updatedList);
                 setInputVal("");
@@ -1121,9 +1254,13 @@
             }, [expandedStreamId, activeChatTab]);
 
             const toggleFocusMode = useCallback((id) => { setExpandedStreamId(prev => prev === id ? null : id); }, []);
-            const handleDragStart = useCallback((e, index) => { dragItem.current = index; }, []);
+            const handleDragStart = useCallback((e, index) => { 
+                setIsDragging(true);
+                dragItem.current = index; 
+            }, []);
             const handleDragEnter = useCallback((e, index) => { dragOverItem.current = index; }, []);
             const handleDragEnd = useCallback(() => {
+                setIsDragging(false);
                 setStreamers(currentStreamers => {
                     const _streamers = [...currentStreamers];
                     const draggedItemContent = _streamers[dragItem.current];
@@ -1135,9 +1272,7 @@
             }, []);
             const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
             
-            const toggleTheaterMode = () => {
-                setIsTheaterMode(!isTheaterMode);
-            };
+            const toggleTheaterMode = () => { setIsTheaterMode(!isTheaterMode); };
 
             const changeLayout = (mode) => {
                 setLayoutMode(mode);
@@ -1167,7 +1302,7 @@
 
             const renderStreams = () => {
                 const count = streamers.length;
-                const isResizingAny = isResizing || isResizingMap;
+                const isResizingAny = isResizing || isResizingMap || resizingStreamId !== null;
                 
                 if (expandedStreamId) {
                     const expandedStream = streamers.find(s => s.id === expandedStreamId);
@@ -1176,13 +1311,13 @@
                     return (
                         <div className="flex flex-col md:flex-row w-full h-full bg-transparent">
                             <div className={`relative ${otherStreams.length > 0 ? 'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5' : 'w-full'} h-2/3 md:h-full transition-all duration-300 flex items-center justify-center`}>
-                                <StreamPlayer key={expandedStream.id} stream={expandedStream} index={streamers.findIndex(s => s.id === expandedStream.id)} widthClass="w-full" heightClass="h-full" isExpanded={true} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} />
+                                <StreamPlayer key={expandedStream.id} stream={expandedStream} index={streamers.findIndex(s => s.id === expandedStream.id)} widthClass="w-full" heightClass="h-full" isExpanded={true} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={resetStreamSize} />
                             </div>
                             {otherStreams.length > 0 && (
                                 <div className="w-full md:w-1/5 h-1/3 md:h-full bg-transparent overflow-x-auto md:overflow-y-auto md:overflow-x-hidden">
                                     <div className="min-h-full w-full flex flex-row md:flex-col justify-center gap-1">
                                         {otherStreams.map((s, idx) => (
-                                            <StreamPlayer key={s.id} stream={s} index={streamers.findIndex(st => st.id === s.id)} widthClass="w-1/2 md:w-full min-w-[150px] md:min-w-0" heightClass="h-auto" style={{ flexGrow: 0 }} isExpanded={false} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} />
+                                            <StreamPlayer key={s.id} stream={s} index={streamers.findIndex(st => st.id === s.id)} widthClass="w-1/2 md:w-full min-w-[150px] md:min-w-0" heightClass="h-auto" style={{ flexGrow: 0 }} isExpanded={false} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={resetStreamSize} />
                                         ))}
                                     </div>
                                 </div>
@@ -1213,13 +1348,36 @@
                 return (
                     <div className="flex flex-wrap justify-center content-center items-center w-full h-full bg-transparent gap-4 p-4 overflow-y-auto scrollbar-hide">
                         {streamers.map((s, index) => (
-                            <StreamPlayer key={s.id} stream={s} index={index} widthClass={getWidthClass(index)} heightClass="h-auto" isExpanded={false} isDraggable={true} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} />
+                            <StreamPlayer key={s.id} stream={s} index={index} widthClass={getWidthClass(index)} heightClass="h-auto" isExpanded={false} isDraggable={true} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={resetStreamSize} />
                         ))}
                     </div>
                 );
             };
 
-            // NOVO ESTADO DE VISIBILIDADE DA BARRA
+            const renderContent = () => {
+                if (pipWindow) {
+                    return (
+                        <>
+                            {createPortal(
+                                <div className="h-full w-full bg-[#09090b] flex flex-col">
+                                    {renderStreams()}
+                                </div>,
+                                pipWindow.document.body
+                            )}
+                            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in">
+                                <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-pulse-glow">
+                                    <ExternalLinkIcon width={48} height={48} className="text-ice" />
+                                </div>
+                                <h2 className="text-2xl font-bold text-white mb-2">{t('pip_active')}</h2>
+                                <p className="text-gray-400 max-w-sm mb-8">{t('pip_desc')}</p>
+                                <button onClick={togglePip} className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-bold transition-all hover:scale-105 active:scale-95">{t('pip_bring_back')}</button>
+                            </div>
+                        </>
+                    );
+                }
+                return renderStreams();
+            }
+
             const toolbarVisible = isToolbarExpanded || showSquadMenu;
 
             return (
@@ -1233,94 +1391,33 @@
                          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/20 blur-[120px] animate-aurora-2 mix-blend-screen transition-all duration-1000"></div>
                     </div>
 
-                    {(isResizing || isResizingMap) && <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}
+                    {(isResizing || isResizingMap || resizingStreamId) && <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}
                     {isTheaterMode && <div className="header-trigger-area"></div>}
 
-                    {/* CONTROL BAR - Melhorei a área de detecção para não conflitar com o chat */}
-                    <div 
-                        className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300"
-                        style={{ 
-                            left: 0, 
-                            right: isSidebarOpen && window.innerWidth >= 768 ? `${sidebarWidth}px` : 0,
-                            height: '40px'
-                        }}
-                    ></div>
-                    <div 
-                        className={`floating-toolbar ${toolbarVisible ? 'expanded' : 'collapsed'}`}
-                        onMouseEnter={() => setIsToolbarExpanded(true)}
-                        onMouseLeave={() => setIsToolbarExpanded(false)}
-                        style={{ 
-                            marginLeft: isSidebarOpen && window.innerWidth >= 768 ? `-${sidebarWidth/2}px` : '0' 
-                        }}
-                    >
-                        <button 
-                            onClick={(e) => { e.stopPropagation(); toggleTheaterMode(); }}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-black transition-all transform active:scale-90 shrink-0 ${isTheaterMode ? 'bg-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white border border-white/10'}`}
-                            title={isTheaterMode ? t('tt_cinema_exit') : t('tt_cinema_enter')}
-                        >
+                    <div className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300" style={{ left: 0, right: isSidebarOpen && window.innerWidth >= 768 ? `${sidebarWidth}px` : 0, height: '40px' }}></div>
+                    <div className={`floating-toolbar ${toolbarVisible ? 'expanded' : 'collapsed'}`} onMouseEnter={() => setIsToolbarExpanded(true)} onMouseLeave={() => setIsToolbarExpanded(false)} style={{ marginLeft: isSidebarOpen && window.innerWidth >= 768 ? `-${sidebarWidth/2}px` : '0' }}>
+                        <button onClick={(e) => { e.stopPropagation(); toggleTheaterMode(); }} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-black transition-all transform active:scale-90 shrink-0 ${isTheaterMode ? 'bg-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white border border-white/10'}`} title={isTheaterMode ? t('tt_cinema_exit') : t('tt_cinema_enter')}>
                             {isTheaterMode ? <SunIcon width={14} height={14} /> : <MoonIcon width={14} height={14} />}
                             <span className="uppercase tracking-tighter">{t('cinema_mode')}</span>
                         </button>
-
                         <div className="w-[1px] h-6 bg-white/10 mx-1 shrink-0"></div>
-
                         {!toolbarVisible ? (
-                            <div className="text-gray-500 flex items-center justify-center w-8 h-8 cursor-pointer hover:text-ice transition-colors animate-pulse">
-                                <SettingsIcon width={20} height={20} />
-                            </div>
+                            <div className="text-gray-500 flex items-center justify-center w-8 h-8 cursor-pointer hover:text-ice transition-colors animate-pulse"><SettingsIcon width={20} height={20} /></div>
                         ) : (
                             <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
-                                <button 
-                                    onClick={(e) => { e.stopPropagation(); changeLayout('auto'); }}
-                                    className={`p-2 rounded-full transition-all ${layoutMode === 'auto' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
-                                    title={t('layout_auto')}
-                                >
-                                    <LayoutIcon width={18} height={18} />
-                                </button>
-                                <button 
-                                    onClick={(e) => { e.stopPropagation(); changeLayout('grid'); }}
-                                    className={`p-2 rounded-full transition-all ${layoutMode === 'grid' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
-                                    title={t('layout_grid')}
-                                >
-                                    <GridIcon width={18} height={18} />
-                                </button>
-                                <button 
-                                    onClick={(e) => { e.stopPropagation(); changeLayout('focus'); }}
-                                    className={`p-2 rounded-full transition-all ${expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
-                                    title={t('layout_focus')}
-                                >
-                                    <LayoutTemplateIcon width={18} height={18} />
-                                </button>
-
+                                <button onClick={(e) => { e.stopPropagation(); togglePip(); }} className={`p-2 rounded-full transition-all ${pipWindow ? 'bg-ice text-black animate-pulse' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('tt_pip')}><ExternalLinkIcon width={18} height={18} /></button>
                                 <div className="w-[1px] h-6 bg-white/10 mx-1"></div>
-
-                                <button 
-                                    onClick={(e) => { e.stopPropagation(); setShowSquadMenu(!showSquadMenu); }}
-                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu ? 'bg-accent text-white' : 'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}
-                                >
-                                    <UsersIcon width={14} height={14} />
-                                    {t('squads_title')}
-                                </button>
-
+                                <button onClick={(e) => { e.stopPropagation(); changeLayout('auto'); }} className={`p-2 rounded-full transition-all ${layoutMode === 'auto' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('layout_auto')}><LayoutIcon width={18} height={18} /></button>
+                                <button onClick={(e) => { e.stopPropagation(); changeLayout('grid'); }} className={`p-2 rounded-full transition-all ${layoutMode === 'grid' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('layout_grid')}><GridIcon width={18} height={18} /></button>
+                                <button onClick={(e) => { e.stopPropagation(); changeLayout('focus'); }} className={`p-2 rounded-full transition-all ${expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('layout_focus')}><LayoutTemplateIcon width={18} height={18} /></button>
                                 <div className="w-[1px] h-6 bg-white/10 mx-1"></div>
-                                
+                                <button onClick={(e) => { e.stopPropagation(); setShowSquadMenu(!showSquadMenu); }} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu ? 'bg-accent text-white' : 'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={14} height={14} />{t('squads_title')}</button>
+                                <div className="w-[1px] h-6 bg-white/10 mx-1"></div>
                                 <div className="flex flex-col items-start px-3 py-1 group/credits cursor-default">
                                     <span className="text-[7px] uppercase font-bold text-gray-500 group-hover/credits:text-ice tracking-[0.2em] mb-0.5">{t('dev_by')}</span>
-                                    <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-gray-400 group-hover/credits:text-white flex items-center gap-1 font-display font-bold text-[10px] tracking-wide">
-                                        <InstagramIcon width={10} height={10} /> EDUARDO MACÊDO
-                                    </a>
+                                    <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-gray-400 group-hover/credits:text-white flex items-center gap-1 font-display font-bold text-[10px] tracking-wide"><InstagramIcon width={10} height={10} /> EDUARDO MACÊDO</a>
                                 </div>
-                                
-                                <SquadsMenu 
-                                    isOpen={showSquadMenu} 
-                                    onClose={() => setShowSquadMenu(false)}
-                                    squads={squads}
-                                    currentStreamers={streamers}
-                                    onSave={saveSquad}
-                                    onLoad={loadSquad}
-                                    onDelete={deleteSquad}
-                                    lang={lang}
-                                />
+                                <SquadsMenu isOpen={showSquadMenu} onClose={() => setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={saveSquad} onLoad={loadSquad} onDelete={deleteSquad} lang={lang} />
                             </div>
                         )}
                     </div>
@@ -1387,7 +1484,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            ) : renderStreams()}
+                            ) : renderContent()}
                         </div>
                         
                         <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen ? 'translate-y-0 md:translate-x-0 opacity-100' : 'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden'}`} style={{ width: isSidebarOpen ? (window.innerWidth < 768 ? '100%' : `${sidebarWidth}px`) : '0px', height: window.innerWidth < 768 && isSidebarOpen ? '45vh' : 'auto', transitionDuration: isResizing ? '0s' : '300ms' }}>
