@@ -399,7 +399,7 @@
             useEffect(() => {
                 const handleActivity = (e) => {
                     if (e.clientY < 120 || streamers.length === 0) { setIsHeaderVisible(true); if (headerTimerRef.current) clearTimeout(headerTimerRef.current); } 
-                    else if (streamers.length > 0 && !isTheaterMode && isHeaderVisible) { if (headerTimerRef.current) clearTimeout(headerTimerRef.current); headerTimerRef.current = setTimeout(() => setIsHeaderVisible(false), 3000); }
+                    else if (streamers.length > 0 && !isTheaterMode && isHeaderVisible) { if (headerTimerRef.current) clearTimeout(headerTimerRef.current); headerTimerRef.current = setTimeout(() => setIsHeaderVisible(false), 1500); }
                 };
                 window.addEventListener('mousemove', handleActivity); return () => { window.removeEventListener('mousemove', handleActivity); if (headerTimerRef.current) clearTimeout(headerTimerRef.current); };
             }, [streamers.length, isTheaterMode, isHeaderVisible]);
