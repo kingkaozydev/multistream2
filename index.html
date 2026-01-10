@@ -54,6 +54,8 @@
                         'drive-fast': 'driveFast 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
                         'drive-slow': 'driveSlow 2s cubic-bezier(0.4, 0, 1, 1) forwards',
                         'smoke-puff': 'smokePuff 1s ease-out infinite',
+                        'speed-lines': 'speedLines 0.5s linear infinite',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
                     },
                     keyframes: {
                         aurora: {
@@ -85,6 +87,15 @@
                         smokePuff: {
                             '0%': { transform: 'translate(0, 0) scale(0.5)', opacity: '0.8' },
                             '100%': { transform: 'translate(-10px, -20px) scale(2)', opacity: '0' },
+                        },
+                        speedLines: {
+                            '0%': { transform: 'translateX(100%)', opacity: '0' },
+                            '50%': { opacity: '0.5' },
+                            '100%': { transform: 'translateX(-100%)', opacity: '0' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.6', filter: 'brightness(1)' },
+                            '50%': { opacity: '1', filter: 'brightness(1.5) blur(1px)' },
                         }
                     },
                     cursor: {
@@ -165,6 +176,7 @@
             background: rgba(18, 18, 21, 0.95);
             border-left: 1px solid rgba(255, 255, 255, 0.06);
             transition: all 0.5s ease;
+            z-index: 60; /* Aumentado para garantir prioridade sobre o trigger global se houver sobreposição */
         }
         
         @media (max-width: 768px) {
@@ -286,7 +298,7 @@
             bottom: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 60;
+            z-index: 70; /* Maior que a sidebar */
             display: flex;
             align-items: center;
             background: rgba(13, 13, 16, 0.92);
@@ -437,7 +449,8 @@
                 squad_load: "Carregar",
                 squad_name_ph: "Nome do Grupo",
                 squad_saved: "Squad Salvo!",
-                squad_deleted: "Squad Removido!"
+                squad_deleted: "Squad Removido!",
+                skip_intro: "Pular Intro"
             },
             en: {
                 welcome: "Welcome to",
@@ -479,7 +492,8 @@
                 squad_load: "Load",
                 squad_name_ph: "Group Name",
                 squad_saved: "Squad Saved!",
-                squad_deleted: "Squad Deleted!"
+                squad_deleted: "Squad Deleted!",
+                skip_intro: "Skip Intro"
             }
         };
 
@@ -650,17 +664,36 @@
                 }
 
                 if (!isLoading) {
-                    const timer = setTimeout(() => setPhase(4), 4500); 
+                    const timer = setTimeout(() => {
+                        setPhase(current => current < 4 ? 4 : current);
+                    }, 4500); 
                     const hideTimer = setTimeout(() => setVisible(false), 5500);
                     return () => { clearTimeout(timer); clearTimeout(hideTimer); };
                 }
             }, [isLoading, visible]);
+
+            const skipIntro = () => {
+                setPhase(4);
+                setTimeout(() => setVisible(false), 1000);
+            };
 
             if (!visible) return null;
 
             return (
                 <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050507] transition-opacity duration-1000 ease-in-out ${phase === 4 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-150 pointer-events-none"></div>
+                    
+                    {/* Linhas de Velocidade */}
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                        {[...Array(20)].map((_, i) => (
+                            <div key={i} className="absolute bg-gradient-to-l from-white/10 to-transparent h-[1px] w-64 animate-speed-lines" style={{
+                                top: `${Math.random() * 100}%`,
+                                animationDuration: `${Math.random() * 0.2 + 0.3}s`,
+                                animationDelay: `${Math.random() * 2}s`
+                            }}></div>
+                        ))}
+                    </div>
+
                     <div className="absolute inset-0 overflow-hidden pointer-events-none perspective-1000">
                         {[...Array(150)].map((_, i) => (
                             <div key={i} className="absolute bg-white rounded-full animate-blizzard" style={{
@@ -701,11 +734,20 @@
                             </div>
                         )}
                     </div>
+
                     <div className={`relative z-10 text-center space-y-2 p-6 transition-all duration-700 transform ${phase >= 3 ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-90'}`}>
-                         <h1 className="font-russo text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] italic">
+                         <h1 className="font-russo text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] italic animate-pulse-glow">
                             {t('intro_title')}
                         </h1>
-                        <div className="h-1 w-full max-w-md mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent my-4"></div>
+                        
+                        {/* Fuel Gauge / Progress Bar */}
+                        <div className="relative w-full max-w-md mx-auto my-4 h-3 bg-white/5 border border-white/10 rounded-full overflow-hidden p-[2px]">
+                            <div 
+                                className="h-full bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 rounded-full transition-all duration-[3000ms] ease-out shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                                style={{ width: phase >= 3 ? '100%' : '5%' }}
+                            ></div>
+                        </div>
+
                         <p className="text-red-500 font-black tracking-[0.2em] text-sm md:text-xl uppercase bg-black/50 backdrop-blur-sm inline-block px-4 py-1 rounded">
                             {t('intro_msg')}
                         </p>
@@ -713,6 +755,17 @@
                             {t('intro_sub')}
                         </p>
                     </div>
+
+                    {/* Botão Pular Intro */}
+                    {phase < 4 && (
+                        <button 
+                            onClick={skipIntro}
+                            className="absolute bottom-10 right-10 z-[110] flex items-center gap-2 px-6 py-2.5 bg-white/5 hover:bg-white/15 border border-white/10 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-300 hover:scale-105 active:scale-95 group"
+                        >
+                            <span className="text-gray-400 group-hover:text-white transition-colors">{t('skip_intro')}</span>
+                            <svg className="w-3 h-3 text-ice group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
+                        </button>
+                    )}
                 </div>
             );
         };
@@ -1169,12 +1222,22 @@
                     {(isResizing || isResizingMap) && <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}
                     {isTheaterMode && <div className="header-trigger-area"></div>}
 
-                    {/* CONTROL BAR (FIXED SQUADS BUG) */}
-                    <div className="floating-toolbar-trigger fixed bottom-0 left-0 right-0 h-16 z-50"></div>
+                    {/* CONTROL BAR - Melhorei a área de detecção para não conflitar com o chat */}
+                    <div 
+                        className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300"
+                        style={{ 
+                            left: 0, 
+                            right: isSidebarOpen && window.innerWidth >= 768 ? `${sidebarWidth}px` : 0,
+                            height: '40px'
+                        }}
+                    ></div>
                     <div 
                         className={`floating-toolbar ${toolbarVisible ? 'expanded' : 'collapsed'}`}
                         onMouseEnter={() => setIsToolbarExpanded(true)}
                         onMouseLeave={() => setIsToolbarExpanded(false)}
+                        style={{ 
+                            marginLeft: isSidebarOpen && window.innerWidth >= 768 ? `-${sidebarWidth/2}px` : '0' 
+                        }}
                     >
                         <button 
                             onClick={(e) => { e.stopPropagation(); toggleTheaterMode(); }}
