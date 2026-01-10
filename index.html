@@ -69,7 +69,7 @@
         .flipped .brand-flipper { transform: rotateY(180deg); }
         /* HIDDEN HEADER MODE */
         .header-hidden-active .command-bar-container { transform: translateX(-50%) translateY(-150%); opacity: 0; pointer-events: none; }
-        .header-hidden-active .hero-brand { transform: scale(0.5) translateY(-20px) !important; padding-top: 1rem !important; padding-bottom: 0 !important; margin-bottom: -1.5rem !important; opacity: 0.6 !important; height: auto !important; min-height: 60px !important; overflow: visible !important; visibility: visible !important; pointer-events: none; }
+        .header-hidden-active .hero-brand { position: absolute !important; top: 0; left: 0; width: 100%; z-index: 20; transform: scale(0.5) translateY(-20px) !important; padding-top: 1rem !important; padding-bottom: 0 !important; margin-bottom: 0 !important; opacity: 0.6 !important; height: auto !important; min-height: 0 !important; overflow: visible !important; visibility: visible !important; pointer-events: none; }
         .header-hidden-active main { padding-top: 0 !important; height: auto !important; flex: 1; }
         .header-hidden-active .sidebar-glass { border-top: none; }
         /* THEATER MODE */
