@@ -457,8 +457,8 @@
             const handleDragEnd = () => { setIsDragging(false); if(dragItem.current!==null && dragOverItem.current!==null && dragItem.current!==dragOverItem.current) setStreamers(p=>{const c=[...p],d=c[dragItem.current];c.splice(dragItem.current,1);c.splice(dragOverItem.current,0,d);return c;}); dragItem.current=null; dragOverItem.current=null; };
             const changeLayout = (m) => { setLayoutMode(m); if(m==='auto'||m==='grid') setStreamers(p=>p.map(s=>({...s,customWidth:null}))); setExpandedStreamId(m==='focus'&&streamers.length?streamers[0].id:null); };
             
-            // Helper para renderizar
-            const RenderStreamItem = ({ s, idx, wClass, hClass, expanded=false }) => (
+            // Helper para renderizar (convertido de Componente para Função para evitar remontagem)
+            const renderStreamItem = (s, idx, wClass, hClass, expanded=false) => (
                 <StreamPlayer key={s.id} stream={s} index={idx} widthClass={wClass} heightClass={hClass} isExpanded={expanded} isDraggable={!expanded} onDragStart={handleDragStart} onDragEnter={(e,i)=>dragOverItem.current=i} onDragEnd={handleDragEnd} onToggleFocus={id=>setExpandedStreamId(p=>p===id?null:id)} onRemove={removeStreamer} onRefresh={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,refreshKey:Date.now()}:x))} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizing||isResizingMap||resizingStreamId!==null} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,customWidth:null}:x))} />
             );
 
@@ -468,8 +468,8 @@
                     if(!main) return null;
                     return (
                         <div className="flex flex-col md:flex-row w-full h-full bg-transparent">
-                            <div className={`relative ${others.length?'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5':'w-full'} h-2/3 md:h-full flex items-center justify-center`}><RenderStreamItem s={main} idx={streamers.findIndex(x=>x.id===main.id)} wClass="w-full" hClass="h-full" expanded={true}/></div>
-                            {others.length > 0 && <div className="w-full md:w-1/5 h-1/3 md:h-full overflow-auto"><div className="min-h-full flex flex-row md:flex-col justify-center gap-1">{others.map(s=><RenderStreamItem key={s.id} s={s} idx={streamers.findIndex(x=>x.id===s.id)} wClass="w-full min-w-[150px]" hClass="h-auto" />)}</div></div>}
+                            <div className={`relative ${others.length?'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5':'w-full'} h-2/3 md:h-full flex items-center justify-center`}>{renderStreamItem(main, streamers.findIndex(x=>x.id===main.id), "w-full", "h-full", true)}</div>
+                            {others.length > 0 && <div className="w-full md:w-1/5 h-1/3 md:h-full overflow-auto"><div className="min-h-full flex flex-row md:flex-col justify-center gap-1">{others.map(s=>renderStreamItem(s, streamers.findIndex(x=>x.id===s.id), "w-full min-w-[150px]", "h-auto"))}</div></div>}
                         </div>
                     );
                 }
@@ -477,7 +477,7 @@
                     if(layoutMode==='grid') return cnt<=1?"w-full":cnt<=4?"w-full md:w-[calc(50%-1rem)]":cnt<=9?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(25%-1rem)]";
                     return cnt===1?"w-full":cnt===2||cnt===4?"w-full md:w-[calc(50%-1rem)]":cnt===3||cnt>=6?"w-full md:w-[calc(33.33%-1rem)]":i<3?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(50%-1rem)]";
                 };
-                return <div className="flex flex-wrap justify-center content-start md:content-center items-center w-full h-full bg-transparent gap-4 p-4 overflow-y-auto scrollbar-hide">{streamers.map((s,i)=><RenderStreamItem key={s.id} s={s} idx={i} wClass={getW(i)} hClass="h-auto"/>)}</div>;
+                return <div className="flex flex-wrap justify-center content-start md:content-center items-center w-full h-full bg-transparent gap-4 p-4 overflow-y-auto scrollbar-hide">{streamers.map((s,i)=>renderStreamItem(s, i, getW(i), "h-auto"))}</div>;
             };
 
             const renderContent = () => pipWindow ? createPortal(<div className="h-full w-full bg-[#09090b] flex flex-col">{renderStreams()}</div>, pipWindow.document.body) || <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in"><div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-pulse-glow"><ExternalLinkIcon width={48} height={48} className="text-ice" /></div><h2 className="text-2xl font-bold text-white mb-2">{t('pip_active')}</h2><p className="text-gray-400 max-w-sm mb-8">{t('pip_desc')}</p><button onClick={togglePip} className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-bold hover:scale-105">{t('pip_bring_back')}</button></div> : renderStreams();
