@@ -5,499 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
     <title>MultLives - Nevethon (Ultimate)</title>
-    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M5 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M19 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M19 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M5 5L12 13L19 5' stroke='%23a5f3fc' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' /></svg>">
-
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script type="module">
         import { inject } from 'https://esm.sh/@vercel/analytics';
         inject({ mode: 'production', debug: false });
         console.log("Vercel Analytics Injected");
     </script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        display: ['"Inter"', 'sans-serif'],
-                        russo: ['"Russo One"', 'sans-serif'],
-                        mono: ['"Share Tech Mono"', 'monospace'],
-                    },
-                    colors: {
-                        background: '#09090b',
-                        surface: '#121215',
-                        surfaceHighlight: '#1e1e24',
-                        accent: '#6366f1',
-                        accentHover: '#4f46e5',
-                        ice: '#a5f3fc',
-                        kick: '#53fc18',
-                        kickDark: '#0b0e11',
-                    },
-                    animation: {
-                        'spin-slow': 'spin 3s linear infinite',
-                        'aurora-1': 'aurora 20s infinite alternate',
-                        'aurora-2': 'aurora 25s infinite alternate-reverse',
-                        'toast-in': 'toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                        'slide-up': 'slideUp 0.3s ease-out forwards',
-                        'rattle': 'rattle 0.1s linear infinite',
-                        'drive-fast': 'driveFast 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
-                        'drive-slow': 'driveSlow 2s cubic-bezier(0.4, 0, 1, 1) forwards',
-                        'smoke-puff': 'smokePuff 1s ease-out infinite',
-                        'speed-lines': 'speedLines 0.5s linear infinite',
-                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-                        'heart-beat': 'heartBeat 1.5s infinite',
-                        'blizzard-fast': 'blizzard 2s linear infinite',
-                        'blizzard-slow': 'blizzard 5s linear infinite',
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                    },
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], display: ['"Inter"', 'sans-serif'], russo: ['"Russo One"', 'sans-serif'], mono: ['"Share Tech Mono"', 'monospace'] },
+                    colors: { background: '#09090b', surface: '#121215', surfaceHighlight: '#1e1e24', accent: '#6366f1', accentHover: '#4f46e5', ice: '#a5f3fc', kick: '#53fc18', kickDark: '#0b0e11' },
+                    animation: { 'spin-slow': 'spin 3s linear infinite', 'aurora-1': 'aurora 20s infinite alternate', 'aurora-2': 'aurora 25s infinite alternate-reverse', 'toast-in': 'toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)', 'slide-up': 'slideUp 0.3s ease-out forwards', 'rattle': 'rattle 0.1s linear infinite', 'drive-fast': 'driveFast 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards', 'drive-slow': 'driveSlow 2s cubic-bezier(0.4, 0, 1, 1) forwards', 'smoke-puff': 'smokePuff 1s ease-out infinite', 'speed-lines': 'speedLines 0.5s linear infinite', 'pulse-glow': 'pulseGlow 2s ease-in-out infinite', 'heart-beat': 'heartBeat 1.5s infinite', 'blizzard-fast': 'blizzard 2s linear infinite', 'blizzard-slow': 'blizzard 5s linear infinite', 'fade-in': 'fadeIn 0.5s ease-out forwards' },
                     keyframes: {
-                        aurora: {
-                            '0%': { transform: 'translate(0, 0) rotate(0deg)' },
-                            '100%': { transform: 'translate(10%, 10%) rotate(10deg)' },
-                        },
-                        toastIn: {
-                            '0%': { transform: 'translateX(100%)', opacity: '0' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' },
-                        },
-                        slideUp: {
-                            '0%': { transform: 'translateY(100%)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                        },
-                        rattle: {
-                            '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' },
-                            '25%': { transform: 'translate(-1px, 1px) rotate(-1deg)' },
-                            '75%': { transform: 'translate(1px, -1px) rotate(1deg)' },
-                        },
-                        driveFast: {
-                            '0%': { transform: 'translateX(-200%) skewX(10deg)', opacity: '0' },
-                            '100%': { transform: 'translateX(0) skewX(0deg)', opacity: '1' },
-                        },
-                        driveSlow: {
-                            '0%': { transform: 'translateX(-150%)', opacity: '0' },
-                            '20%': { transform: 'translateX(-100%)', opacity: '1' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' },
-                        },
-                        smokePuff: {
-                            '0%': { transform: 'translate(0, 0) scale(0.5)', opacity: '0.8' },
-                            '100%': { transform: 'translate(-10px, -20px) scale(2)', opacity: '0' },
-                        },
-                        speedLines: {
-                            '0%': { transform: 'translateX(100%)', opacity: '0' },
-                            '50%': { opacity: '0.5' },
-                            '100%': { transform: 'translateX(-100%)', opacity: '0' },
-                        },
-                        pulseGlow: {
-                            '0%, 100%': { opacity: '0.6', filter: 'brightness(1)' },
-                            '50%': { opacity: '1', filter: 'brightness(1.5) blur(1px)' },
-                        },
-                        heartBeat: {
-                            '0%': { transform: 'scale(1)' },
-                            '14%': { transform: 'scale(1.3)' },
-                            '28%': { transform: 'scale(1)' },
-                            '42%': { transform: 'scale(1.3)' },
-                            '70%': { transform: 'scale(1)' },
-                        },
-                        blizzard: {
-                            '0%': { transform: 'translate(0, 0) rotate(0deg)' },
-                            '100%': { transform: 'translate(-20px, 100vh) rotate(360deg)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
+                        aurora: { '0%': { transform: 'translate(0, 0) rotate(0deg)' }, '100%': { transform: 'translate(10%, 10%) rotate(10deg)' } },
+                        toastIn: { '0%': { transform: 'translateX(100%)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(100%)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        rattle: { '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' }, '25%': { transform: 'translate(-1px, 1px) rotate(-1deg)' }, '75%': { transform: 'translate(1px, -1px) rotate(1deg)' } },
+                        driveFast: { '0%': { transform: 'translateX(-200%) skewX(10deg)', opacity: '0' }, '100%': { transform: 'translateX(0) skewX(0deg)', opacity: '1' } },
+                        driveSlow: { '0%': { transform: 'translateX(-150%)', opacity: '0' }, '20%': { transform: 'translateX(-100%)', opacity: '1' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+                        smokePuff: { '0%': { transform: 'translate(0, 0) scale(0.5)', opacity: '0.8' }, '100%': { transform: 'translate(-10px, -20px) scale(2)', opacity: '0' } },
+                        speedLines: { '0%': { transform: 'translateX(100%)', opacity: '0' }, '50%': { opacity: '0.5' }, '100%': { transform: 'translateX(-100%)', opacity: '0' } },
+                        pulseGlow: { '0%, 100%': { opacity: '0.6', filter: 'brightness(1)' }, '50%': { opacity: '1', filter: 'brightness(1.5) blur(1px)' } },
+                        heartBeat: { '0%': { transform: 'scale(1)' }, '14%': { transform: 'scale(1.3)' }, '28%': { transform: 'scale(1)' }, '42%': { transform: 'scale(1.3)' }, '70%': { transform: 'scale(1)' } },
+                        blizzard: { '0%': { transform: 'translate(0, 0) rotate(0deg)' }, '100%': { transform: 'translate(-20px, 100vh) rotate(360deg)' } },
+                        fadeIn: { '0%': { opacity: '0', transform: 'translateY(-10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
                     },
-                    cursor: {
-                        'col-resize': 'col-resize',
-                        'row-resize': 'row-resize',
-                        'nwse-resize': 'nwse-resize',
-                    }
+                    cursor: { 'col-resize': 'col-resize', 'row-resize': 'row-resize', 'nwse-resize': 'nwse-resize' }
                 }
             }
         }
     </script>
-
     <style>
-        body {
-            background-color: #09090b;
-            color: #e2e8f0;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.8s ease;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        iframe {
-            pointer-events: auto;
-        }
-
+        body { background-color: #09090b; color: #e2e8f0; overflow: hidden; margin: 0; padding: 0; transition: background-color 0.8s ease; -webkit-overflow-scrolling: touch; }
+        iframe { pointer-events: auto; }
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
-
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* COMMAND BAR (Header Flutuante) */
-        .command-bar-container {
-            position: fixed;
-            top: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 60;
-            width: 90%;
-            max-width: 800px;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .command-bar {
-            background: rgba(18, 18, 21, 0.6);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 999px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
-            padding: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            height: 3.5rem;
-        }
-
-        .command-bar:hover, .command-bar:focus-within {
-            background: rgba(18, 18, 21, 0.85);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        /* Mobile adjustments for command bar */
-        @media (max-width: 768px) {
-            .command-bar-container {
-                top: 1rem;
-                width: 95%;
-            }
-            .command-bar {
-                height: 3.5rem;
-                padding: 0.25rem 0.5rem;
-            }
-        }
-
-        /* LOGO HERO SECTION */
-        .hero-brand {
-            padding-top: 8rem;
-            padding-bottom: 2rem;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            z-index: 10;
-            pointer-events: none;
-            max-height: 500px;
-            opacity: 1;
-            overflow: visible;
-        }
-        
-        .hero-brand.minimized {
-            padding-top: 5.5rem;
-            padding-bottom: 0;
-            transform: scale(0.6);
-            opacity: 0.9;
-            margin-bottom: -1.5rem;
-            height: auto;
-        }
-
-        /* FLIP CARD CSS */
-        .brand-flip-container {
-            perspective: 1000px;
-            width: 280px;
-            height: 80px;
-            position: relative;
-        }
-
-        .brand-flipper {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .brand-front, .brand-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .brand-back {
-            transform: rotateY(180deg);
-        }
-
-        .flipped .brand-flipper {
-            transform: rotateY(180deg);
-        }
-        
-        /* MODO CINEMA: Colapso total */
-        .theater-mode-active .hero-brand {
-            transform: translateY(-50px) scale(0.8);
-            opacity: 0;
-            max-height: 0;
-            padding: 0;
-            margin: 0;
-            pointer-events: none;
-            overflow: hidden; 
-        }
-
-        /* HEADER HIDDEN MODE (AUTO-COLLAPSE NO MODO NORMAL) 
-           - CORREÇÃO: Colapsa a Logo completamente para liberar espaço
-        */
-        
-        .header-hidden-active .command-bar-container {
-            transform: translateX(-50%) translateY(-150%);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* CORREÇÃO APLICADA: Força o colapso da logo quando o header some */
-        .header-hidden-active .hero-brand {
-            transform: translateY(-100%) !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            height: 0 !important;
-            min-height: 0 !important;
-            margin: 0 !important;
-            opacity: 0 !important;
-            overflow: hidden !important;
-            pointer-events: none;
-        }
-
-        /* Garante que o main suba totalmente */
-        .header-hidden-active main {
-            padding-top: 0 !important;
-            height: 100vh !important;
-        }
-        
-        .header-hidden-active .sidebar-glass {
-            height: 100vh !important;
-            border-top: none;
-        }
-        
-        .sidebar-glass {
-            background: rgba(18, 18, 21, 0.95);
-            border-left: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.5s ease;
-            z-index: 60;
-        }
-        
-        .theater-mode-active .sidebar-glass {
-            background: rgba(18, 18, 21, 0.98);
-            border-left-color: rgba(165, 243, 252, 0.2);
-            box-shadow: -10px 0 50px rgba(0,0,0,0.8);
-            height: 100% !important;
-        }
-
-        .sidebar-glass {
-            height: 100%; 
-        }
-
-        @media (max-width: 768px) {
-            .sidebar-glass {
-                border-left: none;
-                border-top: 1px solid rgba(255, 255, 255, 0.06);
-                position: relative;
-                box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
-            }
-        }
-
-        /* TEXTO NEVETHON */
-        .nevethon-text { 
-            color: #fff; 
-            font-weight: 900;
-            letter-spacing: 0.1em;
-            position: relative; 
-            display: inline-block;
-            text-shadow: 
-                0 0 10px rgba(165, 243, 252, 0.8),
-                0 0 20px rgba(165, 243, 252, 0.5),
-                0 0 40px rgba(99, 102, 241, 0.3);
-            font-size: 2.5rem; 
-            font-family: 'Russo One', sans-serif;
-            font-style: italic;
-        }
-        
-        .multlives-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        /* Partículas de neve (Header) */
-        .snow-particle { 
-            position: absolute; 
-            top: -10px; 
-            background: white; 
-            border-radius: 50%; 
-            pointer-events: none; 
-            animation: iceFall 2s linear infinite; 
-            box-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
-        }
-        
+        /* COMMAND BAR */
+        .command-bar-container { position: fixed; top: 2rem; left: 50%; transform: translateX(-50%); z-index: 60; width: 90%; max-width: 800px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .command-bar { background: rgba(18, 18, 21, 0.6); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 999px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05); padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; height: 3.5rem; }
+        .command-bar:hover, .command-bar:focus-within { background: rgba(18, 18, 21, 0.85); border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1); }
+        @media (max-width: 768px) { .command-bar-container { top: 1rem; width: 95%; } .command-bar { height: 3.5rem; padding: 0.25rem 0.5rem; } }
+        /* HERO & BRAND */
+        .hero-brand { padding-top: 8rem; padding-bottom: 2rem; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); position: relative; z-index: 10; pointer-events: none; max-height: 500px; opacity: 1; overflow: visible; }
+        .hero-brand.minimized { padding-top: 5.5rem; padding-bottom: 0; transform: scale(0.6); opacity: 0.9; margin-bottom: -1.5rem; height: auto; }
+        .brand-flip-container { perspective: 1000px; width: 280px; height: 80px; position: relative; }
+        .brand-flipper { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .brand-front, .brand-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; align-items: center; justify-content: center; }
+        .brand-back { transform: rotateY(180deg); }
+        .flipped .brand-flipper { transform: rotateY(180deg); }
+        /* HIDDEN HEADER MODE */
+        .header-hidden-active .command-bar-container { transform: translateX(-50%) translateY(-150%); opacity: 0; pointer-events: none; }
+        .header-hidden-active .hero-brand { transform: scale(0.5) translateY(-20px) !important; padding-top: 1rem !important; padding-bottom: 0 !important; margin-bottom: -1.5rem !important; opacity: 0.6 !important; height: auto !important; min-height: 60px !important; overflow: visible !important; visibility: visible !important; pointer-events: none; }
+        .header-hidden-active main { padding-top: 0 !important; height: auto !important; flex: 1; }
+        .header-hidden-active .sidebar-glass { border-top: none; }
+        /* THEATER MODE */
+        .theater-mode-active .hero-brand, .theater-mode-active .command-bar-container { transform: translateY(-200%) !important; opacity: 0 !important; pointer-events: none; display: none; }
+        .sidebar-glass { background: rgba(18, 18, 21, 0.95); border-left: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.5s ease; z-index: 60; height: 100%; }
+        .theater-mode-active .sidebar-glass { background: rgba(18, 18, 21, 0.98); border-left-color: rgba(165, 243, 252, 0.2); box-shadow: -10px 0 50px rgba(0,0,0,0.8); height: 100% !important; }
+        @media (max-width: 768px) { .sidebar-glass { border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.06); position: relative; box-shadow: 0 -4px 20px rgba(0,0,0,0.5); } }
+        /* TEXT EFFECTS & PARTICLES */
+        .nevethon-text { color: #fff; font-weight: 900; letter-spacing: 0.1em; position: relative; display: inline-block; text-shadow: 0 0 10px rgba(165, 243, 252, 0.8), 0 0 20px rgba(165, 243, 252, 0.5), 0 0 40px rgba(99, 102, 241, 0.3); font-size: 2.5rem; font-family: 'Russo One', sans-serif; font-style: italic; }
+        .multlives-wrapper { display: flex; align-items: center; gap: 1rem; }
+        .snow-particle { position: absolute; top: -10px; background: white; border-radius: 50%; pointer-events: none; animation: iceFall 2s linear infinite; box-shadow: 0 0 4px rgba(255, 255, 255, 0.9); }
         .snow-particle:nth-child(1) { left: 10%; width: 2px; height: 2px; animation-duration: 1.5s; animation-delay: 0s; }
         .snow-particle:nth-child(2) { left: 30%; width: 3px; height: 3px; animation-duration: 2.0s; animation-delay: 0.2s; }
         .snow-particle:nth-child(3) { left: 60%; width: 2px; height: 2px; animation-duration: 1.7s; animation-delay: 0.5s; }
         .snow-particle:nth-child(4) { left: 85%; width: 3px; height: 3px; animation-duration: 1.3s; animation-delay: 0.1s; }
-        
-        @keyframes iceFall { 
-            0% { transform: translateY(0); opacity: 0; } 
-            10% { opacity: 1; } 
-            90% { opacity: 1; } 
-            100% { transform: translateY(35px); opacity: 0; } 
-        }
-
-        @keyframes blizzard {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(-20px, 100vh) rotate(360deg); }
-        }
+        @keyframes iceFall { 0% { transform: translateY(0); opacity: 0; } 10%, 90% { opacity: 1; } 100% { transform: translateY(35px); opacity: 0; } }
+        @keyframes blizzard { 0% { transform: translate(0, 0) rotate(0deg); } 100% { transform: translate(-20px, 100vh) rotate(360deg); } }
         .animate-blizzard { animation: blizzard linear infinite; }
-
         .aurora-blob { position: absolute; filter: blur(100px); opacity: 0.3; z-index: 0; pointer-events: none; }
-        .cursor-grab { cursor: grab; }
-        .cursor-grabbing { cursor: grabbing; }
-
-        .kick-chat-container {
-            position: relative;
-            background-color: #0b0e11;
-            width: 100%;
-            height: 100%;
-        }
-        
+        .cursor-grab { cursor: grab; } .cursor-grabbing { cursor: grabbing; }
+        .kick-chat-container { position: relative; background-color: #0b0e11; width: 100%; height: 100%; }
         .car-neon { filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.8)); }
         .car-fire { filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.8)); }
         .car-ice { filter: drop-shadow(0 0 10px rgba(165, 243, 252, 0.8)); }
         .car-broken { filter: sepia(100%) saturate(300%) hue-rotate(315deg) contrast(80%); }
-
-        /* TOOLBAR FLUTUANTE */
-        .floating-toolbar {
-            position: fixed;
-            bottom: 1.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 70;
-            display: flex;
-            align-items: center;
-            background: rgba(13, 13, 16, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 99px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: visible; 
-            padding: 0.35rem;
-            gap: 0.5rem;
-        }
-        
-        .floating-toolbar.active {
-            background: rgba(13, 13, 16, 0.95);
-            backdrop-filter: blur(20px);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(99, 102, 241, 0.1);
-            padding: 0.5rem;
-        }
-
-        .floating-toolbar:hover {
-            border-color: rgba(165, 243, 252, 0.2);
-        }
-        
-        .theater-mode-active .floating-toolbar {
-            transform: translateX(-50%) translateY(150%);
-            opacity: 0;
-        }
-        
-        .floating-toolbar-trigger:hover ~ .floating-toolbar,
-        .floating-toolbar:hover,
-        .floating-toolbar.active {
-            transform: translateX(-50%) translateY(0) !important;
-            opacity: 1 !important;
-        }
-        
-        .theater-mode-active .command-bar-container,
-        .theater-mode-active .hero-brand {
-            transform: translateY(-200%);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* CORREÇÃO: Aumentado Z-Index do Trigger para garantir que funcione acima do sidebar */
-        .header-trigger-area {
-            position: fixed; top: 0; left: 0; right: 0; height: 20px; z-index: 70;
-        }
-
-        .header-trigger-area:hover ~ .command-bar-container,
-        .command-bar-container:hover {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* CINEMA LIGHTING MODES */
-        .theater-mode-active .aurora-blob {
-            opacity: 0.15;
-            filter: blur(150px);
-            transform: scale(1.5);
-        }
-
-        .cinema-glow {
-            transition: box-shadow 0.6s ease;
-        }
-
-        .theater-mode-active .cinema-glow {
-            box-shadow: 0 0 30px rgba(0,0,0,0.9), 0 0 40px rgba(99, 102, 241, 0.15);
-        }
-
-        .theater-mode-active .cinema-glow-expanded {
-            box-shadow: 0 0 60px rgba(0,0,0,1), 0 0 80px rgba(165, 243, 252, 0.2);
-        }
-
-        .blackout-overlay {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 5;
-            transition: opacity 1s ease;
-        }
-
-        .theater-mode-active .blackout-overlay {
-            opacity: 0.85;
-        }
+        /* TOOLBAR */
+        .floating-toolbar { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; background: rgba(13, 13, 16, 0.3); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 99px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); overflow: visible; padding: 0.35rem; gap: 0.5rem; }
+        .floating-toolbar.active { background: rgba(13, 13, 16, 0.95); backdrop-filter: blur(20px); border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(99, 102, 241, 0.1); padding: 0.5rem; }
+        .floating-toolbar:hover { border-color: rgba(165, 243, 252, 0.2); }
+        .theater-mode-active .floating-toolbar { transform: translateX(-50%) translateY(150%); opacity: 0; }
+        .floating-toolbar-trigger:hover ~ .floating-toolbar, .floating-toolbar:hover, .floating-toolbar.active { transform: translateX(-50%) translateY(0) !important; opacity: 1 !important; }
+        .header-trigger-area { position: fixed; top: 0; left: 0; right: 0; height: 20px; z-index: 70; }
+        .header-trigger-area:hover ~ .command-bar-container, .command-bar-container:hover { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+        .theater-mode-active .aurora-blob { opacity: 0.15; filter: blur(150px); transform: scale(1.5); }
+        .cinema-glow { transition: box-shadow 0.6s ease; }
+        .theater-mode-active .cinema-glow { box-shadow: 0 0 30px rgba(0,0,0,0.9), 0 0 40px rgba(99, 102, 241, 0.15); }
+        .theater-mode-active .cinema-glow-expanded { box-shadow: 0 0 60px rgba(0,0,0,1), 0 0 80px rgba(165, 243, 252, 0.2); }
+        .blackout-overlay { position: fixed; inset: 0; background: #000; opacity: 0; pointer-events: none; z-index: 5; transition: opacity 1s ease; }
+        .theater-mode-active .blackout-overlay { opacity: 0.85; }
     </style>
 </head>
 <body>
     <div id="root"></div>
-
     <script type="text/babel">
         const { useState, useEffect, useRef, memo, useCallback } = React;
         const { createPortal } = ReactDOM;
 
+        // Hooks & Components simplificados
         const useToast = () => {
             const [toasts, setToasts] = useState([]);
             const addToast = (message, type = 'info') => {
@@ -512,240 +132,59 @@
             <div className="fixed bottom-24 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
                 {toasts.map(toast => (
                     <div key={toast.id} className="animate-toast-in bg-black/80 backdrop-blur-md border border-white/10 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 min-w-[200px]">
-                        {toast.type === 'error' && <span className="text-red-400">✕</span>}
-                        {toast.type === 'success' && <span className="text-green-400">✓</span>}
-                        {toast.type === 'info' && <span className="text-ice">ℹ</span>}
+                        {toast.type === 'error' && <span className="text-red-400">✕</span>}{toast.type === 'success' && <span className="text-green-400">✓</span>}{toast.type === 'info' && <span className="text-ice">ℹ</span>}
                         <span className="text-sm font-medium">{toast.message}</span>
                     </div>
                 ))}
             </div>
         );
 
-        const DonatePopup = ({ onClose }) => {
-            return (
-                <div className="fixed bottom-24 left-4 right-4 md:left-auto md:right-6 md:w-96 z-[90] animate-slide-up pointer-events-auto">
-                    <div className="relative group">
-                        <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 rounded-2xl blur opacity-30 group-hover:opacity-70 transition duration-1000"></div>
-                        <div className="relative bg-[#121215]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl flex gap-4 items-start ring-1 ring-white/5">
-                            <button 
-                                onClick={onClose} 
-                                className="absolute top-2 right-2 text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-full p-1.5 transition-colors"
-                                title="Fechar aviso"
-                            >
-                                <XIcon width={12} height={12} />
-                            </button>
-                            <div className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-white/10 flex items-center justify-center shadow-inner">
-                                <HeartIcon className="text-pink-500 animate-heart-beat drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]" width={24} height={24} />
-                            </div>
-                            <div className="flex-1 pr-2">
-                                <h3 className="text-white font-bold text-sm mb-1.5 flex items-center gap-2">
-                                    Apoie o NEVETHON! <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/30">Donate</span>
-                                </h3>
-                                <p className="text-gray-300 text-xs leading-relaxed font-medium">
-                                    Já enviou uma mensagem para seu streamer? Ainda não?
-                                    <br className="mb-2 block"/>
-                                    Digite <span className="text-black font-extrabold bg-cyan-400 px-1.5 py-0.5 rounded mx-0.5 shadow-[0_0_10px_rgba(34,211,238,0.5)] cursor-pointer hover:scale-105 inline-block transition-transform select-all">!pix</span> no chat e mande agora mesmo uma mensagem para ele como forma de contribuir.
-                                </p>
-                            </div>
+        const DonatePopup = ({ onClose }) => (
+            <div className="fixed bottom-24 left-4 right-4 md:left-auto md:right-6 md:w-96 z-[90] animate-slide-up pointer-events-auto">
+                <div className="relative group">
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 rounded-2xl blur opacity-30 group-hover:opacity-70 transition duration-1000"></div>
+                    <div className="relative bg-[#121215]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl flex gap-4 items-start ring-1 ring-white/5">
+                        <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-full p-1.5 transition-colors"><XIcon width={12} height={12} /></button>
+                        <div className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-white/10 flex items-center justify-center shadow-inner"><HeartIcon className="text-pink-500 animate-heart-beat drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]" width={24} height={24} /></div>
+                        <div className="flex-1 pr-2">
+                            <h3 className="text-white font-bold text-sm mb-1.5 flex items-center gap-2">Apoie o NEVETHON! <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/30">Donate</span></h3>
+                            <p className="text-gray-300 text-xs leading-relaxed font-medium">Já enviou uma mensagem para seu streamer? <br className="mb-2 block"/>Digite <span className="text-black font-extrabold bg-cyan-400 px-1.5 py-0.5 rounded mx-0.5 shadow-[0_0_10px_rgba(34,211,238,0.5)] cursor-pointer hover:scale-105 inline-block transition-transform select-all">!pix</span> no chat e mande agora mesmo.</p>
                         </div>
                     </div>
                 </div>
-            );
-        };
+            </div>
+        );
 
         const translations = {
-            pt: {
-                welcome: "Bem vindos ao",
-                add_btn: "Adicionar",
-                placeholder_twitch: "Canal Twitch...",
-                placeholder_kick: "Canal Kick...",
-                placeholder_yt: "Vídeo YT...",
-                placeholder_default: "Adicionar Canal...",
-                map_btn: "Mapa",
-                hide_btn: "Ocultar",
-                realtime_loc: "Localização",
-                empty_title: "Seu painel está vazio",
-                empty_desc: "Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior.",
-                dev_by: "Desenvolvido por",
-                cinema_mode: "Cinema",
-                chat_btn: "Chat",
-                tt_add: "Adicionar Stream",
-                tt_mute_all: "Mutar todas",
-                tt_unmute_all: "Desmutar todas",
-                tt_cinema_exit: "Sair do Modo Cinema",
-                tt_cinema_enter: "Ativar Modo Cinema (Escuro)",
-                tt_hide_chat: "Ocultar chat",
-                tt_show_chat: "Mostrar chat",
-                chat_visible: "Visível",
-                chat_hidden: "Chat",
-                warning_title: "Aviso Importante",
-                warning_text: "Você abriu este arquivo diretamente no seu PC. Twitch e YouTube bloqueiam vídeos nesse modo. Hospede no Vercel.",
-                toast_added: "Streamer adicionado!",
-                toast_exists: "Streamer já está na lista!",
-                toast_empty: "Digite o nome do canal!",
-                intro_title: "NEVETHON",
-                intro_msg: "O COMBUSTÍVEL É O SEU DONATE",
-                intro_sub: "SÓ DURA SE VOCÊ DOAR",
-                layout_auto: "Auto",
-                layout_grid: "Grade",
-                layout_focus: "Foco",
-                squads_title: "Squads",
-                squad_save: "Salvar Squad",
-                squad_load: "Carregar",
-                squad_name_ph: "Nome do Grupo",
-                squad_saved: "Squad Salvo!",
-                squad_deleted: "Squad Removido!",
-                skip_intro: "Pular Intro",
-                pip_active: "Super PiP Ativo",
-                pip_desc: "Os vídeos estão numa janela flutuante.",
-                pip_bring_back: "Trazer de Volta",
-                tt_pip: "Abrir em Janela Flutuante (Todos)",
-                pip_error: "Seu navegador não suporta Super PiP ou foi bloqueado.",
-                tt_reset_size: "Redefinir Tamanho"
-            },
-            en: {
-                welcome: "Welcome to",
-                add_btn: "Add",
-                placeholder_twitch: "Twitch Channel...",
-                placeholder_kick: "Kick Channel...",
-                placeholder_yt: "YT Video...",
-                placeholder_default: "Add Channel...",
-                map_btn: "Map",
-                hide_btn: "Hide",
-                realtime_loc: "Location",
-                empty_title: "Your dashboard is empty",
-                empty_desc: "Add Twitch, Kick channels, or YouTube videos using the top bar.",
-                dev_by: "Developed by",
-                cinema_mode: "Cinema",
-                chat_btn: "Chat",
-                tt_add: "Add Stream",
-                tt_mute_all: "Mute all",
-                tt_unmute_all: "Unmute all",
-                tt_cinema_exit: "Exit Cinema Mode",
-                tt_cinema_enter: "Enable Cinema Mode (Dark)",
-                tt_hide_chat: "Hide chat",
-                tt_show_chat: "Show chat",
-                chat_visible: "Visible",
-                chat_hidden: "Chat",
-                warning_title: "Important Notice",
-                warning_text: "You opened this file directly. Twitch/YouTube block videos in this mode. Host it online.",
-                toast_added: "Streamer added!",
-                toast_exists: "Streamer already listed!",
-                toast_empty: "Enter channel name!",
-                intro_title: "NEVETHON",
-                intro_msg: "FUEL IS YOUR SUB",
-                intro_sub: "ONLY LASTS IF YOU DONATE",
-                layout_auto: "Auto",
-                layout_grid: "Grid",
-                layout_focus: "Focus",
-                squads_title: "Squads",
-                squad_save: "Save Squad",
-                squad_load: "Load",
-                squad_name_ph: "Group Name",
-                squad_saved: "Squad Saved!",
-                squad_deleted: "Squad Deleted!",
-                skip_intro: "Skip Intro",
-                pip_active: "Super PiP Active",
-                pip_desc: "Videos are in a floating window.",
-                pip_bring_back: "Bring Back",
-                tt_pip: "Open in Floating Window (All)",
-                pip_error: "Your browser does not support Super PiP or it was blocked.",
-                tt_reset_size: "Reset Size"
-            }
+            pt: { welcome: "Bem vindos ao", add_btn: "Adicionar", placeholder_twitch: "Canal Twitch...", placeholder_kick: "Canal Kick...", placeholder_yt: "Vídeo YT...", placeholder_default: "Adicionar Canal...", map_btn: "Mapa", hide_btn: "Ocultar", realtime_loc: "Localização", empty_title: "Seu painel está vazio", empty_desc: "Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior.", dev_by: "Desenvolvido por", cinema_mode: "Cinema", chat_btn: "Chat", tt_add: "Adicionar Stream", tt_mute_all: "Mutar todas", tt_unmute_all: "Desmutar todas", tt_cinema_exit: "Sair do Modo Cinema", tt_cinema_enter: "Ativar Modo Cinema (Escuro)", tt_hide_chat: "Ocultar chat", tt_show_chat: "Mostrar chat", chat_visible: "Visível", chat_hidden: "Chat", warning_title: "Aviso Importante", warning_text: "Hospede no Vercel.", toast_added: "Streamer adicionado!", toast_exists: "Streamer já na lista!", toast_empty: "Digite o nome!", intro_title: "NEVETHON", intro_msg: "O COMBUSTÍVEL É O SEU DONATE", intro_sub: "SÓ DURA SE VOCÊ DOAR", layout_auto: "Auto", layout_grid: "Grade", layout_focus: "Foco", squads_title: "Squads", squad_save: "Salvar", squad_load: "Carregar", squad_name_ph: "Nome do Grupo", squad_saved: "Squad Salvo!", squad_deleted: "Squad Removido!", skip_intro: "Pular Intro", pip_active: "Super PiP Ativo", pip_desc: "Vídeos em janela flutuante.", pip_bring_back: "Trazer de Volta", tt_pip: "Janela Flutuante", pip_error: "PiP não suportado/bloqueado.", tt_reset_size: "Redefinir Tamanho" },
+            en: { welcome: "Welcome to", add_btn: "Add", placeholder_twitch: "Twitch Channel...", placeholder_kick: "Kick Channel...", placeholder_yt: "YT Video...", placeholder_default: "Add Channel...", map_btn: "Map", hide_btn: "Hide", realtime_loc: "Location", empty_title: "Dashboard empty", empty_desc: "Add Twitch, Kick channels, or YouTube videos.", dev_by: "Developed by", cinema_mode: "Cinema", chat_btn: "Chat", tt_add: "Add Stream", tt_mute_all: "Mute all", tt_unmute_all: "Unmute all", tt_cinema_exit: "Exit Cinema Mode", tt_cinema_enter: "Enable Cinema Mode", tt_hide_chat: "Hide chat", tt_show_chat: "Show chat", chat_visible: "Visible", chat_hidden: "Chat", warning_title: "Notice", warning_text: "Host online.", toast_added: "Streamer added!", toast_exists: "Already listed!", toast_empty: "Enter name!", intro_title: "NEVETHON", intro_msg: "FUEL IS YOUR SUB", intro_sub: "ONLY LASTS IF YOU DONATE", layout_auto: "Auto", layout_grid: "Grid", layout_focus: "Focus", squads_title: "Squads", squad_save: "Save", squad_load: "Load", squad_name_ph: "Group Name", squad_saved: "Squad Saved!", squad_deleted: "Deleted!", skip_intro: "Skip Intro", pip_active: "Super PiP Active", pip_desc: "Videos floating.", pip_bring_back: "Bring Back", tt_pip: "Floating Window", pip_error: "PiP not supported.", tt_reset_size: "Reset Size" }
         };
 
         const KickChatEmbed = ({ streamName, isResizing, idSuffix = '' }) => {
             const [status, setStatus] = useState('warning');
             const [showNativeHint, setShowNativeHint] = useState(true);
-            
-            useEffect(() => {
-                const timer = setTimeout(() => {
-                    setStatus('loaded');
-                }, 4000); 
-                return () => clearTimeout(timer);
-            }, []);
-
-            const openNativeWindow = () => {
-                const width = 400;
-                const height = window.innerHeight;
-                const left = window.screen.width - width;
-                const top = 0;
-                window.open(
-                    `https://kick.com/popout/${streamName}/chat`, 
-                    `kick_chat_${streamName}`, 
-                    `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no`
-                );
-            };
-
-            const refreshIframe = () => {
-                const iframe = document.getElementById(`kick-iframe-${streamName}${idSuffix}`);
-                if (iframe) iframe.src = iframe.src;
-            }
-
+            useEffect(() => { const timer = setTimeout(() => setStatus('loaded'), 4000); return () => clearTimeout(timer); }, []);
+            const openNativeWindow = () => window.open(`https://kick.com/popout/${streamName}/chat`, `kick_chat_${streamName}`, `width=400,height=${window.innerHeight},left=${window.screen.width-400},top=0,menubar=no,toolbar=no,location=no,status=no`);
             return (
                 <div className="w-full h-full relative group/kick bg-[#0b0e11] flex flex-col overflow-hidden">
                     {status === 'warning' && (
                         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#0b0e11] p-6 text-center animate-fade-in">
-                            <div className="w-12 h-12 bg-[#53fc18]/20 rounded-full flex items-center justify-center mb-4 border border-[#53fc18]">
-                                <span className="text-[#53fc18] font-bold text-xl">!</span>
-                            </div>
+                            <div className="w-12 h-12 bg-[#53fc18]/20 rounded-full flex items-center justify-center mb-4 border border-[#53fc18]"><span className="text-[#53fc18] font-bold text-xl">!</span></div>
                             <h3 className="text-white font-bold text-sm mb-2 uppercase tracking-wide">Aviso de Permissões</h3>
-                            <p className="text-gray-400 text-xs max-w-xs mb-4 leading-relaxed">
-                                A Kick restringe logins em janelas incorporadas. 
-                                <br/><br/>
-                                O chat carregará automaticamente em <strong>Modo Leitura</strong>.
-                            </p>
-                            <div className="w-full max-w-[200px] h-1 bg-white/10 rounded-full overflow-hidden">
-                                <div className="h-full bg-[#53fc18] animate-[width_4s_linear_forwards]" style={{width: '0%'}}></div>
-                            </div>
-                            <button 
-                                onClick={() => setStatus('loaded')}
-                                className="mt-4 text-[10px] text-gray-500 hover:text-white underline cursor-pointer"
-                            >
-                                Pular aviso
-                            </button>
+                            <p className="text-gray-400 text-xs max-w-xs mb-4 leading-relaxed">A Kick restringe logins incorporados. O chat carregará em <strong>Modo Leitura</strong>.</p>
+                            <div className="w-full max-w-[200px] h-1 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-[#53fc18] animate-[width_4s_linear_forwards]" style={{width: '0%'}}></div></div>
+                            <button onClick={() => setStatus('loaded')} className="mt-4 text-[10px] text-gray-500 hover:text-white underline cursor-pointer">Pular aviso</button>
                         </div>
                     )}
-
-                    {status === 'loaded' && (
-                        <iframe 
-                            id={`kick-iframe-${streamName}${idSuffix}`}
-                            src={`https://kick.com/popout/${streamName}/chat`} 
-                            className={`w-full h-full border-none bg-[#0b0e11] ${isResizing ? 'pointer-events-none' : ''}`}
-                            referrerPolicy="no-referrer"
-                            allow="clipboard-write; storage-access-by-user-activation; fullscreen"
-                        ></iframe>
-                    )}
-
+                    {status === 'loaded' && <iframe id={`kick-iframe-${streamName}${idSuffix}`} src={`https://kick.com/popout/${streamName}/chat`} className={`w-full h-full border-none bg-[#0b0e11] ${isResizing ? 'pointer-events-none' : ''}`} referrerPolicy="no-referrer" allow="clipboard-write; storage-access-by-user-activation; fullscreen"></iframe>}
                     {status === 'loaded' && showNativeHint && (
                         <div className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none p-4">
                             <div className="bg-[#1a1d21] border border-[#53fc18]/30 rounded-xl shadow-2xl p-5 relative animate-fade-in pointer-events-auto max-w-[280px] w-full">
-                                <button 
-                                    onClick={() => setShowNativeHint(false)} 
-                                    className="absolute top-2 right-2 p-1.5 text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors"
-                                    title="Fechar aviso"
-                                >
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                </button>
-                                
+                                <button onClick={() => setShowNativeHint(false)} className="absolute top-2 right-2 p-1.5 text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors"><XIcon /></button>
                                 <div className="flex flex-col items-center text-center gap-3 mt-1">
-                                    <div className="w-10 h-10 bg-[#53fc18]/10 rounded-full flex items-center justify-center text-[#53fc18] border border-[#53fc18]/20">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                                    </div>
-                                    
-                                    <div>
-                                        <h4 className="text-white font-bold text-sm mb-1">Quer interagir no chat?</h4>
-                                        <p className="text-[11px] text-gray-400 leading-relaxed">
-                                            Para digitar sem erros de login, use a janela nativa da Kick.
-                                        </p>
-                                    </div>
-
-                                    <button 
-                                        onClick={() => { openNativeWindow(); setShowNativeHint(false); }}
-                                        className="bg-[#53fc18] hover:bg-[#42ca14] text-black text-xs font-bold py-2.5 px-4 rounded-lg w-full transition-transform active:scale-95 shadow-lg shadow-[#53fc18]/10 flex items-center justify-center gap-2"
-                                    >
-                                        <span>Abrir Janela Nativa</span>
-                                    </button>
+                                    <div className="w-10 h-10 bg-[#53fc18]/10 rounded-full flex items-center justify-center text-[#53fc18] border border-[#53fc18]/20"><ExternalLinkIcon width={20} height={20}/></div>
+                                    <div><h4 className="text-white font-bold text-sm mb-1">Quer interagir?</h4><p className="text-[11px] text-gray-400 leading-relaxed">Para digitar, use a janela nativa.</p></div>
+                                    <button onClick={() => { openNativeWindow(); setShowNativeHint(false); }} className="bg-[#53fc18] hover:bg-[#42ca14] text-black text-xs font-bold py-2.5 px-4 rounded-lg w-full shadow-lg shadow-[#53fc18]/10 flex items-center justify-center gap-2"><span>Abrir Janela Nativa</span></button>
                                 </div>
                             </div>
                         </div>
@@ -754,31 +193,26 @@
             );
         };
 
-        const FlagBR = () => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="16" height="12"><g fillRule="evenodd" strokeWidth="1pt"><path fill="#009b3a" d="M0 0h640v480H0z"/><path fill="#fedf00" d="M320 22.1L577.6 240 320 457.9 62.4 240z"/><circle fill="#002776" cx="320" cy="240" r="109.2"/><path fill="#fff" fillRule="evenodd" d="M62.4 240l257.6 217.9L577.6 240 320 22.1z" opacity=".0"/><path fill="#fff" d="M228.6 268.4c52.2-12.7 112.9-7.9 174.4 12.8-3.4 3.7-7.2 7-11.2 10.1-55.9-19-111-23.7-158.6-12.4-1.7-3.7-3.2-7.1-4.6-10.5z"/></g></svg>;
-        const FlagUS = () => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="16" height="12"><path fill="#bd3d44" d="M0 0h640v480H0"/><path stroke="#fff" strokeWidth="37" d="M0 55.3h640M0 129h640M0 203h640M0 277h640M0 351h640M0 425h640"/><path fill="#192f5d" d="M0 0h364.8v258.5H0"/><marker id="us-a" markerHeight="30" markerWidth="30"><path fill="#fff" d="M14.7 0l4.5 14L4 14l11.8 8.6-4.5 14L14.7 28l11.4 8.6-4.5-14 11.8-8.6H19.2z"/></marker><path fill="none" markerMid="url(#us-a)" d="M0 0L364.8 258.5M0 258.5L364.8 0"/></svg>;
-        
+        // Icons Minificados
         const PlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
         const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
-        const MessageIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>;
         const MapIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>;
-        const LayoutIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>;
+        const LayoutIcon = ({width,height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>;
         const TwitchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>;
         const YoutubeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>;
-        const InstagramIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>;
         const ExpandIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>;
         const CompressIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>;
         const MoveIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>;
-        const MoonIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>;
-        const SunIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41-1.41"/></svg>;
+        const MoonIcon = ({width,height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>;
+        const SunIcon = ({width,height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41-1.41"/></svg>;
         const RefreshCwIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 14} height={height || 14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg>;
         const Volume2Icon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>;
         const VolumeXIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>;
         const SplitIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="12" x2="21" y2="12"></line></svg>;
         const ChevronDownIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>;
-        const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
-
-        const GridIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>;
-        const LayoutTemplateIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="21" y1="9" x2="3" y2="9"></line><line x1="9" y1="9" x2="9" y2="21"></line></svg>;
+        const SearchIcon = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
+        const GridIcon = ({width,height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>;
+        const LayoutTemplateIcon = ({width,height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="21" y1="9" x2="3" y2="9"></line><line x1="9" y1="9" x2="9" y2="21"></line></svg>;
         const UsersIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 16} height={height || 16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
         const SaveIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>;
         const XIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 14} height={height || 14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
@@ -787,56 +221,28 @@
         const ScaleIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"></path><path d="M7 9v2"></path><path d="M11 9v2"></path><path d="M15 9v2"></path></svg>;
         const ChatIcon = ({ width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 16} height={height || 16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>;
         const HeartIcon = ({ className, width, height }) => <svg xmlns="http://www.w3.org/2000/svg" width={width || 20} height={height || 20} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>;
-
         const CarIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>;
         const BrokenCarIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M10 16H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1l2-4h8l2 4h1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-1"/><circle cx="7" cy="16" r="3"/><circle cx="17" cy="16" r="3"/><path d="M15 8l-2 3" strokeWidth="2"/><path d="M9 8l2 3" strokeWidth="2"/></svg>;
-
-        const LogoML = () => (
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 19V5" stroke="white" strokeWidth="3" strokeLinecap="round" />
-                <path d="M19 19V5" stroke="white" strokeWidth="3" strokeLinecap="round" />
-                <path d="M5 5L12 13L19 5" stroke="#a5f3fc" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-        );
+        const LogoML = () => <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 19V5" stroke="white" strokeWidth="3" strokeLinecap="round" /><path d="M19 19V5" stroke="white" strokeWidth="3" strokeLinecap="round" /><path d="M5 5L12 13L19 5" stroke="#a5f3fc" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 
         const HeroBrand = ({ minimized }) => {
             const [isFlipped, setIsFlipped] = useState(false);
-
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    setIsFlipped(prev => !prev);
-                }, 6000); 
-                return () => clearInterval(interval);
-            }, []);
-
+            useEffect(() => { const interval = setInterval(() => setIsFlipped(prev => !prev), 6000); return () => clearInterval(interval); }, []);
             return (
                 <div className={`hero-brand ${minimized ? 'minimized' : ''}`}>
                     <div className={`brand-flip-container ${isFlipped ? 'flipped' : ''}`}>
                         <div className="brand-flipper">
                             <div className="brand-front">
                                 <div className="multlives-wrapper">
-                                    <div className="w-14 h-14 tech-gradient rounded-2xl flex items-center justify-center text-white shadow-[0_0_30px_rgba(99,102,241,0.4)] ring-1 ring-white/20">
-                                        <LogoML />
-                                    </div>
-                                    <div className="flex flex-col text-left">
-                                         <h1 className="font-bold text-3xl tracking-tight text-white leading-none font-display">MultLives</h1>
-                                         <span className="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-semibold mt-1 ml-0.5">Streaming Hub</span>
-                                    </div>
+                                    <div className="w-14 h-14 tech-gradient rounded-2xl flex items-center justify-center text-white shadow-[0_0_30px_rgba(99,102,241,0.4)] ring-1 ring-white/20"><LogoML /></div>
+                                    <div className="flex flex-col text-left"><h1 className="font-bold text-3xl tracking-tight text-white leading-none font-display">MultLives</h1><span className="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-semibold mt-1 ml-0.5">Streaming Hub</span></div>
                                 </div>
                             </div>
                             <div className="brand-back">
                                 <div className="relative flex items-center justify-center">
-                                     <h2 className="nevethon-text">
-                                        NEVETHON
-                                        <span className="snow-particle" style={{left: '10%', animationDelay: '0s'}}></span>
-                                        <span className="snow-particle" style={{left: '30%', animationDelay: '0.4s'}}></span>
-                                        <span className="snow-particle" style={{left: '50%', animationDelay: '0.8s'}}></span>
-                                        <span className="snow-particle" style={{left: '70%', animationDelay: '0.2s'}}></span>
-                                        <span className="snow-particle" style={{left: '90%', animationDelay: '0.6s'}}></span>
-                                    </h2>
+                                    <h2 className="nevethon-text">NEVETHON<span className="snow-particle" style={{left:'10%',animationDelay:'0s'}}></span><span className="snow-particle" style={{left:'30%',animationDelay:'0.4s'}}></span><span className="snow-particle" style={{left:'50%',animationDelay:'0.8s'}}></span><span className="snow-particle" style={{left:'70%',animationDelay:'0.2s'}}></span><span className="snow-particle" style={{left:'90%',animationDelay:'0.6s'}}></span></h2>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -844,330 +250,102 @@
         };
 
         const LoadingScreen = ({ isLoading, lang }) => {
-            const [visible, setVisible] = useState(() => {
-                const hasSeen = sessionStorage.getItem('nevethon_intro_seen');
-                return !hasSeen;
-            });
+            const [visible, setVisible] = useState(() => !sessionStorage.getItem('nevethon_intro_seen'));
             const [phase, setPhase] = useState(0); 
             const t = (key) => translations[lang][key];
-
             useEffect(() => {
-                if (visible) {
-                    sessionStorage.setItem('nevethon_intro_seen', 'true');
-
-                    setTimeout(() => setPhase(1), 500);
-                    setTimeout(() => setPhase(2), 1500);
-                    setTimeout(() => setPhase(3), 2800);
-                }
-
-                if (!isLoading || !visible) {
-                    const timer = setTimeout(() => {
-                        setPhase(current => current < 4 ? 4 : current);
-                    }, 4500); 
-                    const hideTimer = setTimeout(() => setVisible(false), 5500);
-                    return () => { clearTimeout(timer); clearTimeout(hideTimer); };
-                }
+                if (visible) { sessionStorage.setItem('nevethon_intro_seen', 'true'); setTimeout(() => setPhase(1), 500); setTimeout(() => setPhase(2), 1500); setTimeout(() => setPhase(3), 2800); }
+                if (!isLoading || !visible) { const timer = setTimeout(() => setPhase(c => c < 4 ? 4 : c), 4500); const hideTimer = setTimeout(() => setVisible(false), 5500); return () => { clearTimeout(timer); clearTimeout(hideTimer); }; }
             }, [isLoading, visible]);
-
-            const skipIntro = () => {
-                setPhase(4);
-                setTimeout(() => setVisible(false), 1000);
-            };
-
             if (!visible) return null;
-
             return (
                 <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050507] transition-opacity duration-1000 ease-in-out ${phase === 4 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-150 pointer-events-none"></div>
-                    
-                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                        {[...Array(20)].map((_, i) => (
-                            <div key={i} className="absolute bg-gradient-to-l from-white/10 to-transparent h-[1px] w-64 animate-speed-lines" style={{
-                                top: `${Math.random() * 100}%`,
-                                animationDuration: `${Math.random() * 0.2 + 0.3}s`,
-                                animationDelay: `${Math.random() * 2}s`
-                            }}></div>
-                        ))}
-                    </div>
-
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">{[...Array(20)].map((_, i) => <div key={i} className="absolute bg-gradient-to-l from-white/10 to-transparent h-[1px] w-64 animate-speed-lines" style={{top: `${Math.random()*100}%`, animationDuration: `${Math.random()*0.2+0.3}s`, animationDelay: `${Math.random()*2}s`}}></div>)}</div>
                     <div className="absolute inset-0 overflow-hidden pointer-events-none perspective-1000">
-                        {[...Array(200)].map((_, i) => (
-                            <div key={`snow-1-${i}`} className="absolute bg-white rounded-full animate-blizzard" style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `-${Math.random() * 20}%`,
-                                width: `${Math.random() * 2 + 1}px`,
-                                height: `${Math.random() * 2 + 1}px`,
-                                opacity: Math.random() * 0.8,
-                                animationDuration: `${Math.random() * 0.5 + 1.5}s`,
-                                animationDelay: `${Math.random() * 2}s`
-                            }}></div>
-                        ))}
-                        {[...Array(100)].map((_, i) => (
-                            <div key={`snow-2-${i}`} className="absolute bg-ice rounded-full animate-blizzard blur-[1px]" style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `-${Math.random() * 20}%`,
-                                width: `${Math.random() * 4 + 3}px`,
-                                height: `${Math.random() * 4 + 3}px`,
-                                opacity: Math.random() * 0.4,
-                                animationDuration: `${Math.random() * 1 + 2.5}s`,
-                                animationDelay: `${Math.random() * 3}s`
-                            }}></div>
-                        ))}
+                        {[...Array(200)].map((_, i) => <div key={`s1-${i}`} className="absolute bg-white rounded-full animate-blizzard" style={{left:`${Math.random()*100}%`,top:`-${Math.random()*20}%`,width:`${Math.random()*2+1}px`,height:`${Math.random()*2+1}px`,opacity:Math.random()*0.8,animationDuration:`${Math.random()*0.5+1.5}s`,animationDelay:`${Math.random()*2}s`}}></div>)}
+                        {[...Array(100)].map((_, i) => <div key={`s2-${i}`} className="absolute bg-ice rounded-full animate-blizzard blur-[1px]" style={{left:`${Math.random()*100}%`,top:`-${Math.random()*20}%`,width:`${Math.random()*4+3}px`,height:`${Math.random()*4+3}px`,opacity:Math.random()*0.4,animationDuration:`${Math.random()*1+2.5}s`,animationDelay:`${Math.random()*3}s`}}></div>)}
                     </div>
-
                     <div className="relative w-full max-w-4xl h-64 flex items-center justify-center overflow-hidden">
                         <div className="absolute bottom-10 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                        {phase >= 1 && (
-                            <div className="absolute inset-0 flex items-center justify-center gap-16 translate-y-4">
-                                <div className="animate-drive-fast opacity-0" style={{ animationDelay: '0.1s' }}>
-                                    <CarIcon className="w-16 h-16 text-cyan-400 car-ice transform -scale-x-100" />
-                                </div>
-                                <div className="animate-drive-fast opacity-0" style={{ animationDelay: '0s' }}>
-                                    <CarIcon className="w-16 h-16 text-indigo-500 car-neon transform -scale-x-100" />
-                                </div>
-                                <div className="animate-drive-fast opacity-0" style={{ animationDelay: '0.2s' }}>
-                                    <CarIcon className="w-16 h-16 text-orange-500 car-fire transform -scale-x-100" />
-                                </div>
-                            </div>
-                        )}
-                        {phase >= 2 && (
-                            <div className="absolute right-0 bottom-12 animate-drive-slow opacity-0">
-                                <div className="relative animate-rattle">
-                                    <BrokenCarIcon className="w-16 h-16 text-amber-800 car-broken transform -scale-x-100" />
-                                    <div className="absolute -top-4 right-2 w-4 h-4 bg-gray-500 rounded-full blur-md animate-smoke-puff opacity-0"></div>
-                                    <div className="absolute -top-6 right-0 w-3 h-3 bg-gray-400 rounded-full blur-sm animate-smoke-puff opacity-0" style={{ animationDelay: '0.3s' }}></div>
-                                    <div className="absolute -top-2 right-4 w-2 h-2 bg-gray-600 rounded-full blur-sm animate-smoke-puff opacity-0" style={{ animationDelay: '0.6s' }}></div>
-                                </div>
-                            </div>
-                        )}
+                        {phase >= 1 && <div className="absolute inset-0 flex items-center justify-center gap-16 translate-y-4"><div className="animate-drive-fast opacity-0" style={{animationDelay:'0.1s'}}><CarIcon className="w-16 h-16 text-cyan-400 car-ice transform -scale-x-100"/></div><div className="animate-drive-fast opacity-0" style={{animationDelay:'0s'}}><CarIcon className="w-16 h-16 text-indigo-500 car-neon transform -scale-x-100"/></div><div className="animate-drive-fast opacity-0" style={{animationDelay:'0.2s'}}><CarIcon className="w-16 h-16 text-orange-500 car-fire transform -scale-x-100"/></div></div>}
+                        {phase >= 2 && <div className="absolute right-0 bottom-12 animate-drive-slow opacity-0"><div className="relative animate-rattle"><BrokenCarIcon className="w-16 h-16 text-amber-800 car-broken transform -scale-x-100"/><div className="absolute -top-4 right-2 w-4 h-4 bg-gray-500 rounded-full blur-md animate-smoke-puff opacity-0"></div><div className="absolute -top-6 right-0 w-3 h-3 bg-gray-400 rounded-full blur-sm animate-smoke-puff opacity-0" style={{animationDelay:'0.3s'}}></div><div className="absolute -top-2 right-4 w-2 h-2 bg-gray-600 rounded-full blur-sm animate-smoke-puff opacity-0" style={{animationDelay:'0.6s'}}></div></div></div>}
                     </div>
-
                     <div className={`relative z-10 text-center space-y-4 p-6 transition-all duration-700 transform ${phase >= 3 ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-90'}`}>
-                         <h1 className="font-russo text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] italic animate-pulse-glow">
-                            {t('intro_title')}
-                        </h1>
-                        
-                        <div className="relative w-full max-w-md mx-auto h-3 bg-white/5 border border-white/10 rounded-full overflow-hidden p-[2px]">
-                            <div 
-                                className="h-full bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 rounded-full transition-all duration-[3000ms] ease-out shadow-[0_0_10px_rgba(239,68,68,0.5)]"
-                                style={{ width: phase >= 3 ? '100%' : '5%' }}
-                            ></div>
-                        </div>
-
-                        <div className="flex flex-col items-center gap-2">
-                            <p className="text-red-500 font-black tracking-[0.2em] text-sm md:text-xl uppercase bg-black/50 backdrop-blur-sm inline-block px-4 py-1 rounded border border-red-500/20">
-                                {t('intro_msg')}
-                            </p>
-                            
-                            <p className="text-white/60 font-medium tracking-widest text-[10px] md:text-xs uppercase mt-4 animate-pulse">
-                                {t('intro_sub')}
-                            </p>
-                        </div>
+                        <h1 className="font-russo text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] italic animate-pulse-glow">{t('intro_title')}</h1>
+                        <div className="relative w-full max-w-md mx-auto h-3 bg-white/5 border border-white/10 rounded-full overflow-hidden p-[2px]"><div className="h-full bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 rounded-full transition-all duration-[3000ms] ease-out shadow-[0_0_10px_rgba(239,68,68,0.5)]" style={{width: phase >= 3 ? '100%' : '5%'}}></div></div>
+                        <div className="flex flex-col items-center gap-2"><p className="text-red-500 font-black tracking-[0.2em] text-sm md:text-xl uppercase bg-black/50 backdrop-blur-sm inline-block px-4 py-1 rounded border border-red-500/20">{t('intro_msg')}</p><p className="text-white/60 font-medium tracking-widest text-[10px] md:text-xs uppercase mt-4 animate-pulse">{t('intro_sub')}</p></div>
                     </div>
-
-                    {phase < 4 && (
-                        <button 
-                            onClick={skipIntro}
-                            className="absolute bottom-10 right-10 z-[110] flex items-center gap-2 px-6 py-2.5 bg-white/5 hover:bg-white/15 border border-white/10 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-300 hover:scale-105 active:scale-95 group"
-                        >
-                            <span className="text-gray-400 group-hover:text-white transition-colors">{t('skip_intro')}</span>
-                            <svg className="w-3 h-3 text-ice group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
-                        </button>
-                    )}
+                    {phase < 4 && <button onClick={() => { setPhase(4); setTimeout(() => setVisible(false), 1000); }} className="absolute bottom-10 right-10 z-[110] flex items-center gap-2 px-6 py-2.5 bg-white/5 hover:bg-white/15 border border-white/10 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-300 hover:scale-105 active:scale-95 group"><span className="text-gray-400 group-hover:text-white transition-colors">{t('skip_intro')}</span><svg className="w-3 h-3 text-ice group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></button>}
                 </div>
             );
         };
 
-        const getPlatformColor = (p) => {
-            if (p === 'twitch') return 'text-[#9146ff]';
-            if (p === 'kick') return 'text-[#53fc18]';
-            if (p === 'youtube') return 'text-[#ff0000]';
-            return 'text-white';
-        }
+        const getPlatformColor = p => p==='twitch'?'text-[#9146ff]':p==='kick'?'text-[#53fc18]':p==='youtube'?'text-[#ff0000]':'text-white';
+        const getPlatformIcon = p => p==='twitch'?<TwitchIcon/>:p==='kick'?<span className="text-[10px] font-bold">K</span>:p==='youtube'?<YoutubeIcon/>:null;
 
-        const getPlatformIcon = (p) => {
-            if (p === 'twitch') return <TwitchIcon />;
-            if (p === 'kick') return <span className="text-[10px] font-bold">K</span>;
-            if (p === 'youtube') return <YoutubeIcon />;
-            return null;
-        }
-
-        const getActiveTabStyle = (platform) => {
-            switch(platform) {
-                case 'twitch': return 'border-[#9146ff] text-[#9146ff] bg-[#9146ff]/10';
-                case 'kick': return 'border-[#53fc18] text-[#53fc18] bg-[#53fc18]/10';
-                case 'youtube': return 'border-[#ff0000] text-[#ff0000] bg-[#ff0000]/10';
-                default: return 'border-ice text-white bg-white/5';
-            }
-        };
-
-        const PlatformSelector = ({ selected, onSelect }) => {
-            const platforms = [
-                { id: 'twitch', color: 'text-[#9146ff]', bg: 'bg-[#9146ff]', icon: <TwitchIcon /> },
-                { id: 'kick', color: 'text-[#53fc18]', bg: 'bg-[#53fc18]', icon: <span className="font-bold text-[10px]">K</span> },
-                { id: 'youtube', color: 'text-[#ff0000]', bg: 'bg-[#ff0000]', icon: <YoutubeIcon /> },
-            ];
-
-            return (
-                <div className="flex items-center gap-1 mr-2 bg-white/5 rounded-full p-1 border border-white/5">
-                    {platforms.map(p => (
-                        <button
-                            key={p.id}
-                            type="button"
-                            onClick={() => onSelect(p.id)}
-                            className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${selected === p.id ? `${p.bg} text-black shadow-[0_0_10px_rgba(0,0,0,0.5)] scale-110` : 'text-gray-500 hover:text-white hover:bg-white/10'}`}
-                            title={p.id}
-                        >
-                            {p.icon}
-                        </button>
-                    ))}
-                </div>
-            );
-        };
+        const PlatformSelector = ({ selected, onSelect }) => (
+            <div className="flex items-center gap-1 mr-2 bg-white/5 rounded-full p-1 border border-white/5">
+                {[{id:'twitch',bg:'bg-[#9146ff]',icon:<TwitchIcon/>},{id:'kick',bg:'bg-[#53fc18]',icon:<span className="font-bold text-[10px]">K</span>},{id:'youtube',bg:'bg-[#ff0000]',icon:<YoutubeIcon/>}].map(p => (
+                    <button key={p.id} type="button" onClick={() => onSelect(p.id)} className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${selected === p.id ? `${p.bg} text-black shadow-[0_0_10px_rgba(0,0,0,0.5)] scale-110` : 'text-gray-500 hover:text-white hover:bg-white/10'}`} title={p.id}>{p.icon}</button>
+                ))}
+            </div>
+        );
 
         const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, isResizingAny, isTheaterMode, isDragging, onResizeStart, onResetSize }) => {
-            const getTwitchUrl = () => {
-                const candidates = [hostname, "localhost", "127.0.0.1", window.location.hostname, window.location.host];
-                const uniqueParents = [...new Set(candidates.filter(h => h && h.trim() !== ""))];
-                const cleanParents = uniqueParents.map(p => p.split(':')[0]); 
-                const finalParents = [...new Set(cleanParents)];
-                if (finalParents.length === 0) finalParents.push("localhost");
-                const parentQuery = finalParents.map(p => `parent=${p}`).join("&");
-                return `https://player.twitch.tv/?channel=${stream.name}&${parentQuery}&muted=${isGlobalMuted}`;
-            };
-            
-            const finalStyle = {
-                flexGrow: 0,
-                width: stream.customWidth ? `${stream.customWidth}px` : undefined,
-                ...style
+            const getUrl = () => {
+                if(stream.platform === 'twitch') {
+                    const candidates = [hostname, "localhost", "127.0.0.1", window.location.hostname];
+                    const parents = [...new Set(candidates.filter(h=>h&&h.trim()!=="").map(p=>p.split(':')[0]))];
+                    if(!parents.length) parents.push("localhost");
+                    return `https://player.twitch.tv/?channel=${stream.name}&${parents.map(p=>`parent=${p}`).join("&")}&muted=${isGlobalMuted}`;
+                }
+                if(stream.platform === 'kick') return `https://player.kick.com/${stream.name}`;
+                if(stream.platform === 'youtube') return `https://www.youtube.com/embed/${stream.name}?autoplay=1&mute=${isGlobalMuted?1:0}`;
+                return '';
             };
 
             return (
-                <div 
-                    className={`relative group bg-transparent overflow-hidden transition-all duration-300 ${!stream.customWidth ? widthClass : ''} ${heightClass || ''} flex items-center justify-center p-1 z-10 max-w-[100vw]`}
-                    style={finalStyle} 
-                    draggable={isDraggable}
-                    onDragStart={(e) => isDraggable && onDragStart(e, index)}
-                    onDragEnter={(e) => isDraggable && onDragEnter(e, index)}
-                    onDragEnd={onDragEnd}
-                    onDragOver={(e) => e.preventDefault()}
-                >
-                    <div className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded ? 'ring-1 ring-white/20 cinema-glow-expanded' : ''}`}>
+                <div className={`relative group bg-transparent overflow-hidden transition-all duration-300 ${!stream.customWidth ? widthClass : ''} ${heightClass || ''} flex items-center justify-center p-1 z-10 max-w-[100vw]`} style={{flexGrow:0,width:stream.customWidth?`${stream.customWidth}px`:undefined,...style}} draggable={isDraggable} onDragStart={e=>isDraggable&&onDragStart(e,index)} onDragEnter={e=>isDraggable&&onDragEnter(e,index)} onDragEnd={onDragEnd} onDragOver={e=>e.preventDefault()}>
+                    <div className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded?'ring-1 ring-white/20 cinema-glow-expanded':''}`}>
                         {(isDragging || isResizingAny) && <div className="absolute inset-0 z-50 bg-transparent"></div>}
-                        
-                        {!isExpanded && (
-                            <div 
-                                className="absolute bottom-0 right-0 w-12 h-12 z-40 cursor-nwse-resize opacity-0 group-hover:opacity-100 transition-opacity touch-none flex items-end justify-end pb-1 pr-1"
-                                onMouseDown={(e) => onResizeStart(e, stream.id)}
-                                onTouchStart={(e) => onResizeStart(e, stream.id)}
-                            >
-                                <div className="w-4 h-4 border-r-2 border-b-2 border-white/30 rounded-br-sm active:border-accent active:bg-accent/20 transition-colors"></div>
-                            </div>
-                        )}
-
-                        <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-200 pointer-events-none ${isExpanded ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                        {!isExpanded && <div className="absolute bottom-0 right-0 w-12 h-12 z-40 cursor-nwse-resize opacity-0 group-hover:opacity-100 transition-opacity touch-none flex items-end justify-end pb-1 pr-1" onMouseDown={e=>onResizeStart(e,stream.id)} onTouchStart={e=>onResizeStart(e,stream.id)}><div className="w-4 h-4 border-r-2 border-b-2 border-white/30 rounded-br-sm active:border-accent active:bg-accent/20 transition-colors"></div></div>}
+                        <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-200 pointer-events-none ${isExpanded?'opacity-100':'opacity-0 group-hover:opacity-100'}`}>
                             <div className="flex items-center gap-2 pointer-events-auto">
-                                {isDraggable && (
-                                    <div className="p-1.5 bg-black/60 text-white/50 hover:text-white rounded-md border border-white/10 cursor-grab active:cursor-grabbing hover:bg-white/10 transition-colors">
-                                        <MoveIcon />
-                                    </div>
-                                )}
-                                <div className="px-2 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10 flex items-center gap-2">
-                                    <span className={getPlatformColor(stream.platform)}>{getPlatformIcon(stream.platform)}</span>
-                                    <span className="text-xs font-medium text-white shadow-sm max-w-[150px] truncate">{stream.platform === 'youtube' ? `Vídeo: ${stream.name}` : stream.name}</span>
-                                </div>
+                                {isDraggable && <div className="p-1.5 bg-black/60 text-white/50 hover:text-white rounded-md border border-white/10 cursor-grab active:cursor-grabbing hover:bg-white/10 transition-colors"><MoveIcon /></div>}
+                                <div className="px-2 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10 flex items-center gap-2"><span className={getPlatformColor(stream.platform)}>{getPlatformIcon(stream.platform)}</span><span className="text-xs font-medium text-white shadow-sm max-w-[150px] truncate">{stream.name}</span></div>
                             </div>
                             <div className="flex gap-1 pointer-events-auto">
-                                {stream.customWidth && (
-                                    <button onClick={() => onResetSize(stream.id)} className="p-1.5 bg-black/60 hover:bg-white/20 text-yellow-400 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md" title="Redefinir Tamanho">
-                                        <ScaleIcon />
-                                    </button>
-                                )}
-                                <button onClick={() => onRefresh(stream.id)} className="p-1.5 bg-black/60 hover:bg-blue-500 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md" title="Recarregar Player">
-                                    <RefreshCwIcon />
-                                </button>
-                                <button onClick={() => onToggleFocus(stream.id)} className="p-1.5 bg-black/60 hover:bg-indigo-600 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md">
-                                    {isExpanded ? <CompressIcon /> : <ExpandIcon />}
-                                </button>
-                                <button onClick={() => onRemove(stream.id)} className="p-1.5 bg-black/60 hover:bg-red-500/90 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md">
-                                    <TrashIcon />
-                                </button>
+                                {stream.customWidth && <button onClick={()=>onResetSize(stream.id)} className="p-1.5 bg-black/60 hover:bg-white/20 text-yellow-400 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md"><ScaleIcon/></button>}
+                                <button onClick={()=>onRefresh(stream.id)} className="p-1.5 bg-black/60 hover:bg-blue-500 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md"><RefreshCwIcon/></button>
+                                <button onClick={()=>onToggleFocus(stream.id)} className="p-1.5 bg-black/60 hover:bg-indigo-600 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md">{isExpanded?<CompressIcon/>:<ExpandIcon/>}</button>
+                                <button onClick={()=>onRemove(stream.id)} className="p-1.5 bg-black/60 hover:bg-red-500/90 text-white/70 hover:text-white rounded-md border border-white/10 transition-all backdrop-blur-md"><TrashIcon/></button>
                             </div>
                         </div>
-                        <div className={`w-full h-full pointer-events-none md:pointer-events-auto ${isResizingAny ? 'pointer-events-none' : ''}`}>
-                            {stream.platform === 'twitch' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={getTwitchUrl()} height="100%" width="100%" allowFullScreen={true} allow="autoplay; fullscreen; clipboard-write; encrypted-media; picture-in-picture; web-share; storage-access-by-user-activation" className="w-full h-full border-0"></iframe>}
-                            {stream.platform === 'kick' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://player.kick.com/${stream.name}`} height="100%" width="100%" allowFullScreen={true} allow="autoplay; fullscreen; clipboard-write; encrypted-media; picture-in-picture; web-share; storage-access-by-user-activation" className="w-full h-full border-0"></iframe>}
-                            {stream.platform === 'youtube' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://www.youtube.com/embed/${stream.name}?autoplay=1&mute=${isGlobalMuted ? 1 : 0}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; storage-access-by-user-activation"></iframe>}
+                        <div className={`w-full h-full pointer-events-none md:pointer-events-auto ${isResizingAny?'pointer-events-none':''}`}>
+                            <iframe key={`${stream.id}-${stream.refreshKey||0}`} src={getUrl()} height="100%" width="100%" allowFullScreen className="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; storage-access-by-user-activation; web-share"></iframe>
                         </div>
                     </div>
                 </div>
             );
-        }, (prev, next) => {
-            return prev.stream.id === next.stream.id && prev.stream.refreshKey === next.stream.refreshKey && prev.widthClass === next.widthClass && prev.heightClass === next.heightClass && prev.isExpanded === next.isExpanded && prev.isDraggable === next.isDraggable && prev.index === next.index && prev.isGlobalMuted === next.isGlobalMuted && prev.isResizingAny === next.isResizingAny && prev.isTheaterMode === next.isTheaterMode && prev.isDragging === next.isDragging && prev.stream.customWidth === next.stream.customWidth;
-        });
+        }, (p, n) => p.stream.id===n.stream.id && p.stream.refreshKey===n.stream.refreshKey && p.widthClass===n.widthClass && p.isExpanded===n.isExpanded && p.isDragging===n.isDragging && p.stream.customWidth===n.stream.customWidth && p.isResizingAny===n.isResizingAny && p.isGlobalMuted===n.isGlobalMuted && p.isTheaterMode===n.isTheaterMode);
 
         const SquadsMenu = ({ isOpen, onClose, squads, currentStreamers, onSave, onLoad, onDelete, lang }) => {
             const [newSquadName, setNewSquadName] = useState("");
             const menuRef = useRef(null);
             const t = (key) => translations[lang][key];
-
-            useEffect(() => {
-                const handleClickOutside = (event) => {
-                    if (menuRef.current && !menuRef.current.contains(event.target)) {
-                        onClose();
-                    }
-                };
-                if (isOpen) {
-                    document.addEventListener("mousedown", handleClickOutside);
-                }
-                return () => document.removeEventListener("mousedown", handleClickOutside);
-            }, [isOpen, onClose]);
-
+            useEffect(() => { const handleClickOutside = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) onClose(); }; if(isOpen) document.addEventListener("mousedown", handleClickOutside); return () => document.removeEventListener("mousedown", handleClickOutside); }, [isOpen, onClose]);
             if (!isOpen) return null;
-
             return (
                 <div ref={menuRef} className="absolute bottom-16 left-1/2 -translate-x-1/2 w-72 bg-[#121215] border border-white/10 rounded-xl shadow-2xl p-4 animate-slide-up z-[70]">
-                    <div className="flex justify-between items-center mb-3">
-                        <h3 className="text-white font-bold text-sm flex items-center gap-2"><UsersIcon width={16} /> {t('squads_title')}</h3>
-                        <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="text-gray-400 hover:text-white"><XIcon /></button>
-                    </div>
-
+                    <div className="flex justify-between items-center mb-3"><h3 className="text-white font-bold text-sm flex items-center gap-2"><UsersIcon width={16} /> {t('squads_title')}</h3><button onClick={e=>{e.stopPropagation();onClose();}} className="text-gray-400 hover:text-white"><XIcon /></button></div>
                     <div className="flex gap-2 mb-4">
-                        <input 
-                            type="text" 
-                            placeholder={t('squad_name_ph')}
-                            value={newSquadName} 
-                            onChange={(e) => setNewSquadName(e.target.value)} 
-                            className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-accent"
-                        />
-                        <button 
-                            onClick={(e) => { e.stopPropagation(); if(newSquadName) { onSave(newSquadName); setNewSquadName(""); } }} 
-                            className="bg-accent hover:bg-accentHover text-white p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                            disabled={!newSquadName || currentStreamers.length === 0}
-                            title={t('squad_save')}
-                        >
-                            <SaveIcon />
-                        </button>
+                        <input type="text" placeholder={t('squad_name_ph')} value={newSquadName} onChange={e=>setNewSquadName(e.target.value)} className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-accent"/>
+                        <button onClick={e=>{e.stopPropagation();if(newSquadName){onSave(newSquadName);setNewSquadName("");}}} className="bg-accent hover:bg-accentHover text-white p-2 rounded-lg disabled:opacity-50" disabled={!newSquadName||currentStreamers.length===0} title={t('squad_save')}><SaveIcon /></button>
                     </div>
-
                     <div className="space-y-2 max-h-48 overflow-y-auto pr-1 scrollbar-hide">
-                        {squads.length === 0 && <p className="text-center text-gray-600 text-xs italic">Nenhum squad salvo</p>}
-                        {squads.map(squad => (
-                            <div key={squad.id} className="flex items-center justify-between bg-white/5 p-2 rounded-lg group hover:bg-white/10 transition-colors">
-                                <div className="flex flex-col overflow-hidden">
-                                    <span className="text-xs font-bold text-white truncate">{squad.name}</span>
-                                    <span className="text-[10px] text-gray-500">{squad.streams.length} streams</span>
-                                </div>
-                                <div className="flex gap-1">
-                                    <button onClick={(e) => { e.stopPropagation(); onLoad(squad); }} className="p-1.5 text-ice hover:bg-ice/10 rounded" title={t('squad_load')}>
-                                        <LayoutIcon />
-                                    </button>
-                                    <button onClick={(e) => { e.stopPropagation(); onDelete(squad.id); }} className="p-1.5 text-red-400 hover:bg-red-400/10 rounded" title="Excluir">
-                                        <TrashIcon />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                        {squads.length===0 && <p className="text-center text-gray-600 text-xs italic">Nenhum squad</p>}
+                        {squads.map(sq=>(<div key={sq.id} className="flex items-center justify-between bg-white/5 p-2 rounded-lg group hover:bg-white/10 transition-colors"><div className="flex flex-col overflow-hidden"><span className="text-xs font-bold text-white truncate">{sq.name}</span><span className="text-[10px] text-gray-500">{sq.streams.length} streams</span></div><div className="flex gap-1"><button onClick={e=>{e.stopPropagation();onLoad(sq);}} className="p-1.5 text-ice hover:bg-ice/10 rounded"><LayoutIcon/></button><button onClick={e=>{e.stopPropagation();onDelete(sq.id);}} className="p-1.5 text-red-400 hover:bg-red-400/10 rounded"><TrashIcon/></button></div></div>))}
                     </div>
                 </div>
             );
@@ -1175,17 +353,8 @@
 
         const ChatHeader = ({ stream, onReload, onPopout }) => (
             <div className="h-9 bg-[#121215] border-b border-white/5 flex items-center justify-between px-3 shrink-0 z-20 shadow-sm">
-                <div className="flex items-center gap-2">
-                     <div className={`flex items-center justify-center w-5 h-5 rounded bg-white/5 ${getPlatformColor(stream.platform)}`}>
-                        {getPlatformIcon(stream.platform)}
-                     </div>
-                     <span className="text-xs font-bold text-white tracking-tight">{stream.name}</span>
-                     <span className="text-[9px] uppercase tracking-widest text-gray-500 border border-white/10 px-1.5 rounded bg-white/5">{stream.platform} chat</span>
-                </div>
-                <div className="flex items-center gap-1">
-                     <button onClick={onReload} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors" title="Recarregar Chat"><RefreshCwIcon width={12} height={12}/></button>
-                     <button onClick={onPopout} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors" title="Abrir em Janela"><ExternalLinkIcon width={12} height={12}/></button>
-                </div>
+                <div className="flex items-center gap-2"><div className={`flex items-center justify-center w-5 h-5 rounded bg-white/5 ${getPlatformColor(stream.platform)}`}>{getPlatformIcon(stream.platform)}</div><span className="text-xs font-bold text-white tracking-tight">{stream.name}</span><span className="text-[9px] uppercase tracking-widest text-gray-500 border border-white/10 px-1.5 rounded bg-white/5">{stream.platform} chat</span></div>
+                <div className="flex items-center gap-1"><button onClick={onReload} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors"><RefreshCwIcon width={12} height={12}/></button><button onClick={onPopout} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors"><ExternalLinkIcon width={12} height={12}/></button></div>
             </div>
         );
 
@@ -1193,24 +362,11 @@
             const [streamers, setStreamers] = useState([]);
             const [inputVal, setInputVal] = useState("");
             const [platform, setPlatform] = useState("twitch");
-            const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-                if (typeof window !== 'undefined') return window.innerWidth > 768;
-                return true;
-            });
+            const [isSidebarOpen, setIsSidebarOpen] = useState(() => typeof window!=='undefined'?window.innerWidth>768:true);
             const [activeChatTab, setActiveChatTab] = useState(null);
-            
             const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-            const headerTimerRef = useRef(null);
-
             const [secondaryChatTab, setSecondaryChatTab] = useState(null);
-            
-            const [showMap, setShowMap] = useState(() => {
-                if (typeof window !== 'undefined') {
-                    return window.innerWidth > 768;
-                }
-                return true;
-            });
-            
+            const [showMap, setShowMap] = useState(() => typeof window!=='undefined'?window.innerWidth>768:true);
             const [expandedStreamId, setExpandedStreamId] = useState(null);
             const [isTheaterMode, setIsTheaterMode] = useState(false);
             const [loading, setLoading] = useState(true);
@@ -1225,571 +381,178 @@
             const [showSquadMenu, setShowSquadMenu] = useState(false);
             const [showDonatePopup, setShowDonatePopup] = useState(false);
             const [chatRefreshTriggers, setChatRefreshTriggers] = useState({});
-            
             const [isToolbarActive, setIsToolbarActive] = useState(false);
-            const toolbarTimeoutRef = useRef(null);
-
-            const handleToolbarEnter = () => {
-                if (toolbarTimeoutRef.current) clearTimeout(toolbarTimeoutRef.current);
-                setIsToolbarActive(true);
-            };
-
-            const handleToolbarLeave = () => {
-                toolbarTimeoutRef.current = setTimeout(() => {
-                    setIsToolbarActive(false);
-                }, 2000); 
-            };
-            
             const [isDragging, setIsDragging] = useState(false);
             const [resizingStreamId, setResizingStreamId] = useState(null);
-            
             const [pipWindow, setPipWindow] = useState(null);
-
+            const headerTimerRef = useRef(null);
+            const toolbarTimeoutRef = useRef(null);
             const { toasts, addToast } = useToast();
             const sidebarRef = useRef(null);
             const dragItem = useRef(null);
             const dragOverItem = useRef(null);
             const startResizeX = useRef(0);
             const startResizeWidth = useRef(0);
-            
-            const [hostname] = useState(() => {
-                if (typeof window !== 'undefined' && window.location.hostname) return window.location.hostname;
-                return "localhost";
-            });
-            const [isFileProtocol, setIsFileProtocol] = useState(false);
+            const hostname = typeof window!=='undefined'&&window.location.hostname?window.location.hostname:"localhost";
             const t = (key) => translations[lang][key];
 
             useEffect(() => {
                 const handleActivity = (e) => {
-                    if (e.clientY < 120 || streamers.length === 0) {
-                        setIsHeaderVisible(true);
-                        if (headerTimerRef.current) clearTimeout(headerTimerRef.current);
-                    } else if (streamers.length > 0 && !isTheaterMode) {
-                        if (isHeaderVisible) {
-                            if (headerTimerRef.current) clearTimeout(headerTimerRef.current);
-                            headerTimerRef.current = setTimeout(() => {
-                                setIsHeaderVisible(false);
-                            }, 3000); 
-                        }
-                    }
+                    if (e.clientY < 120 || streamers.length === 0) { setIsHeaderVisible(true); if (headerTimerRef.current) clearTimeout(headerTimerRef.current); } 
+                    else if (streamers.length > 0 && !isTheaterMode && isHeaderVisible) { if (headerTimerRef.current) clearTimeout(headerTimerRef.current); headerTimerRef.current = setTimeout(() => setIsHeaderVisible(false), 3000); }
                 };
-
-                window.addEventListener('mousemove', handleActivity);
-                return () => {
-                    window.removeEventListener('mousemove', handleActivity);
-                    if (headerTimerRef.current) clearTimeout(headerTimerRef.current);
-                };
+                window.addEventListener('mousemove', handleActivity); return () => { window.removeEventListener('mousemove', handleActivity); if (headerTimerRef.current) clearTimeout(headerTimerRef.current); };
             }, [streamers.length, isTheaterMode, isHeaderVisible]);
 
             useEffect(() => {
                 setTimeout(() => setLoading(false), 4500);
                 const saved = localStorage.getItem('multlives-streamers');
-                if (saved) {
-                    try {
-                        const parsed = JSON.parse(saved);
-                        const cleanParsed = Array.isArray(parsed) ? parsed.filter(s => s && s.id && s.name) : [];
-                        setStreamers(cleanParsed);
-                        if (cleanParsed.length > 0) setActiveChatTab(cleanParsed[0].id);
-                    } catch(e) { console.error("Error loading streamers", e); }
-                }
-                const savedSquads = localStorage.getItem('multlives-squads');
-                if (savedSquads) setSquads(JSON.parse(savedSquads));
-
-                if (window.location.protocol === 'file:') setIsFileProtocol(true);
-
-                const donateTimer = setTimeout(() => {
-                    setShowDonatePopup(true);
-                }, 15000); 
-
-                return () => clearTimeout(donateTimer);
-
+                if (saved) { try { const p = JSON.parse(saved); const cl = Array.isArray(p)?p.filter(s=>s&&s.id&&s.name):[]; setStreamers(cl); if(cl.length) setActiveChatTab(cl[0].id); } catch(e){} }
+                const sq = localStorage.getItem('multlives-squads'); if(sq) setSquads(JSON.parse(sq));
+                const dTimer = setTimeout(() => setShowDonatePopup(true), 15000); return () => clearTimeout(dTimer);
             }, []);
+            useEffect(() => localStorage.setItem('multlives-streamers', JSON.stringify(streamers)), [streamers]);
+            useEffect(() => localStorage.setItem('multlives-squads', JSON.stringify(squads)), [squads]);
 
-            useEffect(() => {
-                localStorage.setItem('multlives-streamers', JSON.stringify(streamers));
-            }, [streamers]);
-
-            useEffect(() => {
-                localStorage.setItem('multlives-squads', JSON.stringify(squads));
-            }, [squads]);
-
-            const startResizing = useCallback((e) => { if(e.type === 'mousedown') e.preventDefault(); setIsResizing(true); }, []);
-            const startMapResizing = useCallback((e) => { if(e.type === 'mousedown') e.preventDefault(); setIsResizingMap(true); }, []);
-            const stopResizing = useCallback(() => { 
-                setIsResizing(false); 
-                setIsResizingMap(false); 
-                setResizingStreamId(null);
-            }, []);
-
-            const handleStreamResizeStart = (e, id) => {
-                if (e.type === 'mousedown') {
-                    e.preventDefault();
-                    startResizeX.current = e.clientX;
-                } else if (e.type === 'touchstart') {
-                    startResizeX.current = e.touches[0].clientX;
-                }
-                e.stopPropagation();
-                setResizingStreamId(id);
-                const stream = streamers.find(s => s.id === id);
-                if (stream && stream.customWidth) {
-                    startResizeWidth.current = stream.customWidth;
-                } else {
-                    const el = e.target.closest('.group');
-                    if(el) startResizeWidth.current = el.getBoundingClientRect().width;
-                }
-            };
+            const startResizing = useCallback(e => { if(e.type==='mousedown')e.preventDefault(); setIsResizing(true); }, []);
+            const startMapResizing = useCallback(e => { if(e.type==='mousedown')e.preventDefault(); setIsResizingMap(true); }, []);
+            const stopResizing = useCallback(() => { setIsResizing(false); setIsResizingMap(false); setResizingStreamId(null); }, []);
             
-            const resetStreamSize = (id) => {
-                 setStreamers(prev => prev.map(s => s.id === id ? { ...s, customWidth: null } : s));
+            const handleStreamResizeStart = (e, id) => {
+                if(e.type==='mousedown') { e.preventDefault(); startResizeX.current=e.clientX; } else startResizeX.current=e.touches[0].clientX;
+                e.stopPropagation(); setResizingStreamId(id);
+                const s = streamers.find(st=>st.id===id); startResizeWidth.current = s?.customWidth || e.target.closest('.group')?.getBoundingClientRect().width || 0;
             };
 
-            const resize = useCallback((event) => {
-                let clientX, clientY;
-                if (event.type.startsWith('touch')) { 
-                    clientX = event.touches[0].clientX; 
-                    clientY = event.touches[0].clientY; 
-                } else { 
-                    clientX = event.clientX; 
-                    clientY = event.clientY; 
-                }
-
-                if (isResizing) {
-                    const newWidth = window.innerWidth - clientX;
-                    const maxWidth = Math.max(window.innerWidth * 0.8, 300);
-                    if (newWidth > 250 && newWidth < maxWidth) setSidebarWidth(newWidth);
-                }
-                if (isResizingMap && sidebarRef.current) {
-                    const sidebarRect = sidebarRef.current.getBoundingClientRect();
-                    const newHeight = clientY - sidebarRect.top;
-                    if (newHeight > 100 && newHeight < (sidebarRect.height - 150)) setMapHeight(newHeight);
-                }
-                if (resizingStreamId) {
-                    const deltaX = clientX - startResizeX.current;
-                    const newWidth = Math.max(200, startResizeWidth.current + deltaX);
-                    setStreamers(prev => prev.map(s => s.id === resizingStreamId ? { ...s, customWidth: newWidth } : s));
-                }
+            const resize = useCallback((e) => {
+                const cX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+                const cY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+                if(isResizing) setSidebarWidth(Math.max(250, Math.min(window.innerWidth*0.8, window.innerWidth - cX)));
+                if(isResizingMap && sidebarRef.current) setMapHeight(Math.max(100, Math.min(sidebarRef.current.getBoundingClientRect().height-150, cY - sidebarRef.current.getBoundingClientRect().top)));
+                if(resizingStreamId) setStreamers(p => p.map(s => s.id === resizingStreamId ? { ...s, customWidth: Math.max(200, startResizeWidth.current + (cX - startResizeX.current)) } : s));
             }, [isResizing, isResizingMap, resizingStreamId]);
 
-            useEffect(() => {
-                window.addEventListener("mousemove", resize); window.addEventListener("mouseup", stopResizing);
-                window.addEventListener("touchmove", resize, { passive: false }); window.addEventListener("touchend", stopResizing);
-                return () => {
-                    window.removeEventListener("mousemove", resize); window.removeEventListener("mouseup", stopResizing);
-                    window.removeEventListener("touchmove", resize); window.removeEventListener("touchend", stopResizing);
-                };
-            }, [resize, stopResizing]);
-
-            const copyStylesToPip = useCallback((win) => {
-                [...document.styleSheets].forEach((styleSheet) => {
-                    try {
-                        const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
-                        const style = win.document.createElement('style');
-                        style.textContent = cssRules;
-                        win.document.head.appendChild(style);
-                    } catch (e) {
-                        try {
-                            const link = win.document.createElement('link');
-                            link.rel = 'stylesheet';
-                            link.type = 'text/css';
-                            link.href = styleSheet.href;
-                            win.document.head.appendChild(link);
-                        } catch (e2) {}
-                    }
-                });
-                const tailwindScript = document.querySelector('script[src*="tailwindcss"]');
-                if(tailwindScript) {
-                     const script = win.document.createElement('script');
-                     script.src = tailwindScript.src;
-                     win.document.head.appendChild(script);
-                }
-                win.document.body.className = "bg-[#09090b] text-white overflow-hidden";
-            }, []);
+            useEffect(() => { window.addEventListener("mousemove", resize); window.addEventListener("mouseup", stopResizing); window.addEventListener("touchmove", resize, {passive:false}); window.addEventListener("touchend", stopResizing); return () => { window.removeEventListener("mousemove", resize); window.removeEventListener("mouseup", stopResizing); window.removeEventListener("touchmove", resize); window.removeEventListener("touchend", stopResizing); }; }, [resize, stopResizing]);
 
             const togglePip = useCallback(async () => {
-                if (pipWindow) {
-                    pipWindow.close();
-                    setPipWindow(null);
-                    return;
-                }
-                if (!('documentPictureInPicture' in window)) {
-                    addToast(t('pip_error'), 'error');
-                    return;
-                }
+                if (pipWindow) { pipWindow.close(); setPipWindow(null); return; }
+                if (!('documentPictureInPicture' in window)) { addToast(t('pip_error'), 'error'); return; }
                 try {
                     const win = await window.documentPictureInPicture.requestWindow({ width: 800, height: 600 });
-                    copyStylesToPip(win);
-                    win.addEventListener("pagehide", () => { setPipWindow(null); });
-                    setPipWindow(win);
-                } catch (error) {
-                    addToast(t('pip_error'), 'error');
-                }
-            }, [pipWindow, copyStylesToPip, t, addToast]);
-
-
-            const refreshStream = useCallback((id) => {
-                setStreamers(prev => prev.map(s => s.id === id ? { ...s, refreshKey: Date.now() } : s));
-            }, []);
-            
-            const handleChatReload = (id) => {
-                 setChatRefreshTriggers(prev => ({ ...prev, [id]: Date.now() }));
-            };
-            
-            const handleChatPopout = (stream) => {
-                 if (stream.platform === 'twitch') {
-                     window.open(`https://www.twitch.tv/popout/${stream.name}/chat`, `chat-${stream.name}`, "width=400,height=600");
-                 } else if (stream.platform === 'kick') {
-                      window.open(`https://kick.com/popout/${stream.name}/chat`, `chat-${stream.name}`, "width=400,height=600");
-                 } else if (stream.platform === 'youtube') {
-                     window.open(`https://www.youtube.com/live_chat?v=${stream.name}`, `chat-${stream.name}`, "width=400,height=600");
-                 }
-            };
-
-            const toggleGlobalMute = () => setIsGlobalMuted(!isGlobalMuted);
-            const toggleLang = () => setLang(prev => prev === 'pt' ? 'en' : 'pt');
-            const getPlaceholder = () => {
-                switch(platform) {
-                    case 'twitch': return t('placeholder_twitch');
-                    case 'kick': return t('placeholder_kick');
-                    case 'youtube': return t('placeholder_yt');
-                    default: return t('placeholder_default');
-                }
-            };
+                    [...document.styleSheets].forEach(s => { try { win.document.head.appendChild(s.ownerNode.cloneNode(true)); } catch(e){} });
+                    const ts = document.querySelector('script[src*="tailwindcss"]'); if(ts) { const s=win.document.createElement('script'); s.src=ts.src; win.document.head.appendChild(s); }
+                    win.document.body.className = "bg-[#09090b] text-white overflow-hidden";
+                    win.addEventListener("pagehide", () => setPipWindow(null)); setPipWindow(win);
+                } catch { addToast(t('pip_error'), 'error'); }
+            }, [pipWindow, t, addToast]);
 
             const addStreamer = (e) => {
-                e.preventDefault();
-                if (!inputVal.trim()) { addToast(t('toast_empty'), 'info'); return; }
-                let cleanName = inputVal.trim();
-                if (platform === 'youtube') {
-                    const ytRegex = /(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/;
-                    const match = cleanName.match(ytRegex);
-                    if (match) cleanName = match[1];
-                } else { cleanName = cleanName.toLowerCase(); }
-
-                if (streamers.some(s => s.name === cleanName && s.platform === platform)) { addToast(t('toast_exists'), 'error'); return; }
-                const newStreamer = { id: Date.now().toString(), name: cleanName, platform: platform, refreshKey: Date.now(), customWidth: null };
-                const updatedList = [...streamers, newStreamer];
-                setStreamers(updatedList);
-                setInputVal("");
-                if (updatedList.length === 1) setActiveChatTab(newStreamer.id);
-                addToast(t('toast_added'), 'success');
+                e.preventDefault(); if(!inputVal.trim()) return addToast(t('toast_empty'), 'info');
+                let n = inputVal.trim(); if(platform==='youtube'){ const m=n.match(/(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/); if(m)n=m[1]; } else n=n.toLowerCase();
+                if(streamers.some(s=>s.name===n && s.platform===platform)) return addToast(t('toast_exists'), 'error');
+                const ns={id:Date.now().toString(),name:n,platform,refreshKey:Date.now(),customWidth:null}; setStreamers(p=>[...p,ns]); setInputVal(""); if(!streamers.length) setActiveChatTab(ns.id); addToast(t('toast_added'), 'success');
             };
-
-            const removeStreamer = useCallback((id) => {
-                if (expandedStreamId === id) setExpandedStreamId(null);
-                setStreamers(current => {
-                    const newList = current.filter(s => s.id !== id);
-                    if (activeChatTab === id && newList.length > 0) setActiveChatTab(newList[0].id);
-                    else if (newList.length === 0) setActiveChatTab(null);
-                    return newList;
-                });
-            }, [expandedStreamId, activeChatTab]);
-
-            const toggleFocusMode = useCallback((id) => { setExpandedStreamId(prev => prev === id ? null : id); }, []);
-            const handleDragStart = useCallback((e, index) => { 
-                setIsDragging(true);
-                dragItem.current = index; 
-            }, []);
-            const handleDragEnter = useCallback((e, index) => { dragOverItem.current = index; }, []);
-            const handleDragEnd = useCallback(() => {
-                setIsDragging(false);
-                if (dragItem.current === null || dragOverItem.current === null || dragItem.current === dragOverItem.current) {
-                    dragItem.current = null; 
-                    dragOverItem.current = null;
-                    return;
-                }
-                setStreamers(currentStreamers => {
-                    const _streamers = [...currentStreamers];
-                    if (!_streamers[dragItem.current]) return currentStreamers;
-                    const draggedItemContent = _streamers[dragItem.current];
-                    _streamers.splice(dragItem.current, 1);
-                    _streamers.splice(dragOverItem.current, 0, draggedItemContent);
-                    return _streamers;
-                });
-                dragItem.current = null; dragOverItem.current = null;
-            }, []);
-            const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+            const removeStreamer = (id) => { if(expandedStreamId===id) setExpandedStreamId(null); setStreamers(p=>{const n=p.filter(s=>s.id!==id); if(activeChatTab===id) setActiveChatTab(n[0]?.id||null); return n;}); };
+            const handleDragStart = (e, i) => { setIsDragging(true); dragItem.current=i; };
+            const handleDragEnd = () => { setIsDragging(false); if(dragItem.current!==null && dragOverItem.current!==null && dragItem.current!==dragOverItem.current) setStreamers(p=>{const c=[...p],d=c[dragItem.current];c.splice(dragItem.current,1);c.splice(dragOverItem.current,0,d);return c;}); dragItem.current=null; dragOverItem.current=null; };
+            const changeLayout = (m) => { setLayoutMode(m); if(m==='auto'||m==='grid') setStreamers(p=>p.map(s=>({...s,customWidth:null}))); setExpandedStreamId(m==='focus'&&streamers.length?streamers[0].id:null); };
             
-            const toggleTheaterMode = () => { setIsTheaterMode(!isTheaterMode); };
-
-            const changeLayout = (mode) => {
-                setLayoutMode(mode);
-                if (mode === 'auto' || mode === 'grid') {
-                    setStreamers(prev => prev.map(s => ({ ...s, customWidth: null })));
-                }
-                if (mode === 'focus') {
-                    if (streamers.length > 0) setExpandedStreamId(streamers[0].id);
-                } else {
-                    setExpandedStreamId(null);
-                }
-            };
-
-            const saveSquad = (name) => {
-                const newSquad = { id: Date.now(), name, streams: streamers };
-                setSquads(prev => [...prev, newSquad]);
-                addToast(t('squad_saved'), 'success');
-            };
-            const loadSquad = (squad) => {
-                setStreamers(squad.streams);
-                if (squad.streams.length > 0) setActiveChatTab(squad.streams[0].id);
-                setLayoutMode('auto');
-                setExpandedStreamId(null);
-                setShowSquadMenu(false);
-            };
-            const deleteSquad = (id) => {
-                setSquads(prev => prev.filter(s => s.id !== id));
-                addToast(t('squad_deleted'), 'info');
-            };
+            // Helper para renderizar
+            const RenderStreamItem = ({ s, idx, wClass, hClass, expanded=false }) => (
+                <StreamPlayer key={s.id} stream={s} index={idx} widthClass={wClass} heightClass={hClass} isExpanded={expanded} isDraggable={!expanded} onDragStart={handleDragStart} onDragEnter={(e,i)=>dragOverItem.current=i} onDragEnd={handleDragEnd} onToggleFocus={id=>setExpandedStreamId(p=>p===id?null:id)} onRemove={removeStreamer} onRefresh={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,refreshKey:Date.now()}:x))} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizing||isResizingMap||resizingStreamId!==null} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,customWidth:null}:x))} />
+            );
 
             const renderStreams = () => {
-                const count = streamers.length;
-                const isResizingAny = isResizing || isResizingMap || resizingStreamId !== null;
-                
                 if (expandedStreamId) {
-                    const expandedStream = streamers.find(s => s.id === expandedStreamId);
-                    const otherStreams = streamers.filter(s => s.id !== expandedStreamId);
-                    if (!expandedStream) return null;
+                    const main = streamers.find(s=>s.id===expandedStreamId), others=streamers.filter(s=>s.id!==expandedStreamId);
+                    if(!main) return null;
                     return (
                         <div className="flex flex-col md:flex-row w-full h-full bg-transparent">
-                            <div className={`relative ${otherStreams.length > 0 ? 'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5' : 'w-full'} h-2/3 md:h-full transition-all duration-300 flex items-center justify-center`}>
-                                <StreamPlayer key={expandedStream.id} stream={expandedStream} index={streamers.findIndex(s => s.id === expandedStream.id)} widthClass="w-full" heightClass="h-full" isExpanded={true} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={resetStreamSize} />
-                            </div>
-                            {otherStreams.length > 0 && (
-                                <div className="w-full md:w-1/5 h-1/3 md:h-full bg-transparent overflow-x-auto md:overflow-y-auto md:overflow-x-hidden">
-                                    <div className="min-h-full w-full flex flex-row md:flex-col justify-center gap-1">
-                                        {otherStreams.map((s, idx) => {
-                                            if (!s) return null; 
-                                            return (
-                                                <StreamPlayer key={s.id} stream={s} index={streamers.findIndex(st => st.id === s.id)} widthClass="w-full md:w-full min-w-[150px] md:min-w-0" heightClass="h-auto" style={{ flexGrow: 0 }} isExpanded={false} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={resetStreamSize} />
-                                            )
-                                        })}
-                                    </div>
-                                </div>
-                            )}
+                            <div className={`relative ${others.length?'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5':'w-full'} h-2/3 md:h-full flex items-center justify-center`}><RenderStreamItem s={main} idx={streamers.findIndex(x=>x.id===main.id)} wClass="w-full" hClass="h-full" expanded={true}/></div>
+                            {others.length > 0 && <div className="w-full md:w-1/5 h-1/3 md:h-full overflow-auto"><div className="min-h-full flex flex-row md:flex-col justify-center gap-1">{others.map(s=><RenderStreamItem key={s.id} s={s} idx={streamers.findIndex(x=>x.id===s.id)} wClass="w-full min-w-[150px]" hClass="h-auto" />)}</div></div>}
                         </div>
                     );
                 }
-
-                let getWidthClass = (index) => {
-                    if (layoutMode === 'grid') {
-                        if (count === 1) return "w-full";
-                        if (count <= 4) return "w-full md:w-[calc(50%-1rem)]"; 
-                        if (count <= 9) return "w-full md:w-[calc(33.33%-1rem)]"; 
-                        return "w-full md:w-[calc(25%-1rem)]"; 
-                    } else {
-                        if (count === 1) return "w-full";
-                        if (count === 2) return "w-full md:w-[calc(50%-1rem)]";
-                        if (count === 3) return "w-full md:w-[calc(33.33%-1rem)]"; 
-                        if (count === 4) return "w-full md:w-[calc(50%-1rem)]"; 
-                        if (count === 5) return index < 3 ? "w-full md:w-[calc(33.33%-1rem)]" : "w-full md:w-[calc(50%-1rem)]";
-                        if (count >= 6) return "w-full md:w-[calc(33.33%-1rem)]"; 
-                        return "w-full";
-                    }
+                const cnt = streamers.length, getW = i => {
+                    if(layoutMode==='grid') return cnt<=1?"w-full":cnt<=4?"w-full md:w-[calc(50%-1rem)]":cnt<=9?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(25%-1rem)]";
+                    return cnt===1?"w-full":cnt===2||cnt===4?"w-full md:w-[calc(50%-1rem)]":cnt===3||cnt>=6?"w-full md:w-[calc(33.33%-1rem)]":i<3?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(50%-1rem)]";
                 };
-
-                return (
-                    <div className="flex flex-wrap justify-center content-start md:content-center items-center w-full h-full bg-transparent gap-4 p-4 overflow-y-auto scrollbar-hide">
-                        {streamers.map((s, index) => {
-                            if (!s) return null; 
-                            return (
-                                <StreamPlayer key={s.id} stream={s} index={index} widthClass={getWidthClass(index)} heightClass="h-auto" isExpanded={false} isDraggable={true} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={resetStreamSize} />
-                            )
-                        })}
-                    </div>
-                );
+                return <div className="flex flex-wrap justify-center content-start md:content-center items-center w-full h-full bg-transparent gap-4 p-4 overflow-y-auto scrollbar-hide">{streamers.map((s,i)=><RenderStreamItem key={s.id} s={s} idx={i} wClass={getW(i)} hClass="h-auto"/>)}</div>;
             };
 
-            const renderContent = () => {
-                if (pipWindow) {
-                    return (
-                        <>
-                            {createPortal(
-                                <div className="h-full w-full bg-[#09090b] flex flex-col">
-                                    {renderStreams()}
-                                </div>,
-                                pipWindow.document.body
-                            )}
-                            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in">
-                                <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-pulse-glow">
-                                    <ExternalLinkIcon width={48} height={48} className="text-ice" />
-                                </div>
-                                <h2 className="text-2xl font-bold text-white mb-2">{t('pip_active')}</h2>
-                                <p className="text-gray-400 max-w-sm mb-8">{t('pip_desc')}</p>
-                                <button onClick={togglePip} className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-bold transition-all hover:scale-105 active:scale-95">{t('pip_bring_back')}</button>
-                            </div>
-                        </>
-                    );
-                }
-                return renderStreams();
-            }
-
-            const toolbarVisible = isToolbarActive || showSquadMenu;
-            const isHeaderHidden = !isHeaderVisible && streamers.length > 0 && !isTheaterMode;
-            const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
-
-            const activeStream = streamers.find(s => s.id === activeChatTab);
+            const renderContent = () => pipWindow ? createPortal(<div className="h-full w-full bg-[#09090b] flex flex-col">{renderStreams()}</div>, pipWindow.document.body) || <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in"><div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-pulse-glow"><ExternalLinkIcon width={48} height={48} className="text-ice" /></div><h2 className="text-2xl font-bold text-white mb-2">{t('pip_active')}</h2><p className="text-gray-400 max-w-sm mb-8">{t('pip_desc')}</p><button onClick={togglePip} className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-bold hover:scale-105">{t('pip_bring_back')}</button></div> : renderStreams();
 
             return (
-                <div className={`flex flex-col h-screen transition-all duration-700 ${isTheaterMode ? 'bg-[#020203] theater-mode-active' : 'bg-background'} ${isHeaderHidden ? 'header-hidden-active' : ''} text-gray-100 font-sans selection:bg-accent selection:text-white relative overflow-hidden`}>
-                    <div className="blackout-overlay"></div>
-                    <LoadingScreen isLoading={loading} lang={lang} />
-                    <ToastContainer toasts={toasts} />
-                    
-                    <button 
-                        onClick={toggleLang} 
-                        className="fixed top-4 left-4 z-[60] bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full px-3 py-1.5 text-xs font-bold text-white/80 hover:text-white transition-all border border-white/5 active:scale-95"
-                    >
-                        {lang === 'pt' ? '🇺🇸 EN' : '🇧🇷 PT'}
-                    </button>
-                    
-                    {showDonatePopup && <DonatePopup onClose={() => setShowDonatePopup(false)} />}
-                    
-                    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-ice/20 blur-[120px] animate-aurora-1 mix-blend-screen transition-all duration-1000"></div>
-                         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/20 blur-[120px] animate-aurora-2 mix-blend-screen transition-all duration-1000"></div>
-                    </div>
-
-                    {(isResizing || isResizingMap || resizingStreamId) && <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}
-                    
+                <div className={`flex flex-col h-screen transition-all duration-700 ${isTheaterMode?'bg-[#020203] theater-mode-active':'bg-background'} ${(!isHeaderVisible&&streamers.length&&!isTheaterMode)?'header-hidden-active':''} text-gray-100 font-sans relative overflow-hidden`}>
+                    <div className="blackout-overlay"></div><LoadingScreen isLoading={loading} lang={lang}/><ToastContainer toasts={toasts}/><button onClick={()=>setLang(l=>l==='pt'?'en':'pt')} className="fixed top-4 left-4 z-[60] bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full px-3 py-1.5 text-xs font-bold text-white/80 border border-white/5 active:scale-95">{lang==='pt'?'🇺🇸 EN':'🇧🇷 PT'}</button>
+                    {showDonatePopup && <DonatePopup onClose={()=>setShowDonatePopup(false)}/>}
+                    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden"><div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-ice/20 blur-[120px] animate-aurora-1 mix-blend-screen"></div><div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/20 blur-[120px] animate-aurora-2 mix-blend-screen"></div></div>
+                    {(isResizing||isResizingMap||resizingStreamId) && <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}
                     <div className="header-trigger-area"></div>
-
-                    <HeroBrand minimized={streamers.length > 0} />
-
+                    <HeroBrand minimized={streamers.length>0}/>
                     <div className="command-bar-container">
                         <form onSubmit={addStreamer} className="command-bar">
-                            <PlatformSelector selected={platform} onSelect={setPlatform} />
-                            
-                            <div className="flex-1 flex items-center h-full relative group/input">
-                                <SearchIcon className="absolute left-2 text-gray-500 w-4 h-4 group-focus-within/input:text-white transition-colors" />
-                                <input 
-                                    type="text" 
-                                    value={inputVal} 
-                                    onChange={(e) => setInputVal(e.target.value)} 
-                                    placeholder={getPlaceholder()} 
-                                    className="w-full h-full bg-transparent text-sm pl-8 pr-2 focus:outline-none text-white placeholder-gray-500 font-medium" 
-                                />
-                            </div>
-                            
-                            <button type="submit" className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 transition-colors shadow-lg active:scale-95 shrink-0" title={t('add_btn')}>
-                                <PlusIcon />
-                            </button>
-
+                            <PlatformSelector selected={platform} onSelect={setPlatform}/>
+                            <div className="flex-1 flex items-center h-full relative group/input"><SearchIcon className="absolute left-2 text-gray-500 w-4 h-4 group-focus-within/input:text-white transition-colors"/><input type="text" value={inputVal} onChange={e=>setInputVal(e.target.value)} placeholder={platform==='twitch'?t('placeholder_twitch'):platform==='kick'?t('placeholder_kick'):platform==='youtube'?t('placeholder_yt'):t('placeholder_default')} className="w-full h-full bg-transparent text-sm pl-8 pr-2 focus:outline-none text-white placeholder-gray-500 font-medium"/></div>
+                            <button type="submit" className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 shadow-lg active:scale-95 shrink-0" title={t('add_btn')}><PlusIcon/></button>
                             <div className="hidden md:flex items-center gap-1 ml-1 border-l border-white/10 pl-1">
-                                <button type="button" onClick={toggleGlobalMute} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${isGlobalMuted ? 'bg-red-500/20 text-red-400' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isGlobalMuted ? t('tt_unmute_all') : t('tt_mute_all')}>
-                                    {isGlobalMuted ? <VolumeXIcon /> : <Volume2Icon />}
-                                </button>
-                                <button type="button" onClick={toggleSidebar} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${!isSidebarOpen ? 'bg-indigo-500/20 text-indigo-400' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}>
-                                    <LayoutIcon />
-                                </button>
+                                <button type="button" onClick={()=>setIsGlobalMuted(!isGlobalMuted)} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${isGlobalMuted?'bg-red-500/20 text-red-400':'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isGlobalMuted?t('tt_unmute_all'):t('tt_mute_all')}>{isGlobalMuted?<VolumeXIcon/>:<Volume2Icon/>}</button>
+                                <button type="button" onClick={()=>setIsSidebarOpen(!isSidebarOpen)} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${!isSidebarOpen?'bg-indigo-500/20 text-indigo-400':'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isSidebarOpen?t('tt_hide_chat'):t('tt_show_chat')}><LayoutIcon/></button>
                             </div>
                         </form>
                     </div>
-
-                    <div className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300" style={{ left: 0, right: isSidebarOpen && window.innerWidth >= 768 ? `${sidebarWidth}px` : 0, height: '40px' }}></div>
-                    
-                    <div 
-                        className={`floating-toolbar ${toolbarVisible ? 'active' : ''}`} 
-                        onMouseEnter={handleToolbarEnter} 
-                        onMouseLeave={handleToolbarLeave} 
-                        onTouchStart={handleToolbarEnter}
-                        style={{ marginLeft: isSidebarOpen && window.innerWidth >= 768 ? `-${sidebarWidth/2}px` : '0' }}
-                    >
-                        <div className="md:hidden flex items-center">
-                            <button onClick={(e) => { e.stopPropagation(); toggleSidebar(); }} className={`p-2 rounded-full transition-all ${isSidebarOpen ? 'bg-indigo-500 text-white shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}>
-                                <ChatIcon width={16} height={16} />
-                            </button>
-                            <div className="w-[1px] h-5 bg-white/10 mx-1"></div>
-                        </div>
-
-                        <button onClick={(e) => { e.stopPropagation(); toggleTheaterMode(); }} className={`flex items-center justify-center p-2 rounded-full transition-all transform active:scale-90 shrink-0 ${isTheaterMode ? 'bg-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white'}`} title={isTheaterMode ? t('tt_cinema_exit') : t('tt_cinema_enter')}>
-                            {isTheaterMode ? <SunIcon width={16} height={16} /> : <MoonIcon width={16} height={16} />}
-                        </button>
-                        
+                    <div className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300" style={{left:0,right:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`${sidebarWidth}px`:0,height:'40px'}}></div>
+                    <div className={`floating-toolbar ${isToolbarActive||showSquadMenu?'active':''}`} onMouseEnter={()=>{if(toolbarTimeoutRef.current)clearTimeout(toolbarTimeoutRef.current);setIsToolbarActive(true)}} onMouseLeave={()=>{toolbarTimeoutRef.current=setTimeout(()=>setIsToolbarActive(false),2000)}} onTouchStart={()=>setIsToolbarActive(true)} style={{marginLeft:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`-${sidebarWidth/2}px`:'0'}}>
+                        <div className="md:hidden flex items-center"><button onClick={e=>{e.stopPropagation();setIsSidebarOpen(!isSidebarOpen);}} className={`p-2 rounded-full transition-all ${isSidebarOpen?'bg-indigo-500 text-white':'text-gray-400 hover:text-white'}`}><ChatIcon/></button><div className="w-[1px] h-5 bg-white/10 mx-1"></div></div>
+                        <button onClick={e=>{e.stopPropagation();setIsTheaterMode(!isTheaterMode);}} className={`flex items-center justify-center p-2 rounded-full transition-all active:scale-90 shrink-0 ${isTheaterMode?'bg-amber-400 text-black shadow-glow':'bg-white/5 text-gray-300 hover:text-white'}`} title={isTheaterMode?t('tt_cinema_exit'):t('tt_cinema_enter')}>{isTheaterMode?<SunIcon/>:<MoonIcon/>}</button>
                         <div className="w-[1px] h-5 bg-white/10 mx-0.5 shrink-0"></div>
-                        
-                        {!toolbarVisible ? (
-                            <div className="text-white/30 flex items-center justify-center w-8 h-8 cursor-pointer hover:text-white/80 transition-all animate-pulse duration-[2000ms]">
-                                <SettingsIcon width={18} height={18} />
-                            </div>
-                        ) : (
+                        {!(isToolbarActive||showSquadMenu)?<div className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><SettingsIcon width={18} height={18}/></div>:(
                             <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
-                                <button onClick={(e) => { e.stopPropagation(); togglePip(); }} className={`p-2 rounded-full transition-all ${pipWindow ? 'bg-ice text-black animate-pulse' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('tt_pip')}><ExternalLinkIcon width={18} height={18} /></button>
+                                <button onClick={e=>{e.stopPropagation();togglePip();}} className={`p-2 rounded-full transition-all ${pipWindow?'bg-ice text-black animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('tt_pip')}><ExternalLinkIcon width={18} height={18}/></button>
                                 <div className="w-[1px] h-5 bg-white/10"></div>
-                                <button onClick={(e) => { e.stopPropagation(); changeLayout('auto'); }} className={`p-2 rounded-full transition-all ${layoutMode === 'auto' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('layout_auto')}><LayoutIcon width={18} height={18} /></button>
-                                <button onClick={(e) => { e.stopPropagation(); changeLayout('grid'); }} className={`p-2 rounded-full transition-all ${layoutMode === 'grid' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('layout_grid')}><GridIcon width={18} height={18} /></button>
-                                <button onClick={(e) => { e.stopPropagation(); changeLayout('focus'); }} className={`p-2 rounded-full transition-all ${expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('layout_focus')}><LayoutTemplateIcon width={18} height={18} /></button>
+                                <button onClick={e=>{e.stopPropagation();changeLayout('auto');}} className={`p-2 rounded-full transition-all ${layoutMode==='auto'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutIcon width={18} height={18}/></button>
+                                <button onClick={e=>{e.stopPropagation();changeLayout('grid');}} className={`p-2 rounded-full transition-all ${layoutMode==='grid'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><GridIcon width={18} height={18}/></button>
+                                <button onClick={e=>{e.stopPropagation();changeLayout('focus');}} className={`p-2 rounded-full transition-all ${expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutTemplateIcon width={18} height={18}/></button>
                                 <div className="w-[1px] h-5 bg-white/10"></div>
-                                <button onClick={(e) => { e.stopPropagation(); setShowSquadMenu(!showSquadMenu); }} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu ? 'bg-accent text-white' : 'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={14} height={14} />{t('squads_title')}</button>
-                                <SquadsMenu isOpen={showSquadMenu} onClose={() => setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={saveSquad} onLoad={loadSquad} onDelete={deleteSquad} lang={lang} />
+                                <button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);}} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={14} height={14}/>{t('squads_title')}</button>
+                                <SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success');}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false);}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info');}} lang={lang}/>
                             </div>
                         )}
                     </div>
-
-                    <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-1 md:pt-1 ${isTheaterMode ? '!pt-0 !h-full' : ''} z-10 relative transition-all duration-700`}>
+                    <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-1 md:pt-1 ${isTheaterMode?'!pt-0 !h-full':''} z-10 relative transition-all duration-700`}>
                         <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-0">
-                            {streamers.length === 0 ? (
-                                <div className="flex-1 flex items-center justify-center text-center animate-fade-in">
-                                    <div className="p-8 max-w-md w-full mx-4 opacity-50">
-                                        <p className="text-gray-500 text-sm mb-6 leading-relaxed mt-20">{t('empty_desc')}</p>
-                                    </div>
-                                </div>
-                            ) : renderContent()}
+                            {streamers.length===0?<div className="flex-1 flex items-center justify-center text-center animate-fade-in"><div className="p-8 max-w-md w-full mx-4 opacity-50"><p className="text-gray-500 text-sm mb-6 leading-relaxed mt-20">{t('empty_desc')}</p></div></div>:renderContent()}
                         </div>
-                        
-                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen ? 'translate-y-0 md:translate-x-0 opacity-100' : (window.innerWidth < 768 ? 'translate-y-0' : 'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden')}`} style={{ width: window.innerWidth < 768 ? '100%' : (isSidebarOpen ? `${sidebarWidth}px` : '0px'), height: window.innerWidth < 768 ? (isSidebarOpen ? '45vh' : '0px') : '100%', transitionDuration: isResizing ? '0s' : '300ms' }}>
+                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen?'translate-y-0 md:translate-x-0 opacity-100':(typeof window!=='undefined'&&window.innerWidth<768?'translate-y-0':'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden')}`} style={{width:typeof window!=='undefined'&&window.innerWidth<768?'100%':(isSidebarOpen?`${sidebarWidth}px`:'0px'),height:typeof window!=='undefined'&&window.innerWidth<768?(isSidebarOpen?'45vh':'0px'):'100%',transitionDuration:isResizing?'0s':'300ms'}}>
                             <div className="hidden md:flex absolute left-0 top-0 bottom-0 w-1.5 hover:w-3 items-center justify-center -ml-1.5 z-50 cursor-col-resize group/resizer" onMouseDown={startResizing} onTouchStart={startResizing}><div className="h-8 w-1 rounded-full bg-white/20 group-hover/resizer:bg-accent/80 transition-colors"></div></div>
                             <div className="flex flex-col h-full w-full overflow-hidden">
-                                <div className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col relative group bg-black/40 border-b border-white/5`} style={{ height: showMap ? `${mapHeight}px` : '0px', transitionDuration: isResizingMap ? '0s' : '300ms' }}>
-                                     <iframe src="https://rtirl.com/twitch:119611214" className={`w-full h-full border-none grayscale-[30%] invert-[5%] contrast-125 ${isResizingMap || isResizing ? 'pointer-events-none' : ''}`} scrolling="no"></iframe>
-                                     <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-[#09090b] to-transparent pointer-events-none flex justify-between items-end"><span className="text-[10px] font-bold text-ice/80 tracking-widest uppercase mb-1 ml-1 drop-shadow-md">{t('realtime_loc')}</span></div>
-                                     {showMap && <div className="absolute bottom-0 left-0 right-0 h-2 flex justify-center items-center -mb-1 z-50 cursor-row-resize group/mapresizer" onMouseDown={startMapResizing} onTouchStart={startMapResizing}><div className="w-8 h-1 rounded-full bg-white/20 group-hover/mapresizer:bg-accent/80 transition-colors"></div></div>}
+                                <div className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col relative group bg-black/40 border-b border-white/5`} style={{height:showMap?`${mapHeight}px`:'0px',transitionDuration:isResizingMap?'0s':'300ms'}}>
+                                    <iframe src="https://rtirl.com/twitch:119611214" className={`w-full h-full border-none grayscale-[30%] invert-[5%] contrast-125 ${isResizingMap||isResizing?'pointer-events-none':''}`} scrolling="no"></iframe>
+                                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-[#09090b] to-transparent pointer-events-none flex justify-between items-end"><span className="text-[10px] font-bold text-ice/80 tracking-widest uppercase mb-1 ml-1 drop-shadow-md">{t('realtime_loc')}</span></div>
+                                    {showMap && <div className="absolute bottom-0 left-0 right-0 h-2 flex justify-center items-center -mb-1 z-50 cursor-row-resize group/mapresizer" onMouseDown={startMapResizing} onTouchStart={startMapResizing}><div className="w-8 h-1 rounded-full bg-white/20 group-hover/mapresizer:bg-accent/80 transition-colors"></div></div>}
                                 </div>
                                 <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
                                     <div className="flex bg-surface/50 border-b border-white/5 shrink-0 h-11 px-1 gap-1 items-center overflow-x-auto scrollbar-hide">
-                                        <button onClick={() => setShowMap(!showMap)} className={`flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${showMap ? 'border-ice text-white bg-white/5' : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}><MapIcon /> {showMap ? t('hide_btn') : t('map_btn')}</button>
-                                        <button onClick={() => setSecondaryChatTab(secondaryChatTab ? null : streamers.find(s => s.id !== activeChatTab)?.id || activeChatTab)} className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ml-1 ${secondaryChatTab ? 'bg-accent/20 text-accent' : 'text-gray-500 hover:text-white hover:bg-white/5'}`} title="Dividir Chat"><SplitIcon /></button>
+                                        <button onClick={()=>setShowMap(!showMap)} className={`flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${showMap?'border-ice text-white bg-white/5':'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}><MapIcon/>{showMap?t('hide_btn'):t('map_btn')}</button>
+                                        <button onClick={()=>setSecondaryChatTab(secondaryChatTab?null:streamers.find(s=>s.id!==activeChatTab)?.id||activeChatTab)} className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ml-1 ${secondaryChatTab?'bg-accent/20 text-accent':'text-gray-500 hover:text-white hover:bg-white/5'}`}><SplitIcon/></button>
                                         <div className="w-[1px] h-4 bg-white/10 mx-1 shrink-0"></div>
-                                        {streamers.map((s, idx) => (
-                                            <button key={s.id} onClick={() => setActiveChatTab(s.id)} className={`group flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${activeChatTab === s.id ? getActiveTabStyle(s.platform) : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}>
-                                                <span className={`flex items-center justify-center w-3 h-3 ${getPlatformColor(s.platform)}`}>{s.platform === 'twitch' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}{s.platform === 'kick' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}{s.platform === 'youtube' && <YoutubeIcon />}</span>
-                                                <span className={`truncate transition-all duration-300 ease-in-out ${activeChatTab === s.id ? 'max-w-[120px] opacity-100' : 'max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100'}`}>{s.name}</span>
-                                            </button>
-                                        ))}
-                                        <div className="flex-1"></div>
-                                        <button 
-                                            onClick={() => setIsSidebarOpen(false)} 
-                                            className="md:hidden flex items-center justify-center w-9 h-full text-gray-400 hover:text-white bg-white/5 border-l border-white/5 active:bg-white/10"
-                                            title="Fechar Chat"
-                                        >
-                                            <ChevronDownIcon />
-                                        </button>
+                                        {streamers.map(s=>(<button key={s.id} onClick={()=>setActiveChatTab(s.id)} className={`group flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${activeChatTab===s.id?getActiveTabStyle(s.platform):'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}><span className={`flex items-center justify-center w-3 h-3 ${getPlatformColor(s.platform)}`}>{s.platform==='twitch'||s.platform==='kick'?<span className="block w-1.5 h-1.5 rounded-full bg-current"></span>:<YoutubeIcon/>}</span><span className={`truncate transition-all duration-300 ease-in-out ${activeChatTab===s.id?'max-w-[120px] opacity-100':'max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100'}`}>{s.name}</span></button>))}
+                                        <div className="flex-1"></div><button onClick={()=>setIsSidebarOpen(false)} className="md:hidden flex items-center justify-center w-9 h-full text-gray-400 hover:text-white bg-white/5 border-l border-white/5 active:bg-white/10"><ChevronDownIcon/></button>
                                     </div>
                                     <div className="flex-1 flex flex-col min-h-0 bg-[#09090b] overflow-hidden">
-                                        <div className={`flex-1 relative flex flex-col ${secondaryChatTab ? 'border-b border-white/10' : ''}`}>
-                                            {activeStream && (
-                                                <ChatHeader 
-                                                    stream={activeStream} 
-                                                    onReload={() => handleChatReload(activeStream.id)}
-                                                    onPopout={() => handleChatPopout(activeStream)}
-                                                />
-                                            )}
-                                            
-                                            <div className="flex-1 relative">
-                                                {streamers.map(s => (<div key={`chat-${s.id}`} className={`absolute inset-0 ${activeChatTab === s.id ? 'z-10' : 'hidden'}`}>{s.platform === 'kick' ? <KickChatEmbed key={chatRefreshTriggers[s.id] || 'init'} streamName={s.name} isResizing={isResizing} idSuffix="-primary"/> : s.platform === 'youtube' ? <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT Indisponível em File</div> : <iframe key={chatRefreshTriggers[s.id] || 'init'} src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0" />}</div>))}
-                                                {streamers.length === 0 && <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-xs">Sem Chat</div>}
-                                            </div>
-                                        </div>
-                                        {secondaryChatTab && (
-                                            <div className="flex-1 relative flex flex-col">
-                                                <div className="h-8 bg-surface/80 border-b border-white/5 flex items-center px-2 gap-2">
-                                                    <span className="text-[10px] font-bold text-accent uppercase">Chat 2</span>
-                                                    <select className="bg-transparent text-xs text-white outline-none flex-1" value={secondaryChatTab} onChange={(e) => setSecondaryChatTab(e.target.value)}>{streamers.map(s => <option key={s.id} value={s.id} className="text-black">{s.name}</option>)}</select>
-                                                    <button onClick={() => setSecondaryChatTab(null)} className="ml-auto text-gray-500 hover:text-white">✕</button>
+                                        {[activeChatTab, secondaryChatTab].filter(Boolean).map((tabId, idx) => {
+                                            const s = streamers.find(st=>st.id===tabId); if(!s) return null;
+                                            const isSec = idx===1;
+                                            return (
+                                                <div key={isSec?'sec':'pri'} className={`flex-1 relative flex flex-col ${isSec?'border-t border-white/10':''}`}>
+                                                    {isSec ? <div className="h-8 bg-surface/80 border-b border-white/5 flex items-center px-2 gap-2"><span className="text-[10px] font-bold text-accent uppercase">Chat 2</span><select className="bg-transparent text-xs text-white outline-none flex-1" value={secondaryChatTab} onChange={e=>setSecondaryChatTab(e.target.value)}>{streamers.map(st=><option key={st.id} value={st.id} className="text-black">{st.name}</option>)}</select><button onClick={()=>setSecondaryChatTab(null)} className="ml-auto text-gray-500 hover:text-white">✕</button></div> : <ChatHeader stream={s} onReload={()=>setChatRefreshTriggers(p=>({...p,[s.id]:Date.now()}))} onPopout={()=>{if(s.platform==='twitch')window.open(`https://www.twitch.tv/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else if(s.platform==='kick')window.open(`https://kick.com/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else window.open(`https://www.youtube.com/live_chat?v=${s.name}`,`c-${s.name}`,"width=400,height=600")}}/>}
+                                                    <div className="flex-1 relative">
+                                                        {s.platform==='kick'?<KickChatEmbed key={chatRefreshTriggers[s.id]||'init'} streamName={s.name} isResizing={isResizing} idSuffix={isSec?'-sec':'-pri'}/>:s.platform==='youtube'?<div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT N/A</div>:<iframe key={chatRefreshTriggers[s.id]||'init'} src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0"/>}
+                                                    </div>
                                                 </div>
-                                                <div className="flex-1 relative">
-                                                    {streamers.map(s => (<div key={`sec-chat-${s.id}`} className={`absolute inset-0 ${secondaryChatTab === s.id ? 'z-10' : 'hidden'}`}>{s.platform === 'kick' ? <KickChatEmbed streamName={s.name} isResizing={isResizing} idSuffix="-secondary"/> : s.platform === 'youtube' ? <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT Indisponível</div> : <iframe src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0" />}</div>))}
-                                                </div>
-                                            </div>
-                                        )}
+                                            );
+                                        })}
+                                        {streamers.length===0 && <div className="flex-1 flex items-center justify-center text-gray-600 text-xs">Sem Chat</div>}
                                     </div>
                                 </div>
                             </div>
@@ -1800,6 +563,9 @@
         };
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
+
+        // Helper func que estava fora
+        const getActiveTabStyle = p => p==='twitch'?'border-[#9146ff] text-[#9146ff] bg-[#9146ff]/10':p==='kick'?'border-[#53fc18] text-[#53fc18] bg-[#53fc18]/10':p==='youtube'?'border-[#ff0000] text-[#ff0000] bg-[#ff0000]/10':'border-ice text-white bg-white/5';
     </script>
 </body>
 </html>
