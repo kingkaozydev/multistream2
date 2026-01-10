@@ -3,34 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- CRÍTICO: Mitigação CSRF Kick -->
     <meta name="referrer" content="no-referrer">
     <title>MultLives - Nevethon (Ultimate)</title>
     
-    <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M5 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M19 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M5 5L12 13L19 5' stroke='%23a5f3fc' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' /></svg>">
 
-    <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    
-    <!-- Babel para JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- VERCEL ANALYTICS -->
     <script type="module">
         import { inject } from 'https://esm.sh/@vercel/analytics';
         inject({ mode: 'production', debug: false });
         console.log("Vercel Analytics Injected");
     </script>
     
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -40,6 +32,7 @@
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                         display: ['"Inter"', 'sans-serif'],
                         russo: ['"Russo One"', 'sans-serif'],
+                        mono: ['"Share Tech Mono"', 'monospace'],
                     },
                     colors: {
                         background: '#09090b',
@@ -64,6 +57,9 @@
                         'speed-lines': 'speedLines 0.5s linear infinite',
                         'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
                         'heart-beat': 'heartBeat 1.5s infinite',
+                        'blizzard-fast': 'blizzard 2s linear infinite',
+                        'blizzard-slow': 'blizzard 5s linear infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
                     },
                     keyframes: {
                         aurora: {
@@ -111,6 +107,14 @@
                             '28%': { transform: 'scale(1)' },
                             '42%': { transform: 'scale(1.3)' },
                             '70%': { transform: 'scale(1)' },
+                        },
+                        blizzard: {
+                            '0%': { transform: 'translate(0, 0) rotate(0deg)' },
+                            '100%': { transform: 'translate(-20px, 100vh) rotate(360deg)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     },
                     cursor: {
@@ -146,50 +150,156 @@
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HEADER */
-        .glass-header {
-            background: rgba(13, 13, 16, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, width 0.3s ease;
-            z-index: 50;
+        /* COMMAND BAR (Novo Header Flutuante) */
+        .command-bar-container {
             position: fixed;
-            top: 1.5rem;
+            top: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 95%;
-            max-width: 1600px;
-            border-radius: 1.5rem;
+            z-index: 60;
+            width: 90%;
+            max-width: 800px;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        .command-bar {
+            background: rgba(18, 18, 21, 0.6);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            height: 3.5rem;
+        }
+
+        .command-bar:hover, .command-bar:focus-within {
+            background: rgba(18, 18, 21, 0.85);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        /* Mobile adjustments for command bar */
         @media (max-width: 768px) {
-            .glass-header {
-                width: 100%;
-                top: 0;
-                border-radius: 0 0 1.5rem 1.5rem;
-                border-top: none;
-                border-left: none;
-                border-right: none;
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
-                height: 3.5rem; /* Mais compacto no mobile */
+            .command-bar-container {
+                top: 1rem;
+                width: 95%;
+            }
+            .command-bar {
+                height: 3.5rem;
+                padding: 0.25rem 0.5rem;
             }
         }
 
-        .theater-mode-header {
-            transform: translateX(-50%) translateY(-150%);
+        /* LOGO HERO SECTION - REPOSITION & FLIP LOGIC */
+        .hero-brand {
+            padding-top: 8rem; /* Posição inicial (Centro/Baixo) */
+            padding-bottom: 2rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 10;
+            pointer-events: none; /* Deixa cliques passarem */
+            max-height: 500px; /* Altura máxima para permitir transição */
+            opacity: 1;
+            overflow: visible;
         }
         
-        .header-trigger-area {
-            position: fixed; top: 0; left: 0; right: 0; height: 20px; z-index: 51;
+        /* Estado quando há players (Sobe e Diminui) - AJUSTADO PARA MAXIMIZAR ESPAÇO */
+        .hero-brand.minimized {
+            padding-top: 5.5rem; /* Ajustado milimetricamente para ficar logo abaixo da barra */
+            padding-bottom: 0;
+            transform: scale(0.6); /* Um pouco menor para ser menos intrusivo */
+            opacity: 0.9;
+            margin-bottom: -1.5rem; /* Puxa o conteúdo de baixo para cima */
+            height: auto;
         }
 
-        .header-trigger-area:hover ~ .glass-header,
-        .glass-header:hover {
-            transform: translateX(-50%) translateY(0);
+        /* FLIP CARD CSS */
+        .brand-flip-container {
+            perspective: 1000px;
+            width: 280px;
+            height: 80px;
+            position: relative;
         }
 
+        .brand-flipper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .brand-front, .brand-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-back {
+            transform: rotateY(180deg);
+        }
+
+        .flipped .brand-flipper {
+            transform: rotateY(180deg);
+        }
+        
+        /* MODO CINEMA: Colapso total do Header para aproveitar 100% da altura */
+        .theater-mode-active .hero-brand {
+            transform: translateY(-50px) scale(0.8);
+            opacity: 0;
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin: 0;
+            pointer-events: none;
+            overflow: hidden; 
+        }
+
+        /* HEADER HIDDEN MODE (AUTO-COLLAPSE NO MODO NORMAL) */
+        /* Esta classe será aplicada quando o mouse não estiver no topo */
+        .header-hidden-active .hero-brand {
+            transform: translateY(-50px) scale(0.8);
+            opacity: 0;
+            max-height: 0 !important;
+            height: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin: 0 !important;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .header-hidden-active .command-bar-container {
+            transform: translateX(-50%) translateY(-150%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Garante que o main suba totalmente */
+        .header-hidden-active main {
+            padding-top: 0 !important;
+            height: 100vh !important;
+        }
+        
+        /* Ajuste fino para a sidebar ocupar 100% real quando o header some */
+        .header-hidden-active .sidebar-glass {
+            height: 100vh !important;
+            border-top: none;
+        }
+        
         .sidebar-glass {
             background: rgba(18, 18, 21, 0.95);
             border-left: 1px solid rgba(255, 255, 255, 0.06);
@@ -197,6 +307,19 @@
             z-index: 60;
         }
         
+        /* Ajuste para Sidebar ocupar altura total corretamente */
+        .theater-mode-active .sidebar-glass {
+            background: rgba(18, 18, 21, 0.98);
+            border-left-color: rgba(165, 243, 252, 0.2);
+            box-shadow: -10px 0 50px rgba(0,0,0,0.8);
+            height: 100% !important; /* Força altura total */
+        }
+
+        /* SIDEBAR HEIGHT FIX - Garante 100% de altura também no modo normal */
+        .sidebar-glass {
+            height: 100%; 
+        }
+
         @media (max-width: 768px) {
             .sidebar-glass {
                 border-left: none;
@@ -207,13 +330,13 @@
         }
 
         /* LOGO ANIMATION & SCENE */
-        .logo-scene { perspective: 1000px; height: 40px; width: 140px; }
+        .logo-scene { perspective: 1000px; height: 50px; width: 180px; }
         
         .logo-spinner { 
             position: relative; 
             width: 100%; 
             height: 100%; 
-            text-align: left; 
+            text-align: center;
             transform-style: preserve-3d; 
             animation: epicFlip 10s infinite cubic-bezier(0.4, 0, 0.2, 1); 
         }
@@ -235,6 +358,7 @@
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
+            align-items: center;
             background-color: transparent; 
         }
         
@@ -246,22 +370,25 @@
         .nevethon-text { 
             color: #fff; 
             font-weight: 900;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
             position: relative; 
             display: inline-block;
             text-shadow: 
-                0 0 5px rgba(165, 243, 252, 0.8),
-                0 0 10px rgba(165, 243, 252, 0.5),
-                0 0 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .frozen-title { 
-            background: linear-gradient(180deg, #FFFFFF 20%, #A5F3FC 100%); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            text-shadow: 0 0 30px rgba(165, 243, 252, 0.6), 0 0 10px rgba(255, 255, 255, 0.4); 
+                0 0 10px rgba(165, 243, 252, 0.8),
+                0 0 20px rgba(165, 243, 252, 0.5),
+                0 0 40px rgba(99, 102, 241, 0.3);
+            font-size: 2.5rem; /* Maior para o verso do flip */
+            font-family: 'Russo One', sans-serif;
+            font-style: italic;
         }
         
+        /* Ajuste do MultLives Logo para caber no container */
+        .multlives-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         /* Partículas de neve (Header) */
         .snow-particle { 
             position: absolute; 
@@ -293,9 +420,6 @@
         .animate-blizzard { animation: blizzard linear infinite; }
 
         .aurora-blob { position: absolute; filter: blur(100px); opacity: 0.3; z-index: 0; pointer-events: none; }
-        .aurora-cyan { background: #a5f3fc; }
-        .aurora-purple { background: #6366f1; }
-        .tech-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
         .cursor-grab { cursor: grab; }
         .cursor-grabbing { cursor: grabbing; }
 
@@ -327,7 +451,7 @@
             border-radius: 99px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden; 
+            overflow: visible; 
             padding: 0.35rem;
             gap: 0.5rem;
         }
@@ -356,6 +480,25 @@
         .floating-toolbar.active {
             transform: translateX(-50%) translateY(0) !important;
             opacity: 1 !important;
+        }
+        
+        /* Hide Brand & Command Bar in Theater Mode */
+        .theater-mode-active .command-bar-container,
+        .theater-mode-active .hero-brand {
+            transform: translateY(-200%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .header-trigger-area {
+            position: fixed; top: 0; left: 0; right: 0; height: 20px; z-index: 51;
+        }
+
+        .header-trigger-area:hover ~ .command-bar-container,
+        .command-bar-container:hover {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
         }
 
         /* CINEMA LIGHTING MODES */
@@ -473,10 +616,10 @@
             pt: {
                 welcome: "Bem vindos ao",
                 add_btn: "Adicionar",
-                placeholder_twitch: "Canal Twitch",
-                placeholder_kick: "Canal Kick",
-                placeholder_yt: "Vídeo YT",
-                placeholder_default: "Canal",
+                placeholder_twitch: "Canal Twitch...",
+                placeholder_kick: "Canal Kick...",
+                placeholder_yt: "Vídeo YT...",
+                placeholder_default: "Adicionar Canal...",
                 map_btn: "Mapa",
                 hide_btn: "Ocultar",
                 realtime_loc: "Localização",
@@ -522,10 +665,10 @@
             en: {
                 welcome: "Welcome to",
                 add_btn: "Add",
-                placeholder_twitch: "Twitch Channel",
-                placeholder_kick: "Kick Channel",
-                placeholder_yt: "YT Video",
-                placeholder_default: "Channel",
+                placeholder_twitch: "Twitch Channel...",
+                placeholder_kick: "Kick Channel...",
+                placeholder_yt: "YT Video...",
+                placeholder_default: "Add Channel...",
                 map_btn: "Map",
                 hide_btn: "Hide",
                 realtime_loc: "Location",
@@ -705,8 +848,8 @@
         const VolumeXIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>;
         const SplitIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="12" x2="21" y2="12"></line></svg>;
         const ChevronDownIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>;
-        
-        // NEW ICONS
+        const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
+
         const GridIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>;
         const LayoutTemplateIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="21" y1="9" x2="3" y2="9"></line><line x1="9" y1="9" x2="9" y2="21"></line></svg>;
         const UsersIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
@@ -729,19 +872,77 @@
             </svg>
         );
 
+        // --- NEW COMPONENT: HERO BRAND (Flip Animation & Reposition) ---
+        const HeroBrand = ({ minimized }) => {
+            const [isFlipped, setIsFlipped] = useState(false);
+
+            useEffect(() => {
+                // Loop de animação: Gira a cada 6 segundos
+                const interval = setInterval(() => {
+                    setIsFlipped(prev => !prev);
+                }, 6000); // 6 segundos de intervalo
+                return () => clearInterval(interval);
+            }, []);
+
+            return (
+                <div className={`hero-brand ${minimized ? 'minimized' : ''}`}>
+                    <div className={`brand-flip-container ${isFlipped ? 'flipped' : ''}`}>
+                        <div className="brand-flipper">
+                            
+                            {/* FRENTE: MULTLIVES */}
+                            <div className="brand-front">
+                                <div className="multlives-wrapper">
+                                    <div className="w-14 h-14 tech-gradient rounded-2xl flex items-center justify-center text-white shadow-[0_0_30px_rgba(99,102,241,0.4)] ring-1 ring-white/20">
+                                        <LogoML />
+                                    </div>
+                                    <div className="flex flex-col text-left">
+                                         <h1 className="font-bold text-3xl tracking-tight text-white leading-none font-display">MultLives</h1>
+                                         <span className="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-semibold mt-1 ml-0.5">Streaming Hub</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* VERSO: NEVETHON (Nevando) */}
+                            <div className="brand-back">
+                                <div className="relative flex items-center justify-center">
+                                     <h2 className="nevethon-text">
+                                        NEVETHON
+                                        {/* Neve caindo apenas no texto */}
+                                        <span className="snow-particle" style={{left: '10%', animationDelay: '0s'}}></span>
+                                        <span className="snow-particle" style={{left: '30%', animationDelay: '0.4s'}}></span>
+                                        <span className="snow-particle" style={{left: '50%', animationDelay: '0.8s'}}></span>
+                                        <span className="snow-particle" style={{left: '70%', animationDelay: '0.2s'}}></span>
+                                        <span className="snow-particle" style={{left: '90%', animationDelay: '0.6s'}}></span>
+                                    </h2>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const LoadingScreen = ({ isLoading, lang }) => {
-            const [visible, setVisible] = useState(true);
+            // LÓGICA: Verifica se já viu a intro nesta sessão
+            const [visible, setVisible] = useState(() => {
+                const hasSeen = sessionStorage.getItem('nevethon_intro_seen');
+                return !hasSeen;
+            });
             const [phase, setPhase] = useState(0); 
             const t = (key) => translations[lang][key];
 
             useEffect(() => {
                 if (visible) {
+                    // Marca como visto imediatamente para que um F5 já pule
+                    sessionStorage.setItem('nevethon_intro_seen', 'true');
+
                     setTimeout(() => setPhase(1), 500);
                     setTimeout(() => setPhase(2), 1500);
                     setTimeout(() => setPhase(3), 2800);
                 }
 
-                if (!isLoading) {
+                if (!isLoading || !visible) {
                     const timer = setTimeout(() => {
                         setPhase(current => current < 4 ? 4 : current);
                     }, 4500); 
@@ -755,6 +956,7 @@
                 setTimeout(() => setVisible(false), 1000);
             };
 
+            // Se não for visível (já viu na sessão), retorna null direto
             if (!visible) return null;
 
             return (
@@ -772,16 +974,30 @@
                         ))}
                     </div>
 
+                    {/* NEVASCA INTENSA (DUAS CAMADAS) */}
                     <div className="absolute inset-0 overflow-hidden pointer-events-none perspective-1000">
-                        {[...Array(150)].map((_, i) => (
-                            <div key={i} className="absolute bg-white rounded-full animate-blizzard" style={{
+                        {/* Camada 1: Longe, Pequena e Rápida */}
+                        {[...Array(200)].map((_, i) => (
+                            <div key={`snow-1-${i}`} className="absolute bg-white rounded-full animate-blizzard" style={{
                                 left: `${Math.random() * 100}%`,
                                 top: `-${Math.random() * 20}%`,
                                 width: `${Math.random() * 2 + 1}px`,
                                 height: `${Math.random() * 2 + 1}px`,
-                                opacity: Math.random(),
-                                animationDuration: `${Math.random() * 0.5 + 0.5}s`,
+                                opacity: Math.random() * 0.8,
+                                animationDuration: `${Math.random() * 0.5 + 1.5}s`,
                                 animationDelay: `${Math.random() * 2}s`
+                            }}></div>
+                        ))}
+                         {/* Camada 2: Perto, Maior, Lenta e Desfocada (Depth) */}
+                        {[...Array(100)].map((_, i) => (
+                            <div key={`snow-2-${i}`} className="absolute bg-ice rounded-full animate-blizzard blur-[1px]" style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `-${Math.random() * 20}%`,
+                                width: `${Math.random() * 4 + 3}px`,
+                                height: `${Math.random() * 4 + 3}px`,
+                                opacity: Math.random() * 0.4,
+                                animationDuration: `${Math.random() * 1 + 2.5}s`,
+                                animationDelay: `${Math.random() * 3}s`
                             }}></div>
                         ))}
                     </div>
@@ -813,25 +1029,28 @@
                         )}
                     </div>
 
-                    <div className={`relative z-10 text-center space-y-2 p-6 transition-all duration-700 transform ${phase >= 3 ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-90'}`}>
+                    <div className={`relative z-10 text-center space-y-4 p-6 transition-all duration-700 transform ${phase >= 3 ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-90'}`}>
                          <h1 className="font-russo text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] italic animate-pulse-glow">
                             {t('intro_title')}
                         </h1>
                         
                         {/* Fuel Gauge / Progress Bar */}
-                        <div className="relative w-full max-w-md mx-auto my-4 h-3 bg-white/5 border border-white/10 rounded-full overflow-hidden p-[2px]">
+                        <div className="relative w-full max-w-md mx-auto h-3 bg-white/5 border border-white/10 rounded-full overflow-hidden p-[2px]">
                             <div 
                                 className="h-full bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 rounded-full transition-all duration-[3000ms] ease-out shadow-[0_0_10px_rgba(239,68,68,0.5)]"
                                 style={{ width: phase >= 3 ? '100%' : '5%' }}
                             ></div>
                         </div>
 
-                        <p className="text-red-500 font-black tracking-[0.2em] text-sm md:text-xl uppercase bg-black/50 backdrop-blur-sm inline-block px-4 py-1 rounded">
-                            {t('intro_msg')}
-                        </p>
-                        <p className="text-white/60 font-medium tracking-widest text-[10px] md:text-xs uppercase mt-2 animate-pulse">
-                            {t('intro_sub')}
-                        </p>
+                        <div className="flex flex-col items-center gap-2">
+                            <p className="text-red-500 font-black tracking-[0.2em] text-sm md:text-xl uppercase bg-black/50 backdrop-blur-sm inline-block px-4 py-1 rounded border border-red-500/20">
+                                {t('intro_msg')}
+                            </p>
+                            
+                            <p className="text-white/60 font-medium tracking-widest text-[10px] md:text-xs uppercase mt-4 animate-pulse">
+                                {t('intro_sub')}
+                            </p>
+                        </div>
                     </div>
 
                     {/* Botão Pular Intro */}
@@ -871,60 +1090,27 @@
             }
         };
 
+        // Compact Icon-only selector
         const PlatformSelector = ({ selected, onSelect }) => {
-            const [isOpen, setIsOpen] = useState(false);
-            const dropdownRef = useRef(null);
-
-            useEffect(() => {
-                const handleClickOutside = (event) => {
-                    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                        setIsOpen(false);
-                    }
-                };
-                document.addEventListener("mousedown", handleClickOutside);
-                return () => document.removeEventListener("mousedown", handleClickOutside);
-            }, []);
-
             const platforms = [
-                { id: 'twitch', name: 'Twitch', color: 'text-[#9146ff]', icon: <TwitchIcon /> },
-                { id: 'kick', name: 'Kick', color: 'text-[#53fc18]', icon: <span className="font-bold text-xs translate-y-[1px]">K</span> },
-                { id: 'youtube', name: 'YouTube', color: 'text-[#ff0000]', icon: <YoutubeIcon /> },
+                { id: 'twitch', color: 'text-[#9146ff]', bg: 'bg-[#9146ff]', icon: <TwitchIcon /> },
+                { id: 'kick', color: 'text-[#53fc18]', bg: 'bg-[#53fc18]', icon: <span className="font-bold text-[10px]">K</span> },
+                { id: 'youtube', color: 'text-[#ff0000]', bg: 'bg-[#ff0000]', icon: <YoutubeIcon /> },
             ];
 
-            const current = platforms.find(p => p.id === selected);
-
             return (
-                <div className="relative" ref={dropdownRef}>
-                    <button
-                        type="button"
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="h-10 pl-2 pr-2 sm:pl-3 sm:pr-3 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1 sm:gap-2 transition-all hover:bg-white/10 w-10 sm:w-auto sm:min-w-[110px] justify-center sm:justify-between"
-                        title="Selecionar Plataforma"
-                    >
-                        <div className="flex items-center gap-2">
-                            <span className={current.color}>{current.icon}</span>
-                            <span className={`text-sm font-medium ${current.color} hidden sm:block`}>{current.name}</span>
-                        </div>
-                        <span className="text-[10px] text-gray-500 hidden sm:block">▼</span>
-                    </button>
-
-                    {isOpen && (
-                        <div className="absolute top-full left-0 mt-1 w-auto min-w-[120px] sm:min-w-[140px] bg-[#121215] border border-white/10 rounded-lg shadow-xl overflow-hidden z-50 flex flex-col animate-fade-in">
-                            {platforms.map(p => (
-                                <button
-                                    key={p.id}
-                                    onClick={() => {
-                                        onSelect(p.id);
-                                        setIsOpen(false);
-                                    }}
-                                    className="flex items-center gap-2 px-3 py-2.5 hover:bg-white/5 transition-colors text-left"
-                                >
-                                    <span className={p.color}>{p.icon}</span>
-                                    <span className={`text-sm font-medium ${p.color}`}>{p.name}</span>
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                <div className="flex items-center gap-1 mr-2 bg-white/5 rounded-full p-1 border border-white/5">
+                    {platforms.map(p => (
+                        <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => onSelect(p.id)}
+                            className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${selected === p.id ? `${p.bg} text-black shadow-[0_0_10px_rgba(0,0,0,0.5)] scale-110` : 'text-gray-500 hover:text-white hover:bg-white/10'}`}
+                            title={p.id}
+                        >
+                            {p.icon}
+                        </button>
+                    ))}
                 </div>
             );
         };
@@ -940,7 +1126,6 @@
                 return `https://player.twitch.tv/?channel=${stream.name}&${parentQuery}&muted=${isGlobalMuted}`;
             };
             
-            // Width Logic: Use customWidth if available, otherwise use className
             const finalStyle = {
                 flexGrow: 0,
                 width: stream.customWidth ? `${stream.customWidth}px` : undefined,
@@ -961,7 +1146,6 @@
                          {/* CRITICAL: Drag Mask to fix iframe drag issues */}
                         {(isDragging || isResizingAny) && <div className="absolute inset-0 z-50 bg-transparent"></div>}
                         
-                        {/* RESIZE HANDLE - Bottom Right */}
                         {!isExpanded && (
                             <div 
                                 className="absolute bottom-0 right-0 w-12 h-12 z-40 cursor-nwse-resize opacity-0 group-hover:opacity-100 transition-opacity touch-none flex items-end justify-end pb-1 pr-1"
@@ -1087,9 +1271,13 @@
             const [platform, setPlatform] = useState("twitch");
             const [isSidebarOpen, setIsSidebarOpen] = useState(true);
             const [activeChatTab, setActiveChatTab] = useState(null);
+            
+            // HEADER AUTO-HIDE STATE
+            const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+            const headerTimerRef = useRef(null);
+
             const [secondaryChatTab, setSecondaryChatTab] = useState(null);
             
-            // MAP HIDDEN ON MOBILE BY DEFAULT
             const [showMap, setShowMap] = useState(() => {
                 if (typeof window !== 'undefined') {
                     return window.innerWidth > 768;
@@ -1109,8 +1297,6 @@
             const [layoutMode, setLayoutMode] = useState('auto'); // auto, grid
             const [squads, setSquads] = useState([]);
             const [showSquadMenu, setShowSquadMenu] = useState(false);
-            
-            // DONATE POPUP STATE
             const [showDonatePopup, setShowDonatePopup] = useState(false);
             
             // TOOLBAR ACTIVE STATE
@@ -1125,14 +1311,12 @@
             const handleToolbarLeave = () => {
                 toolbarTimeoutRef.current = setTimeout(() => {
                     setIsToolbarActive(false);
-                }, 2000); // 2 seconds delay
+                }, 2000); 
             };
             
-            // DND & Resizing State
             const [isDragging, setIsDragging] = useState(false);
             const [resizingStreamId, setResizingStreamId] = useState(null);
             
-            // PiP State
             const [pipWindow, setPipWindow] = useState(null);
 
             const { toasts, addToast } = useToast();
@@ -1148,6 +1332,31 @@
             });
             const [isFileProtocol, setIsFileProtocol] = useState(false);
             const t = (key) => translations[lang][key];
+
+            // LOGIC: HEADER AUTO-HIDE
+            useEffect(() => {
+                const handleActivity = (e) => {
+                    // Se o mouse estiver no topo (primeiros 120px) ou se não houver streamers, mostra o header
+                    if (e.clientY < 120 || streamers.length === 0) {
+                        setIsHeaderVisible(true);
+                        if (headerTimerRef.current) clearTimeout(headerTimerRef.current);
+                    } else if (streamers.length > 0 && !isTheaterMode) {
+                        // Se o mouse saiu do topo e tem streamers, inicia contagem para esconder
+                        if (isHeaderVisible) {
+                            if (headerTimerRef.current) clearTimeout(headerTimerRef.current);
+                            headerTimerRef.current = setTimeout(() => {
+                                setIsHeaderVisible(false);
+                            }, 3000); // 3 segundos para sumir
+                        }
+                    }
+                };
+
+                window.addEventListener('mousemove', handleActivity);
+                return () => {
+                    window.removeEventListener('mousemove', handleActivity);
+                    if (headerTimerRef.current) clearTimeout(headerTimerRef.current);
+                };
+            }, [streamers.length, isTheaterMode, isHeaderVisible]);
 
             useEffect(() => {
                 setTimeout(() => setLoading(false), 4500);
@@ -1165,8 +1374,6 @@
 
                 if (window.location.protocol === 'file:') setIsFileProtocol(true);
 
-                // --- TRIGGER DONATE POPUP ---
-                // Shows after 15 seconds to not be intrusive immediately on load
                 const donateTimer = setTimeout(() => {
                     setShowDonatePopup(true);
                 }, 15000); 
@@ -1191,7 +1398,6 @@
                 setResizingStreamId(null);
             }, []);
 
-            // STREAM RESIZE HANDLERS
             const handleStreamResizeStart = (e, id) => {
                 if (e.type === 'mousedown') {
                     e.preventDefault();
@@ -1250,7 +1456,6 @@
                 };
             }, [resize, stopResizing]);
 
-            // Copy Styles to PiP Window
             const copyStylesToPip = useCallback((win) => {
                 [...document.styleSheets].forEach((styleSheet) => {
                     try {
@@ -1481,9 +1686,10 @@
             }
 
             const toolbarVisible = isToolbarActive || showSquadMenu;
+            const isHeaderHidden = !isHeaderVisible && streamers.length > 0 && !isTheaterMode;
 
             return (
-                <div className={`flex flex-col h-screen transition-all duration-700 ${isTheaterMode ? 'bg-[#020203] theater-mode-active' : 'bg-background'} text-gray-100 font-sans selection:bg-accent selection:text-white relative overflow-hidden`}>
+                <div className={`flex flex-col h-screen transition-all duration-700 ${isTheaterMode ? 'bg-[#020203] theater-mode-active' : 'bg-background'} ${isHeaderHidden ? 'header-hidden-active' : ''} text-gray-100 font-sans selection:bg-accent selection:text-white relative overflow-hidden`}>
                     <div className="blackout-overlay"></div>
                     <LoadingScreen isLoading={loading} lang={lang} />
                     <ToastContainer toasts={toasts} />
@@ -1497,11 +1703,49 @@
                     </div>
 
                     {(isResizing || isResizingMap || resizingStreamId) && <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}
-                    {isTheaterMode && <div className="header-trigger-area"></div>}
+                    
+                    {/* Header Trigger Area - Sempre presente para permitir reativar o header com o mouse */}
+                    <div className="header-trigger-area"></div>
+
+                    {/* NEW: HERO BRAND SECTION (Above Content) */}
+                    <HeroBrand minimized={streamers.length > 0} />
+
+                    {/* NEW: FLOATING COMMAND BAR (Replaces old Header) */}
+                    <div className="command-bar-container">
+                        <form onSubmit={addStreamer} className="command-bar">
+                            <PlatformSelector selected={platform} onSelect={setPlatform} />
+                            
+                            <div className="flex-1 flex items-center h-full relative group/input">
+                                <SearchIcon className="absolute left-2 text-gray-500 w-4 h-4 group-focus-within/input:text-white transition-colors" />
+                                <input 
+                                    type="text" 
+                                    value={inputVal} 
+                                    onChange={(e) => setInputVal(e.target.value)} 
+                                    placeholder={getPlaceholder()} 
+                                    className="w-full h-full bg-transparent text-sm pl-8 pr-2 focus:outline-none text-white placeholder-gray-500 font-medium" 
+                                />
+                            </div>
+                            
+                            <button type="submit" className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 transition-colors shadow-lg active:scale-95 shrink-0" title={t('add_btn')}>
+                                <PlusIcon />
+                            </button>
+
+                            {/* Separator */}
+                            <div className="w-[1px] h-6 bg-white/10 mx-1"></div>
+
+                            {/* Utility Buttons inside Command Bar now */}
+                            <button type="button" onClick={toggleGlobalMute} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${isGlobalMuted ? 'bg-red-500/20 text-red-400' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isGlobalMuted ? t('tt_unmute_all') : t('tt_mute_all')}>
+                                {isGlobalMuted ? <VolumeXIcon /> : <Volume2Icon />}
+                            </button>
+                            <button type="button" onClick={toggleSidebar} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${!isSidebarOpen ? 'bg-indigo-500/20 text-indigo-400' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}>
+                                <LayoutIcon />
+                            </button>
+                        </form>
+                    </div>
 
                     <div className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300" style={{ left: 0, right: isSidebarOpen && window.innerWidth >= 768 ? `${sidebarWidth}px` : 0, height: '40px' }}></div>
                     
-                    {/* MENU FLUTUANTE DISCRETO */}
+                    {/* MENU FLUTUANTE INFERIOR (Mantido para Settings e Layouts) */}
                     <div 
                         className={`floating-toolbar ${toolbarVisible ? 'active' : ''}`} 
                         onMouseEnter={handleToolbarEnter} 
@@ -1523,8 +1767,6 @@
                             <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
                                 <button onClick={(e) => { e.stopPropagation(); togglePip(); }} className={`p-2 rounded-full transition-all ${pipWindow ? 'bg-ice text-black animate-pulse' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('tt_pip')}><ExternalLinkIcon width={18} height={18} /></button>
                                 <div className="w-[1px] h-5 bg-white/10"></div>
-                                <button onClick={(e) => { e.stopPropagation(); toggleSidebar(); }} className={`p-2 rounded-full transition-all ${isSidebarOpen ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}><ChatIcon width={18} height={18} /></button>
-                                <div className="w-[1px] h-5 bg-white/10"></div>
                                 <button onClick={(e) => { e.stopPropagation(); changeLayout('auto'); }} className={`p-2 rounded-full transition-all ${layoutMode === 'auto' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('layout_auto')}><LayoutIcon width={18} height={18} /></button>
                                 <button onClick={(e) => { e.stopPropagation(); changeLayout('grid'); }} className={`p-2 rounded-full transition-all ${layoutMode === 'grid' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('layout_grid')}><GridIcon width={18} height={18} /></button>
                                 <button onClick={(e) => { e.stopPropagation(); changeLayout('focus'); }} className={`p-2 rounded-full transition-all ${expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={t('layout_focus')}><LayoutTemplateIcon width={18} height={18} /></button>
@@ -1535,72 +1777,19 @@
                         )}
                     </div>
 
-                    <header className={`h-16 px-3 sm:px-6 flex items-center justify-between shrink-0 ${isTheaterMode ? 'theater-mode-header glass-header' : 'glass-header'}`}>
-                        <div className={`flex items-center gap-2 sm:gap-4`}>
-                            <div className="w-10 h-10 tech-gradient rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 transform hover:scale-105 transition-transform duration-300 ring-1 ring-white/20 shrink-0">
-                                <LogoML />
-                            </div>
-                            <div className="logo-scene hidden md:block">
-                                <div className="logo-spinner">
-                                    <div className="logo-face flex flex-col justify-center">
-                                        <h1 className="font-bold text-lg tracking-tight text-white leading-none">MultLives</h1>
-                                        <span className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold leading-none mt-1">Streaming Hub</span>
-                                    </div>
-                                    <div className="logo-back logo-face flex items-center">
-                                        <h1 className="font-extrabold text-xl tracking-wide nevethon-text italic">NEVETHON<span className="snow-particle"></span><span className="snow-particle"></span><span className="snow-particle"></span><span className="snow-particle"></span></h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <form onSubmit={addStreamer} className={`flex-1 max-w-xl mx-2 md:mx-8 flex items-center gap-1 sm:gap-2`}>
-                            <div className="relative group shrink-0">
-                                <PlatformSelector selected={platform} onSelect={setPlatform} />
-                            </div>
-                            <div className="relative flex-1 min-w-0">
-                                <input type="text" value={inputVal} onChange={(e) => setInputVal(e.target.value)} placeholder={getPlaceholder()} className="w-full h-10 bg-white/5 backdrop-blur-sm rounded-lg pl-3 sm:pl-4 pr-3 sm:pr-10 text-xs sm:text-sm focus:bg-white/10 outline-none transition-all placeholder-gray-500 min-w-0" />
-                            </div>
-                            <button type="submit" className="h-10 px-3 sm:px-4 flex items-center gap-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors text-sm active:scale-95 shrink-0" title={t('tt_add')}>
-                                <PlusIcon /> <span className="hidden sm:inline">{t('add_btn')}</span>
-                            </button>
-                        </form>
-                        
-                        <div className={`flex items-center gap-1 sm:gap-3 border-l border-white/10 pl-2 md:pl-6 shrink-0`}>
-                            <button onClick={toggleLang} className="hidden sm:flex p-2 rounded-lg bg-surface hover:bg-white/10 border border-white/5 transition-all active:scale-95 items-center justify-center w-9 h-9" title={lang === 'pt' ? "Mudar para Inglês" : "Switch to Portuguese"}>
-                                {lang === 'pt' ? <FlagBR /> : <FlagUS />}
-                            </button>
-                            <button onClick={toggleGlobalMute} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all shadow-lg ${isGlobalMuted ? 'bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500/30' : 'bg-surface hover:bg-white/10 text-gray-400 hover:text-white border border-white/5'}`} title={isGlobalMuted ? t('tt_unmute_all') : t('tt_mute_all')}>
-                                {isGlobalMuted ? <VolumeXIcon /> : <Volume2Icon />}
-                            </button>
-                            <button onClick={toggleSidebar} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all shadow-lg ${!isSidebarOpen ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/50 hover:bg-indigo-500/30' : 'bg-surface hover:bg-white/10 text-gray-400 hover:text-white border border-white/5'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}>
-                                <LayoutIcon /> <span className="hidden sm:inline">{isSidebarOpen ? t('chat_visible') : t('chat_hidden')}</span>
-                            </button>
-                        </div>
-                    </header>
-                    <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-16 md:pt-24 ${isTheaterMode ? '!pt-0' : ''} z-10 relative transition-all duration-700`}>
+                    <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-1 md:pt-1 ${isTheaterMode ? '!pt-0 !h-full' : ''} z-10 relative transition-all duration-700`}>
                         <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-0">
                             {streamers.length === 0 ? (
                                 <div className="flex-1 flex items-center justify-center text-center animate-fade-in">
-                                    <div className="p-8 rounded-2xl bg-surface/50 border border-white/5 backdrop-blur-sm max-w-md w-full mx-4">
-                                        <div className="w-16 h-16 mb-6 mx-auto rounded-2xl bg-gradient-to-tr from-surfaceHighlight to-surface border border-white/5 flex items-center justify-center shadow-2xl">
-                                            <svg className="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                        </div>
-                                        <h2 className="text-xl font-semibold text-white mb-2">{t('empty_title')}</h2>
-                                        {isFileProtocol ? (
-                                            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-left max-w-sm"><h3 className="text-red-400 font-bold text-sm mb-1">{t('warning_title')}</h3><p className="text-red-200/80 text-xs">{t('warning_text')}</p></div>
-                                        ) : (
-                                            <p className="text-gray-500 text-sm mb-6 leading-relaxed">{t('empty_desc')}</p>
-                                        )}
-                                        <div className="flex justify-center gap-3 text-xs font-medium text-gray-400">
-                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5"><span className="text-[#9146ff]"><TwitchIcon /></span> Twitch</div>
-                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5"><span className="text-[#53fc18]"><TwitchIcon /></span> Kick</div>
-                                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-white/5"><span className="text-[#ff0000]"><YoutubeIcon /></span> YT</div>
-                                        </div>
+                                    {/* Empty State Simplificado, já que temos o Hero Header */}
+                                    <div className="p-8 max-w-md w-full mx-4 opacity-50">
+                                        <p className="text-gray-500 text-sm mb-6 leading-relaxed mt-20">{t('empty_desc')}</p>
                                     </div>
                                 </div>
                             ) : renderContent()}
                         </div>
                         
-                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen ? 'translate-y-0 md:translate-x-0 opacity-100' : 'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden'}`} style={{ width: isSidebarOpen ? (window.innerWidth < 768 ? '100%' : `${sidebarWidth}px`) : '0px', height: window.innerWidth < 768 && isSidebarOpen ? '45vh' : 'auto', transitionDuration: isResizing ? '0s' : '300ms' }}>
+                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen ? 'translate-y-0 md:translate-x-0 opacity-100' : 'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden'}`} style={{ width: isSidebarOpen ? (window.innerWidth < 768 ? '100%' : `${sidebarWidth}px`) : '0px', height: window.innerWidth < 768 && isSidebarOpen ? '45vh' : '100%', transitionDuration: isResizing ? '0s' : '300ms' }}>
                             <div className="hidden md:flex absolute left-0 top-0 bottom-0 w-1.5 hover:w-3 items-center justify-center -ml-1.5 z-50 cursor-col-resize group/resizer" onMouseDown={startResizing} onTouchStart={startResizing}><div className="h-8 w-1 rounded-full bg-white/20 group-hover/resizer:bg-accent/80 transition-colors"></div></div>
                             <div className="flex flex-col h-full w-full overflow-hidden">
                                 <div className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col relative group bg-black/40 border-b border-white/5`} style={{ height: showMap ? `${mapHeight}px` : '0px', transitionDuration: isResizingMap ? '0s' : '300ms' }}>
