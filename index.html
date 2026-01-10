@@ -880,7 +880,7 @@
                 <div ref={menuRef} className="absolute bottom-16 left-1/2 -translate-x-1/2 w-72 bg-[#121215] border border-white/10 rounded-xl shadow-2xl p-4 animate-slide-up z-[70]">
                     <div className="flex justify-between items-center mb-3">
                         <h3 className="text-white font-bold text-sm flex items-center gap-2"><UsersIcon width={16} /> {t('squads_title')}</h3>
-                        <button onClick={onClose} className="text-gray-400 hover:text-white"><XIcon /></button>
+                        <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="text-gray-400 hover:text-white"><XIcon /></button>
                     </div>
 
                     <div className="flex gap-2 mb-4">
@@ -892,7 +892,7 @@
                             className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-accent"
                         />
                         <button 
-                            onClick={() => { if(newSquadName) { onSave(newSquadName); setNewSquadName(""); } }} 
+                            onClick={(e) => { e.stopPropagation(); if(newSquadName) { onSave(newSquadName); setNewSquadName(""); } }} 
                             className="bg-accent hover:bg-accentHover text-white p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={!newSquadName || currentStreamers.length === 0}
                             title={t('squad_save')}
@@ -910,10 +910,10 @@
                                     <span className="text-[10px] text-gray-500">{squad.streams.length} streams</span>
                                 </div>
                                 <div className="flex gap-1">
-                                    <button onClick={() => onLoad(squad)} className="p-1.5 text-ice hover:bg-ice/10 rounded" title={t('squad_load')}>
+                                    <button onClick={(e) => { e.stopPropagation(); onLoad(squad); }} className="p-1.5 text-ice hover:bg-ice/10 rounded" title={t('squad_load')}>
                                         <LayoutIcon />
                                     </button>
-                                    <button onClick={() => onDelete(squad.id)} className="p-1.5 text-red-400 hover:bg-red-400/10 rounded" title="Excluir">
+                                    <button onClick={(e) => { e.stopPropagation(); onDelete(squad.id); }} className="p-1.5 text-red-400 hover:bg-red-400/10 rounded" title="Excluir">
                                         <TrashIcon />
                                     </button>
                                 </div>
@@ -1152,6 +1152,9 @@
                 );
             };
 
+            // NOVO ESTADO DE VISIBILIDADE DA BARRA
+            const toolbarVisible = isToolbarExpanded || showSquadMenu;
+
             return (
                 <div className={`flex flex-col h-screen transition-all duration-700 ${isTheaterMode ? 'bg-[#020203] theater-mode-active' : 'bg-background'} text-gray-100 font-sans selection:bg-accent selection:text-white relative overflow-hidden`}>
                     <div className="blackout-overlay"></div>
@@ -1166,12 +1169,12 @@
                     {(isResizing || isResizingMap) && <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}
                     {isTheaterMode && <div className="header-trigger-area"></div>}
 
-                    {/* CONTROL BAR (MODO CINEMA SEMPRE VISÍVEL + MENU RETRÁTIL) */}
+                    {/* CONTROL BAR (FIXED SQUADS BUG) */}
                     <div className="floating-toolbar-trigger fixed bottom-0 left-0 right-0 h-16 z-50"></div>
                     <div 
-                        className={`floating-toolbar ${isToolbarExpanded ? 'expanded' : 'collapsed'}`}
+                        className={`floating-toolbar ${toolbarVisible ? 'expanded' : 'collapsed'}`}
                         onMouseEnter={() => setIsToolbarExpanded(true)}
-                        onMouseLeave={() => { setIsToolbarExpanded(false); setShowSquadMenu(false); }}
+                        onMouseLeave={() => setIsToolbarExpanded(false)}
                     >
                         <button 
                             onClick={(e) => { e.stopPropagation(); toggleTheaterMode(); }}
@@ -1184,12 +1187,12 @@
 
                         <div className="w-[1px] h-6 bg-white/10 mx-1 shrink-0"></div>
 
-                        {!isToolbarExpanded ? (
-                            <div className="text-gray-500 flex items-center justify-center w-8 h-8 cursor-pointer hover:text-ice transition-colors">
+                        {!toolbarVisible ? (
+                            <div className="text-gray-500 flex items-center justify-center w-8 h-8 cursor-pointer hover:text-ice transition-colors animate-pulse">
                                 <SettingsIcon width={20} height={20} />
                             </div>
                         ) : (
-                            <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap overflow-hidden">
+                            <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
                                 <button 
                                     onClick={(e) => { e.stopPropagation(); changeLayout('auto'); }}
                                     className={`p-2 rounded-full transition-all ${layoutMode === 'auto' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
