@@ -150,7 +150,7 @@
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* COMMAND BAR (Novo Header Flutuante) */
+        /* COMMAND BAR (Header Flutuante) */
         .command-bar-container {
             position: fixed;
             top: 2rem;
@@ -193,9 +193,9 @@
             }
         }
 
-        /* LOGO HERO SECTION - REPOSITION & FLIP LOGIC */
+        /* LOGO HERO SECTION */
         .hero-brand {
-            padding-top: 8rem; /* Posição inicial (Centro/Baixo) */
+            padding-top: 8rem;
             padding-bottom: 2rem;
             width: 100%;
             display: flex;
@@ -205,19 +205,18 @@
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             z-index: 10;
-            pointer-events: none; /* Deixa cliques passarem */
-            max-height: 500px; /* Altura máxima para permitir transição */
+            pointer-events: none;
+            max-height: 500px;
             opacity: 1;
             overflow: visible;
         }
         
-        /* Estado quando há players (Sobe e Diminui) - AJUSTADO PARA MAXIMIZAR ESPAÇO */
         .hero-brand.minimized {
-            padding-top: 5.5rem; /* Ajustado milimetricamente para ficar logo abaixo da barra */
+            padding-top: 5.5rem;
             padding-bottom: 0;
-            transform: scale(0.6); /* Um pouco menor para ser menos intrusivo */
+            transform: scale(0.6);
             opacity: 0.9;
-            margin-bottom: -1.5rem; /* Puxa o conteúdo de baixo para cima */
+            margin-bottom: -1.5rem;
             height: auto;
         }
 
@@ -256,23 +255,37 @@
             transform: rotateY(180deg);
         }
         
-        /* MODO CINEMA: Colapso total do Header para aproveitar 100% da altura */
+        /* MODO CINEMA: Colapso total */
         .theater-mode-active .hero-brand {
             transform: translateY(-50px) scale(0.8);
             opacity: 0;
             max-height: 0;
-            padding-top: 0;
-            padding-bottom: 0;
+            padding: 0;
             margin: 0;
             pointer-events: none;
             overflow: hidden; 
         }
 
-        /* HEADER HIDDEN MODE (AUTO-COLLAPSE NO MODO NORMAL) */
+        /* HEADER HIDDEN MODE (AUTO-COLLAPSE NO MODO NORMAL) 
+           - CORREÇÃO: Colapsa a Logo completamente para liberar espaço
+        */
         
         .header-hidden-active .command-bar-container {
             transform: translateX(-50%) translateY(-150%);
             opacity: 0;
+            pointer-events: none;
+        }
+
+        /* CORREÇÃO APLICADA: Força o colapso da logo quando o header some */
+        .header-hidden-active .hero-brand {
+            transform: translateY(-100%) !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            margin: 0 !important;
+            opacity: 0 !important;
+            overflow: hidden !important;
             pointer-events: none;
         }
 
@@ -282,7 +295,6 @@
             height: 100vh !important;
         }
         
-        /* Ajuste fino para a sidebar ocupar 100% real quando o header some */
         .header-hidden-active .sidebar-glass {
             height: 100vh !important;
             border-top: none;
@@ -295,15 +307,13 @@
             z-index: 60;
         }
         
-        /* Ajuste para Sidebar ocupar altura total corretamente */
         .theater-mode-active .sidebar-glass {
             background: rgba(18, 18, 21, 0.98);
             border-left-color: rgba(165, 243, 252, 0.2);
             box-shadow: -10px 0 50px rgba(0,0,0,0.8);
-            height: 100% !important; /* Força altura total */
+            height: 100% !important;
         }
 
-        /* SIDEBAR HEIGHT FIX - Garante 100% de altura também no modo normal */
         .sidebar-glass {
             height: 100%; 
         }
@@ -312,46 +322,9 @@
             .sidebar-glass {
                 border-left: none;
                 border-top: 1px solid rgba(255, 255, 255, 0.06);
-                position: relative; /* Melhor fluxo no mobile */
+                position: relative;
                 box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
             }
-        }
-
-        /* LOGO ANIMATION & SCENE */
-        .logo-scene { perspective: 1000px; height: 50px; width: 180px; }
-        
-        .logo-spinner { 
-            position: relative; 
-            width: 100%; 
-            height: 100%; 
-            text-align: center;
-            transform-style: preserve-3d; 
-            animation: epicFlip 10s infinite cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-
-        @keyframes epicFlip { 
-            0%, 40% { transform: rotateX(0deg); } 
-            45% { transform: rotateX(90deg); }
-            50%, 90% { transform: rotateX(180deg); } 
-            95% { transform: rotateX(270deg); }
-            100% { transform: rotateX(360deg); } 
-        }
-
-        .logo-face { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            backface-visibility: hidden; 
-            -webkit-backface-visibility: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center;
-            background-color: transparent; 
-        }
-        
-        .logo-back { 
-            transform: rotateX(180deg); 
         }
 
         /* TEXTO NEVETHON */
@@ -365,12 +338,11 @@
                 0 0 10px rgba(165, 243, 252, 0.8),
                 0 0 20px rgba(165, 243, 252, 0.5),
                 0 0 40px rgba(99, 102, 241, 0.3);
-            font-size: 2.5rem; /* Maior para o verso do flip */
+            font-size: 2.5rem; 
             font-family: 'Russo One', sans-serif;
             font-style: italic;
         }
         
-        /* Ajuste do MultLives Logo para caber no container */
         .multlives-wrapper {
             display: flex;
             align-items: center;
@@ -400,7 +372,6 @@
             100% { transform: translateY(35px); opacity: 0; } 
         }
 
-        /* ANIMAÇÃO DE NEVE DA TELA DE CARREGAMENTO */
         @keyframes blizzard {
             0% { transform: translate(0, 0) rotate(0deg); }
             100% { transform: translate(-20px, 100vh) rotate(360deg); }
@@ -418,22 +389,21 @@
             height: 100%;
         }
         
-        /* CARROS CUSTOM */
         .car-neon { filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.8)); }
         .car-fire { filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.8)); }
         .car-ice { filter: drop-shadow(0 0 10px rgba(165, 243, 252, 0.8)); }
-        .car-broken { filter: sepia(100%) saturate(300%) hue-rotate(315deg) contrast(80%); } /* Ferrugem style */
+        .car-broken { filter: sepia(100%) saturate(300%) hue-rotate(315deg) contrast(80%); }
 
-        /* TOOLBAR FLUTUANTE - SISTEMA RETRÁTIL INTELIGENTE */
+        /* TOOLBAR FLUTUANTE */
         .floating-toolbar {
             position: fixed;
             bottom: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 70; /* Maior que a sidebar */
+            z-index: 70;
             display: flex;
             align-items: center;
-            background: rgba(13, 13, 16, 0.3); /* Transparência maior por padrão */
+            background: rgba(13, 13, 16, 0.3);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 99px;
@@ -444,7 +414,6 @@
             gap: 0.5rem;
         }
         
-        /* Estado Ativo (Hover/Touch) */
         .floating-toolbar.active {
             background: rgba(13, 13, 16, 0.95);
             backdrop-filter: blur(20px);
@@ -457,7 +426,6 @@
             border-color: rgba(165, 243, 252, 0.2);
         }
         
-        /* Oculta em theater mode se o mouse não estiver perto */
         .theater-mode-active .floating-toolbar {
             transform: translateX(-50%) translateY(150%);
             opacity: 0;
@@ -470,7 +438,6 @@
             opacity: 1 !important;
         }
         
-        /* Hide Brand & Command Bar in Theater Mode */
         .theater-mode-active .command-bar-container,
         .theater-mode-active .hero-brand {
             transform: translateY(-200%);
@@ -478,8 +445,9 @@
             pointer-events: none;
         }
 
+        /* CORREÇÃO: Aumentado Z-Index do Trigger para garantir que funcione acima do sidebar */
         .header-trigger-area {
-            position: fixed; top: 0; left: 0; right: 0; height: 20px; z-index: 51;
+            position: fixed; top: 0; left: 0; right: 0; height: 20px; z-index: 70;
         }
 
         .header-trigger-area:hover ~ .command-bar-container,
@@ -494,12 +462,6 @@
             opacity: 0.15;
             filter: blur(150px);
             transform: scale(1.5);
-        }
-
-        .theater-mode-active .sidebar-glass {
-            background: rgba(18, 18, 21, 0.98);
-            border-left-color: rgba(165, 243, 252, 0.2);
-            box-shadow: -10px 0 50px rgba(0,0,0,0.8);
         }
 
         .cinema-glow {
@@ -559,17 +521,12 @@
             </div>
         );
 
-        // --- NEW COMPONENT: DONATE ALERT POPUP ---
         const DonatePopup = ({ onClose }) => {
             return (
                 <div className="fixed bottom-24 left-4 right-4 md:left-auto md:right-6 md:w-96 z-[90] animate-slide-up pointer-events-auto">
                     <div className="relative group">
-                        {/* Glow Effect Background */}
                         <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 rounded-2xl blur opacity-30 group-hover:opacity-70 transition duration-1000"></div>
-                        
-                        {/* Main Container */}
                         <div className="relative bg-[#121215]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl flex gap-4 items-start ring-1 ring-white/5">
-                            {/* Close Button */}
                             <button 
                                 onClick={onClose} 
                                 className="absolute top-2 right-2 text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-full p-1.5 transition-colors"
@@ -577,13 +534,9 @@
                             >
                                 <XIcon width={12} height={12} />
                             </button>
-
-                            {/* Icon Container */}
                             <div className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-white/10 flex items-center justify-center shadow-inner">
                                 <HeartIcon className="text-pink-500 animate-heart-beat drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]" width={24} height={24} />
                             </div>
-
-                            {/* Text Content */}
                             <div className="flex-1 pr-2">
                                 <h3 className="text-white font-bold text-sm mb-1.5 flex items-center gap-2">
                                     Apoie o NEVETHON! <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/30">Donate</span>
@@ -804,7 +757,6 @@
         const FlagBR = () => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="16" height="12"><g fillRule="evenodd" strokeWidth="1pt"><path fill="#009b3a" d="M0 0h640v480H0z"/><path fill="#fedf00" d="M320 22.1L577.6 240 320 457.9 62.4 240z"/><circle fill="#002776" cx="320" cy="240" r="109.2"/><path fill="#fff" fillRule="evenodd" d="M62.4 240l257.6 217.9L577.6 240 320 22.1z" opacity=".0"/><path fill="#fff" d="M228.6 268.4c52.2-12.7 112.9-7.9 174.4 12.8-3.4 3.7-7.2 7-11.2 10.1-55.9-19-111-23.7-158.6-12.4-1.7-3.7-3.2-7.1-4.6-10.5z"/></g></svg>;
         const FlagUS = () => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="16" height="12"><path fill="#bd3d44" d="M0 0h640v480H0"/><path stroke="#fff" strokeWidth="37" d="M0 55.3h640M0 129h640M0 203h640M0 277h640M0 351h640M0 425h640"/><path fill="#192f5d" d="M0 0h364.8v258.5H0"/><marker id="us-a" markerHeight="30" markerWidth="30"><path fill="#fff" d="M14.7 0l4.5 14L4 14l11.8 8.6-4.5 14L14.7 28l11.4 8.6-4.5-14 11.8-8.6H19.2z"/></marker><path fill="none" markerMid="url(#us-a)" d="M0 0L364.8 258.5M0 258.5L364.8 0"/></svg>;
         
-        // ICONS
         const PlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
         const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
         const MessageIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>;
@@ -847,15 +799,13 @@
             </svg>
         );
 
-        // --- NEW COMPONENT: HERO BRAND (Flip Animation & Reposition) ---
         const HeroBrand = ({ minimized }) => {
             const [isFlipped, setIsFlipped] = useState(false);
 
             useEffect(() => {
-                // Loop de animação: Gira a cada 6 segundos
                 const interval = setInterval(() => {
                     setIsFlipped(prev => !prev);
-                }, 6000); // 6 segundos de intervalo
+                }, 6000); 
                 return () => clearInterval(interval);
             }, []);
 
@@ -863,8 +813,6 @@
                 <div className={`hero-brand ${minimized ? 'minimized' : ''}`}>
                     <div className={`brand-flip-container ${isFlipped ? 'flipped' : ''}`}>
                         <div className="brand-flipper">
-                            
-                            {/* FRENTE: MULTLIVES */}
                             <div className="brand-front">
                                 <div className="multlives-wrapper">
                                     <div className="w-14 h-14 tech-gradient rounded-2xl flex items-center justify-center text-white shadow-[0_0_30px_rgba(99,102,241,0.4)] ring-1 ring-white/20">
@@ -876,13 +824,10 @@
                                     </div>
                                 </div>
                             </div>
-
-                            {/* VERSO: NEVETHON (Nevando) */}
                             <div className="brand-back">
                                 <div className="relative flex items-center justify-center">
                                      <h2 className="nevethon-text">
                                         NEVETHON
-                                        {/* Neve caindo apenas no texto */}
                                         <span className="snow-particle" style={{left: '10%', animationDelay: '0s'}}></span>
                                         <span className="snow-particle" style={{left: '30%', animationDelay: '0.4s'}}></span>
                                         <span className="snow-particle" style={{left: '50%', animationDelay: '0.8s'}}></span>
@@ -899,7 +844,6 @@
         };
 
         const LoadingScreen = ({ isLoading, lang }) => {
-            // LÓGICA: Verifica se já viu a intro nesta sessão
             const [visible, setVisible] = useState(() => {
                 const hasSeen = sessionStorage.getItem('nevethon_intro_seen');
                 return !hasSeen;
@@ -909,7 +853,6 @@
 
             useEffect(() => {
                 if (visible) {
-                    // Marca como visto imediatamente para que um F5 já pule
                     sessionStorage.setItem('nevethon_intro_seen', 'true');
 
                     setTimeout(() => setPhase(1), 500);
@@ -931,14 +874,12 @@
                 setTimeout(() => setVisible(false), 1000);
             };
 
-            // Se não for visível (já viu na sessão), retorna null direto
             if (!visible) return null;
 
             return (
                 <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050507] transition-opacity duration-1000 ease-in-out ${phase === 4 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-150 pointer-events-none"></div>
                     
-                    {/* Linhas de Velocidade */}
                     <div className="absolute inset-0 overflow-hidden pointer-events-none">
                         {[...Array(20)].map((_, i) => (
                             <div key={i} className="absolute bg-gradient-to-l from-white/10 to-transparent h-[1px] w-64 animate-speed-lines" style={{
@@ -949,9 +890,7 @@
                         ))}
                     </div>
 
-                    {/* NEVASCA INTENSA (DUAS CAMADAS) */}
                     <div className="absolute inset-0 overflow-hidden pointer-events-none perspective-1000">
-                        {/* Camada 1: Longe, Pequena e Rápida */}
                         {[...Array(200)].map((_, i) => (
                             <div key={`snow-1-${i}`} className="absolute bg-white rounded-full animate-blizzard" style={{
                                 left: `${Math.random() * 100}%`,
@@ -963,7 +902,6 @@
                                 animationDelay: `${Math.random() * 2}s`
                             }}></div>
                         ))}
-                         {/* Camada 2: Perto, Maior, Lenta e Desfocada (Depth) */}
                         {[...Array(100)].map((_, i) => (
                             <div key={`snow-2-${i}`} className="absolute bg-ice rounded-full animate-blizzard blur-[1px]" style={{
                                 left: `${Math.random() * 100}%`,
@@ -1009,7 +947,6 @@
                             {t('intro_title')}
                         </h1>
                         
-                        {/* Fuel Gauge / Progress Bar */}
                         <div className="relative w-full max-w-md mx-auto h-3 bg-white/5 border border-white/10 rounded-full overflow-hidden p-[2px]">
                             <div 
                                 className="h-full bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 rounded-full transition-all duration-[3000ms] ease-out shadow-[0_0_10px_rgba(239,68,68,0.5)]"
@@ -1028,7 +965,6 @@
                         </div>
                     </div>
 
-                    {/* Botão Pular Intro */}
                     {phase < 4 && (
                         <button 
                             onClick={skipIntro}
@@ -1065,7 +1001,6 @@
             }
         };
 
-        // Compact Icon-only selector
         const PlatformSelector = ({ selected, onSelect }) => {
             const platforms = [
                 { id: 'twitch', color: 'text-[#9146ff]', bg: 'bg-[#9146ff]', icon: <TwitchIcon /> },
@@ -1118,7 +1053,6 @@
                     onDragOver={(e) => e.preventDefault()}
                 >
                     <div className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded ? 'ring-1 ring-white/20 cinema-glow-expanded' : ''}`}>
-                         {/* CRITICAL: Drag Mask to fix iframe drag issues */}
                         {(isDragging || isResizingAny) && <div className="absolute inset-0 z-50 bg-transparent"></div>}
                         
                         {!isExpanded && (
@@ -1172,7 +1106,6 @@
             return prev.stream.id === next.stream.id && prev.stream.refreshKey === next.stream.refreshKey && prev.widthClass === next.widthClass && prev.heightClass === next.heightClass && prev.isExpanded === next.isExpanded && prev.isDraggable === next.isDraggable && prev.index === next.index && prev.isGlobalMuted === next.isGlobalMuted && prev.isResizingAny === next.isResizingAny && prev.isTheaterMode === next.isTheaterMode && prev.isDragging === next.isDragging && prev.stream.customWidth === next.stream.customWidth;
         });
 
-        // SQUADS MENU
         const SquadsMenu = ({ isOpen, onClose, squads, currentStreamers, onSave, onLoad, onDelete, lang }) => {
             const [newSquadName, setNewSquadName] = useState("");
             const menuRef = useRef(null);
@@ -1260,14 +1193,12 @@
             const [streamers, setStreamers] = useState([]);
             const [inputVal, setInputVal] = useState("");
             const [platform, setPlatform] = useState("twitch");
-            // STATE: Start closed on mobile, open on desktop
             const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
                 if (typeof window !== 'undefined') return window.innerWidth > 768;
                 return true;
             });
             const [activeChatTab, setActiveChatTab] = useState(null);
             
-            // HEADER AUTO-HIDE STATE
             const [isHeaderVisible, setIsHeaderVisible] = useState(true);
             const headerTimerRef = useRef(null);
 
@@ -1289,13 +1220,12 @@
             const [mapHeight, setMapHeight] = useState(300);
             const [isResizingMap, setIsResizingMap] = useState(false);
             const [lang, setLang] = useState('pt');
-            const [layoutMode, setLayoutMode] = useState('auto'); // auto, grid
+            const [layoutMode, setLayoutMode] = useState('auto'); 
             const [squads, setSquads] = useState([]);
             const [showSquadMenu, setShowSquadMenu] = useState(false);
             const [showDonatePopup, setShowDonatePopup] = useState(false);
             const [chatRefreshTriggers, setChatRefreshTriggers] = useState({});
             
-            // TOOLBAR ACTIVE STATE
             const [isToolbarActive, setIsToolbarActive] = useState(false);
             const toolbarTimeoutRef = useRef(null);
 
@@ -1329,20 +1259,17 @@
             const [isFileProtocol, setIsFileProtocol] = useState(false);
             const t = (key) => translations[lang][key];
 
-            // LOGIC: HEADER AUTO-HIDE
             useEffect(() => {
                 const handleActivity = (e) => {
-                    // Se o mouse estiver no topo (primeiros 120px) ou se não houver streamers, mostra o header
                     if (e.clientY < 120 || streamers.length === 0) {
                         setIsHeaderVisible(true);
                         if (headerTimerRef.current) clearTimeout(headerTimerRef.current);
                     } else if (streamers.length > 0 && !isTheaterMode) {
-                        // Se o mouse saiu do topo e tem streamers, inicia contagem para esconder
                         if (isHeaderVisible) {
                             if (headerTimerRef.current) clearTimeout(headerTimerRef.current);
                             headerTimerRef.current = setTimeout(() => {
                                 setIsHeaderVisible(false);
-                            }, 3000); // 3 segundos para sumir
+                            }, 3000); 
                         }
                     }
                 };
@@ -1630,7 +1557,7 @@
                                 <div className="w-full md:w-1/5 h-1/3 md:h-full bg-transparent overflow-x-auto md:overflow-y-auto md:overflow-x-hidden">
                                     <div className="min-h-full w-full flex flex-row md:flex-col justify-center gap-1">
                                         {otherStreams.map((s, idx) => {
-                                            if (!s) return null; // Safe guard
+                                            if (!s) return null; 
                                             return (
                                                 <StreamPlayer key={s.id} stream={s} index={streamers.findIndex(st => st.id === s.id)} widthClass="w-full md:w-full min-w-[150px] md:min-w-0" heightClass="h-auto" style={{ flexGrow: 0 }} isExpanded={false} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={resetStreamSize} />
                                             )
@@ -1662,7 +1589,7 @@
                 return (
                     <div className="flex flex-wrap justify-center content-start md:content-center items-center w-full h-full bg-transparent gap-4 p-4 overflow-y-auto scrollbar-hide">
                         {streamers.map((s, index) => {
-                            if (!s) return null; // Safe guard
+                            if (!s) return null; 
                             return (
                                 <StreamPlayer key={s.id} stream={s} index={index} widthClass={getWidthClass(index)} heightClass="h-auto" isExpanded={false} isDraggable={true} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={resetStreamSize} />
                             )
@@ -1699,7 +1626,6 @@
             const isHeaderHidden = !isHeaderVisible && streamers.length > 0 && !isTheaterMode;
             const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
 
-            // Determinar a stream ativa para mostrar no header
             const activeStream = streamers.find(s => s.id === activeChatTab);
 
             return (
@@ -1708,7 +1634,6 @@
                     <LoadingScreen isLoading={loading} lang={lang} />
                     <ToastContainer toasts={toasts} />
                     
-                    {/* LANGUAGE BUTTON */}
                     <button 
                         onClick={toggleLang} 
                         className="fixed top-4 left-4 z-[60] bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full px-3 py-1.5 text-xs font-bold text-white/80 hover:text-white transition-all border border-white/5 active:scale-95"
@@ -1716,7 +1641,6 @@
                         {lang === 'pt' ? '🇺🇸 EN' : '🇧🇷 PT'}
                     </button>
                     
-                    {/* DONATE POPUP RENDER */}
                     {showDonatePopup && <DonatePopup onClose={() => setShowDonatePopup(false)} />}
                     
                     <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -1726,13 +1650,10 @@
 
                     {(isResizing || isResizingMap || resizingStreamId) && <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}
                     
-                    {/* Header Trigger Area - Sempre presente para permitir reativar o header com o mouse */}
                     <div className="header-trigger-area"></div>
 
-                    {/* NEW: HERO BRAND SECTION (Above Content) */}
                     <HeroBrand minimized={streamers.length > 0} />
 
-                    {/* NEW: FLOATING COMMAND BAR (Replaces old Header) */}
                     <div className="command-bar-container">
                         <form onSubmit={addStreamer} className="command-bar">
                             <PlatformSelector selected={platform} onSelect={setPlatform} />
@@ -1752,7 +1673,6 @@
                                 <PlusIcon />
                             </button>
 
-                            {/* Utility Buttons: Hidden on Mobile */}
                             <div className="hidden md:flex items-center gap-1 ml-1 border-l border-white/10 pl-1">
                                 <button type="button" onClick={toggleGlobalMute} className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${isGlobalMuted ? 'bg-red-500/20 text-red-400' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isGlobalMuted ? t('tt_unmute_all') : t('tt_mute_all')}>
                                     {isGlobalMuted ? <VolumeXIcon /> : <Volume2Icon />}
@@ -1766,7 +1686,6 @@
 
                     <div className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300" style={{ left: 0, right: isSidebarOpen && window.innerWidth >= 768 ? `${sidebarWidth}px` : 0, height: '40px' }}></div>
                     
-                    {/* MENU FLUTUANTE INFERIOR (Mantido para Settings e Layouts) */}
                     <div 
                         className={`floating-toolbar ${toolbarVisible ? 'active' : ''}`} 
                         onMouseEnter={handleToolbarEnter} 
@@ -1774,7 +1693,6 @@
                         onTouchStart={handleToolbarEnter}
                         style={{ marginLeft: isSidebarOpen && window.innerWidth >= 768 ? `-${sidebarWidth/2}px` : '0' }}
                     >
-                        {/* Mobile Chat Toggle Added Here */}
                         <div className="md:hidden flex items-center">
                             <button onClick={(e) => { e.stopPropagation(); toggleSidebar(); }} className={`p-2 rounded-full transition-all ${isSidebarOpen ? 'bg-indigo-500 text-white shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'text-gray-400 hover:text-white hover:bg-white/10'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}>
                                 <ChatIcon width={16} height={16} />
@@ -1810,7 +1728,6 @@
                         <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-0">
                             {streamers.length === 0 ? (
                                 <div className="flex-1 flex items-center justify-center text-center animate-fade-in">
-                                    {/* Empty State Simplificado, já que temos o Hero Header */}
                                     <div className="p-8 max-w-md w-full mx-4 opacity-50">
                                         <p className="text-gray-500 text-sm mb-6 leading-relaxed mt-20">{t('empty_desc')}</p>
                                     </div>
@@ -1838,7 +1755,6 @@
                                             </button>
                                         ))}
                                         <div className="flex-1"></div>
-                                        {/* Mobile Close Button */}
                                         <button 
                                             onClick={() => setIsSidebarOpen(false)} 
                                             className="md:hidden flex items-center justify-center w-9 h-full text-gray-400 hover:text-white bg-white/5 border-l border-white/5 active:bg-white/10"
@@ -1849,7 +1765,6 @@
                                     </div>
                                     <div className="flex-1 flex flex-col min-h-0 bg-[#09090b] overflow-hidden">
                                         <div className={`flex-1 relative flex flex-col ${secondaryChatTab ? 'border-b border-white/10' : ''}`}>
-                                            {/* ACTIVE CHAT HEADER */}
                                             {activeStream && (
                                                 <ChatHeader 
                                                     stream={activeStream} 
