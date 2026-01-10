@@ -295,7 +295,7 @@
             border-radius: 99px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: visible; /* Necessário para o menu de Squads não ser cortado */
+            overflow: visible; 
             padding: 0.5rem;
             gap: 0.5rem;
         }
@@ -819,7 +819,7 @@
                     onDragEnd={onDragEnd}
                     onDragOver={(e) => e.preventDefault()}
                 >
-                    <div className={`relative bg-transparent transition-all duration-300 cinema-glow ${isExpanded ? 'w-full h-full ring-1 ring-white/20 aspect-video cinema-glow-expanded' : 'w-full aspect-video'}`}>
+                    <div className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded ? 'ring-1 ring-white/20 cinema-glow-expanded' : ''}`}>
                         <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-200 pointer-events-none ${isExpanded ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                             <div className="flex items-center gap-2 pointer-events-auto">
                                 {isDraggable && (
@@ -1107,7 +1107,7 @@
                     const otherStreams = streamers.filter(s => s.id !== expandedStreamId);
                     if (!expandedStream) return null;
                     return (
-                        <div className="flex flex-col md:flex-row w-full h-full bg-transparent" style={{ paddingTop: isTheaterMode ? '0' : '' }}>
+                        <div className="flex flex-col md:flex-row w-full h-full bg-transparent">
                             <div className={`relative ${otherStreams.length > 0 ? 'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5' : 'w-full'} h-2/3 md:h-full transition-all duration-300 flex items-center justify-center`}>
                                 <StreamPlayer key={expandedStream.id} stream={expandedStream} index={streamers.findIndex(s => s.id === expandedStream.id)} widthClass="w-full" heightClass="h-full" isExpanded={true} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} />
                             </div>
@@ -1124,26 +1124,27 @@
                     );
                 }
 
+                // CÁLCULO DE LARGURA DA GRELHA (GRID)
                 let getWidthClass = (index) => {
-                    const mobileOverride = "w-full sm:w-[calc(50%-4px)] md:w-[calc(33.33%-4px)]";
                     if (layoutMode === 'grid') {
                         if (count === 1) return "w-full";
-                        if (count <= 4) return "w-[calc(50%-4px)]"; 
-                        if (count <= 9) return "w-[calc(33.33%-4px)]"; 
-                        return "w-[calc(25%-4px)]"; 
+                        if (count <= 4) return "w-[calc(50%-1rem)]"; 
+                        if (count <= 9) return "w-[calc(33.33%-1rem)]"; 
+                        return "w-[calc(25%-1rem)]"; 
                     } else {
+                        // Lógica Auto
                         if (count === 1) return "w-full";
-                        if (count === 2) return "w-[calc(50%-4px)] md:w-[calc(50%-4px)]";
-                        if (count === 3) return "w-[calc(50%-4px)] md:w-[calc(33.33%-4px)]"; 
-                        if (count === 4) return "w-[calc(50%-4px)]"; 
-                        if (count === 5) return index < 3 ? "w-[calc(33.33%-4px)]" : "w-[calc(50%-4px)]";
-                        if (count === 6) return "w-[calc(33.33%-4px)]"; 
-                        return mobileOverride;
+                        if (count === 2) return "w-[calc(50%-1rem)]";
+                        if (count === 3) return "w-[calc(33.33%-1rem)]"; 
+                        if (count === 4) return "w-[calc(50%-1rem)]"; 
+                        if (count === 5) return index < 3 ? "w-[calc(33.33%-1rem)]" : "w-[calc(50%-1rem)]";
+                        if (count >= 6) return "w-[calc(33.33%-1rem)]"; 
+                        return "w-full";
                     }
                 };
 
                 return (
-                    <div className="flex flex-wrap justify-center content-center items-center w-full h-full bg-transparent gap-4 p-4 overflow-y-auto" style={{ paddingTop: isTheaterMode ? '0' : '' }}>
+                    <div className="flex flex-wrap justify-center content-center items-center w-full h-full bg-transparent gap-4 p-4 overflow-y-auto scrollbar-hide">
                         {streamers.map((s, index) => (
                             <StreamPlayer key={s.id} stream={s} index={index} widthClass={getWidthClass(index)} heightClass="h-auto" isExpanded={false} isDraggable={true} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} isTheaterMode={isTheaterMode} />
                         ))}
@@ -1172,7 +1173,6 @@
                         onMouseEnter={() => setIsToolbarExpanded(true)}
                         onMouseLeave={() => { setIsToolbarExpanded(false); setShowSquadMenu(false); }}
                     >
-                        {/* MODO CINEMA - SEMPRE VISÍVEL */}
                         <button 
                             onClick={(e) => { e.stopPropagation(); toggleTheaterMode(); }}
                             className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-black transition-all transform active:scale-90 shrink-0 ${isTheaterMode ? 'bg-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white border border-white/10'}`}
@@ -1225,8 +1225,8 @@
                                 <div className="w-[1px] h-6 bg-white/10 mx-1"></div>
                                 
                                 <div className="flex flex-col items-start px-3 py-1 group/credits cursor-default">
-                                    <span className="text-[7px] uppercase font-bold text-gray-500 group-hover/credits:text-ice tracking-[0.2em] leading-none mb-0.5 transition-colors">{t('dev_by')}</span>
-                                    <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-gray-400 group-hover/credits:text-white flex items-center gap-1 font-display font-bold text-[10px] tracking-wide transition-colors">
+                                    <span className="text-[7px] uppercase font-bold text-gray-500 group-hover/credits:text-ice tracking-[0.2em] mb-0.5">{t('dev_by')}</span>
+                                    <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-gray-400 group-hover/credits:text-white flex items-center gap-1 font-display font-bold text-[10px] tracking-wide">
                                         <InstagramIcon width={10} height={10} /> EDUARDO MACÊDO
                                     </a>
                                 </div>
@@ -1286,8 +1286,8 @@
                             </button>
                         </div>
                     </header>
-                    <main className={`flex-1 flex-col md:flex-row overflow-hidden pt-24 ${isTheaterMode ? '!pt-0' : ''} z-10 relative transition-all duration-700 flex`}>
-                        <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-[30vh]">
+                    <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-24 ${isTheaterMode ? '!pt-0' : ''} z-10 relative transition-all duration-700`}>
+                        <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-0">
                             {streamers.length === 0 ? (
                                 <div className="flex-1 flex items-center justify-center text-center animate-fade-in">
                                     <div className="p-8 rounded-2xl bg-surface/50 border border-white/5 backdrop-blur-sm max-w-md w-full mx-4">
@@ -1312,13 +1312,13 @@
                         
                         <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen ? 'translate-y-0 md:translate-x-0 opacity-100' : 'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden'}`} style={{ width: isSidebarOpen ? (window.innerWidth < 768 ? '100%' : `${sidebarWidth}px`) : '0px', height: window.innerWidth < 768 && isSidebarOpen ? '45vh' : 'auto', transitionDuration: isResizing ? '0s' : '300ms' }}>
                             <div className="hidden md:flex absolute left-0 top-0 bottom-0 w-1.5 hover:w-3 items-center justify-center -ml-1.5 z-50 cursor-col-resize group/resizer" onMouseDown={startResizing} onTouchStart={startResizing}><div className="h-8 w-1 rounded-full bg-white/20 group-hover/resizer:bg-accent/80 transition-colors"></div></div>
-                            <div className="flex flex-col h-full w-full">
+                            <div className="flex flex-col h-full w-full overflow-hidden">
                                 <div className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col relative group bg-black/40 border-b border-white/5`} style={{ height: showMap ? `${mapHeight}px` : '0px', transitionDuration: isResizingMap ? '0s' : '300ms' }}>
                                      <iframe src="https://rtirl.com/twitch:119611214" className={`w-full h-full border-none grayscale-[30%] invert-[5%] contrast-125 ${isResizingMap || isResizing ? 'pointer-events-none' : ''}`} scrolling="no"></iframe>
                                      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-[#09090b] to-transparent pointer-events-none flex justify-between items-end"><span className="text-[10px] font-bold text-ice/80 tracking-widest uppercase mb-1 ml-1 drop-shadow-md">{t('realtime_loc')}</span></div>
                                      {showMap && <div className="absolute bottom-0 left-0 right-0 h-2 flex justify-center items-center -mb-1 z-50 cursor-row-resize group/mapresizer" onMouseDown={startMapResizing} onTouchStart={startMapResizing}><div className="w-8 h-1 rounded-full bg-white/20 group-hover/mapresizer:bg-accent/80 transition-colors"></div></div>}
                                 </div>
-                                <div className="flex-1 flex flex-col min-h-0">
+                                <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
                                     <div className="flex bg-surface/50 border-b border-white/5 shrink-0 h-11 px-1 gap-1 items-center overflow-x-auto scrollbar-hide">
                                         <button onClick={() => setShowMap(!showMap)} className={`flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${showMap ? 'border-ice text-white bg-white/5' : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}><MapIcon /> {showMap ? t('hide_btn') : t('map_btn')}</button>
                                         <button onClick={() => setSecondaryChatTab(secondaryChatTab ? null : streamers.find(s => s.id !== activeChatTab)?.id || activeChatTab)} className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ml-1 ${secondaryChatTab ? 'bg-accent/20 text-accent' : 'text-gray-500 hover:text-white hover:bg-white/5'}`} title="Dividir Chat"><SplitIcon /></button>
@@ -1331,7 +1331,7 @@
                                         ))}
                                         <div className="flex-1"></div>
                                     </div>
-                                    <div className="flex-1 flex flex-col min-h-0 bg-[#09090b]">
+                                    <div className="flex-1 flex flex-col min-h-0 bg-[#09090b] overflow-hidden">
                                         <div className={`flex-1 relative ${secondaryChatTab ? 'border-b border-white/10' : ''}`}>
                                             {streamers.map(s => (<div key={`chat-${s.id}`} className={`absolute inset-0 ${activeChatTab === s.id ? 'z-10' : 'hidden'}`}>{s.platform === 'kick' ? <KickChatEmbed streamName={s.name} isResizing={isResizing} idSuffix="-primary"/> : s.platform === 'youtube' ? <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT Indisponível em File</div> : <iframe src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0" />}</div>))}
                                             {streamers.length === 0 && <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-xs">Sem Chat</div>}
