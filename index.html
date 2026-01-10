@@ -19,6 +19,20 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- VERCEL ANALYTICS (Adicionado) -->
+    <!-- Isso ativa a coleta de dados quando hospedado na Vercel -->
+    <script type="module">
+        import { inject } from 'https://esm.sh/@vercel/analytics';
+        
+        // Inicia o analytics
+        inject({
+            mode: 'production', // Força o modo produção para tentar capturar mesmo se não detectar o ambiente, mas idealmente respeita o ambiente real
+            debug: false 
+        });
+        
+        console.log("Vercel Analytics Injected");
+    </script>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
