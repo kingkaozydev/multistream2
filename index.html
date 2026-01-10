@@ -497,16 +497,27 @@
 
         const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, isResizingAny }) => {
             
-            // Helper para gerar URL da Twitch robusta (Correção para evitar parent vazio)
+            // Helper para gerar URL da Twitch robusta
             const getTwitchUrl = () => {
-                // Remove duplicatas e strings vazias para evitar erros de configuração
-                const rawParents = [hostname, "localhost", window.location.hostname];
-                const validParents = rawParents.filter((h, i) => h && h !== "" && rawParents.indexOf(h) === i);
+                // Lista de possíveis hosts para garantir que o embed funcione em vários ambientes locais
+                const candidates = [
+                    hostname,
+                    "localhost", 
+                    "127.0.0.1",
+                    window.location.hostname,
+                    window.location.host // Inclui porta se houver
+                ];
                 
-                // Se nenhum host for detectado (ex: file://), tenta garantir ao menos localhost
-                if (validParents.length === 0) validParents.push("localhost");
+                // Filtra vazios e duplicatas
+                const uniqueParents = [...new Set(candidates.filter(h => h && h.trim() !== ""))];
 
-                const parentQuery = validParents.map(p => `parent=${p}`).join("&");
+                // Remove portas para ficar apenas o domínio (Twitch prefere apenas domínio em alguns casos, mas manteremos host por segurança)
+                const cleanParents = uniqueParents.map(p => p.split(':')[0]); 
+                const finalParents = [...new Set(cleanParents)];
+
+                if (finalParents.length === 0) finalParents.push("localhost");
+
+                const parentQuery = finalParents.map(p => `parent=${p}`).join("&");
                 return `https://player.twitch.tv/?channel=${stream.name}&${parentQuery}&muted=${isGlobalMuted}`;
             };
 
@@ -548,7 +559,7 @@
                         </div>
                         <div className={`w-full h-full pointer-events-none md:pointer-events-auto ${isResizingAny ? 'pointer-events-none' : ''}`}>
                             {/* Key combinada força o reload do iframe quando refreshKey muda */}
-                            {stream.platform === 'twitch' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={getTwitchUrl()} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0"></iframe>}
+                            {stream.platform === 'twitch' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={getTwitchUrl()} height="100%" width="100%" allowFullScreen={true} allow="autoplay; fullscreen; clipboard-write; encrypted-media; picture-in-picture; web-share; storage-access-by-user-activation" className="w-full h-full border-0"></iframe>}
                             {stream.platform === 'kick' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://player.kick.com/${stream.name}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0"></iframe>}
                             {stream.platform === 'youtube' && <iframe key={`${stream.id}-${stream.refreshKey || 0}`} src={`https://www.youtube.com/embed/${stream.name}?autoplay=1&mute=${isGlobalMuted ? 1 : 0}`} height="100%" width="100%" allowFullScreen={true} className="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>}
                         </div>
