@@ -25,9 +25,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <script>
         tailwind.config = {
             theme: {
@@ -280,6 +277,42 @@
         .car-fire { filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.8)); }
         .car-ice { filter: drop-shadow(0 0 10px rgba(165, 243, 252, 0.8)); }
         .car-broken { filter: sepia(100%) saturate(300%) hue-rotate(315deg) contrast(80%); } /* Ferrugem style */
+
+        /* TOOLBAR FLUTUANTE */
+        .floating-toolbar {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 60;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(13, 13, 16, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 99px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .floating-toolbar:hover {
+            transform: translateX(-50%) translateY(-2px);
+            border-color: rgba(165, 243, 252, 0.3);
+        }
+        
+        /* Oculta em theater mode se o mouse não estiver perto */
+        .theater-mode-active .floating-toolbar {
+            transform: translateX(-50%) translateY(150%);
+            opacity: 0;
+        }
+        
+        .floating-toolbar-trigger:hover ~ .floating-toolbar,
+        .floating-toolbar:hover {
+            transform: translateX(-50%) translateY(0) !important;
+            opacity: 1 !important;
+        }
     </style>
 </head>
 <body>
@@ -299,7 +332,7 @@
         };
 
         const ToastContainer = ({ toasts }) => (
-            <div className="fixed bottom-20 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
+            <div className="fixed bottom-24 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
                 {toasts.map(toast => (
                     <div key={toast.id} className="animate-toast-in bg-black/80 backdrop-blur-md border border-white/10 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 min-w-[200px]">
                         {toast.type === 'error' && <span className="text-red-400">✕</span>}
@@ -314,9 +347,6 @@
         const translations = {
             pt: {
                 welcome: "Bem vindos ao",
-                subtitle_p1: "O MAIOR",
-                subtitle_highlight: "SUBATHON EXTREMO",
-                subtitle_p2: "DOS STREAMERS",
                 add_btn: "Adicionar",
                 placeholder_twitch: "Canal Twitch",
                 placeholder_kick: "Canal Kick",
@@ -324,37 +354,41 @@
                 placeholder_default: "Canal",
                 map_btn: "Mapa",
                 hide_btn: "Ocultar",
-                realtime_loc: "Localização em Tempo Real",
-                no_chat: "Nenhum chat selecionado",
+                realtime_loc: "Localização",
                 empty_title: "Seu painel está vazio",
                 empty_desc: "Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior.",
                 dev_by: "Desenvolvido por",
                 lights: "Luzes",
                 chat_btn: "Chat",
                 tt_add: "Adicionar Stream",
-                tt_mute_all: "Mutar todas as lives",
-                tt_unmute_all: "Desmutar todas as lives",
-                tt_lights_exit: "Sair do modo cinema",
-                tt_lights_enter: "Entrar no modo cinema (Tela Cheia)",
-                tt_hide_chat: "Ocultar o chat lateral",
-                tt_show_chat: "Mostrar o chat lateral",
-                chat_visible: "Chat Visível",
-                chat_hidden: "Mostrar Chat",
+                tt_mute_all: "Mutar todas",
+                tt_unmute_all: "Desmutar todas",
+                tt_lights_exit: "Sair modo cinema",
+                tt_lights_enter: "Entrar modo cinema",
+                tt_hide_chat: "Ocultar chat",
+                tt_show_chat: "Mostrar chat",
+                chat_visible: "Visível",
+                chat_hidden: "Chat",
                 warning_title: "Aviso Importante",
-                warning_text: "Você abriu este arquivo diretamente no seu PC. Twitch e YouTube bloqueiam vídeos nesse modo. Para funcionar corretamente, hospede no Vercel ou use um servidor local.",
-                switch_platform: "Clique para trocar a plataforma",
+                warning_text: "Você abriu este arquivo diretamente no seu PC. Twitch e YouTube bloqueiam vídeos nesse modo. Hospede no Vercel.",
                 toast_added: "Streamer adicionado!",
                 toast_exists: "Streamer já está na lista!",
                 toast_empty: "Digite o nome do canal!",
                 intro_title: "NEVETHON",
                 intro_msg: "O COMBUSTÍVEL É O SEU DONATE",
-                intro_sub: "SÓ DURA SE VOCÊ DOAR"
+                intro_sub: "SÓ DURA SE VOCÊ DOAR",
+                layout_auto: "Layout Auto",
+                layout_grid: "Layout Grade",
+                layout_focus: "Modo Foco",
+                squads_title: "Squads",
+                squad_save: "Salvar Squad",
+                squad_load: "Carregar",
+                squad_name_ph: "Nome do Grupo",
+                squad_saved: "Squad Salvo!",
+                squad_deleted: "Squad Removido!"
             },
             en: {
                 welcome: "Welcome to",
-                subtitle_p1: "THE BIGGEST",
-                subtitle_highlight: "EXTREME SUBATHON",
-                subtitle_p2: "OF STREAMERS",
                 add_btn: "Add",
                 placeholder_twitch: "Twitch Channel",
                 placeholder_kick: "Kick Channel",
@@ -362,31 +396,38 @@
                 placeholder_default: "Channel",
                 map_btn: "Map",
                 hide_btn: "Hide",
-                realtime_loc: "Real-time Location",
-                no_chat: "No chat selected",
+                realtime_loc: "Location",
                 empty_title: "Your dashboard is empty",
                 empty_desc: "Add Twitch, Kick channels, or YouTube videos using the top bar.",
                 dev_by: "Developed by",
                 lights: "Lights",
                 chat_btn: "Chat",
                 tt_add: "Add Stream",
-                tt_mute_all: "Mute all streams",
-                tt_unmute_all: "Unmute all streams",
+                tt_mute_all: "Mute all",
+                tt_unmute_all: "Unmute all",
                 tt_lights_exit: "Exit theater mode",
-                tt_lights_enter: "Enter theater mode (Fullscreen)",
-                tt_hide_chat: "Hide sidebar chat",
-                tt_show_chat: "Show sidebar chat",
-                chat_visible: "Chat Visible",
-                chat_hidden: "Show Chat",
+                tt_lights_enter: "Enter theater mode",
+                tt_hide_chat: "Hide chat",
+                tt_show_chat: "Show chat",
+                chat_visible: "Visible",
+                chat_hidden: "Chat",
                 warning_title: "Important Notice",
-                warning_text: "You opened this file directly on your PC. Twitch and YouTube block videos in this mode. For it to work correctly, host it on Vercel or use a local server.",
-                switch_platform: "Click to switch platform",
+                warning_text: "You opened this file directly. Twitch/YouTube block videos in this mode. Host it online.",
                 toast_added: "Streamer added!",
                 toast_exists: "Streamer already listed!",
                 toast_empty: "Enter channel name!",
                 intro_title: "NEVETHON",
                 intro_msg: "FUEL IS YOUR SUB",
-                intro_sub: "ONLY LASTS IF YOU DONATE"
+                intro_sub: "ONLY LASTS IF YOU DONATE",
+                layout_auto: "Auto Layout",
+                layout_grid: "Grid Layout",
+                layout_focus: "Focus Mode",
+                squads_title: "Squads",
+                squad_save: "Save Squad",
+                squad_load: "Load",
+                squad_name_ph: "Group Name",
+                squad_saved: "Squad Saved!",
+                squad_deleted: "Squad Deleted!"
             }
         };
 
@@ -503,30 +544,10 @@
             );
         };
 
-        const FlagBR = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="16" height="12">
-                <g fillRule="evenodd" strokeWidth="1pt">
-                    <path fill="#009b3a" d="M0 0h640v480H0z"/>
-                    <path fill="#fedf00" d="M320 22.1L577.6 240 320 457.9 62.4 240z"/>
-                    <circle fill="#002776" cx="320" cy="240" r="109.2"/>
-                    <path fill="#fff" fillRule="evenodd" d="M62.4 240l257.6 217.9L577.6 240 320 22.1z" opacity=".0"/>
-                    <path fill="#fff" d="M228.6 268.4c52.2-12.7 112.9-7.9 174.4 12.8-3.4 3.7-7.2 7-11.2 10.1-55.9-19-111-23.7-158.6-12.4-1.7-3.7-3.2-7.1-4.6-10.5z"/>
-                </g>
-            </svg>
-        );
-
-        const FlagUS = () => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="16" height="12">
-                <path fill="#bd3d44" d="M0 0h640v480H0"/>
-                <path stroke="#fff" strokeWidth="37" d="M0 55.3h640M0 129h640M0 203h640M0 277h640M0 351h640M0 425h640"/>
-                <path fill="#192f5d" d="M0 0h364.8v258.5H0"/>
-                <marker id="us-a" markerHeight="30" markerWidth="30">
-                    <path fill="#fff" d="M14.7 0l4.5 14L4 14l11.8 8.6-4.5 14L14.7 28l11.4 8.6-4.5-14 11.8-8.6H19.2z"/>
-                </marker>
-                <path fill="none" markerMid="url(#us-a)" d="M0 0L364.8 258.5M0 258.5L364.8 0"/>
-            </svg>
-        );
-
+        const FlagBR = () => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="16" height="12"><g fillRule="evenodd" strokeWidth="1pt"><path fill="#009b3a" d="M0 0h640v480H0z"/><path fill="#fedf00" d="M320 22.1L577.6 240 320 457.9 62.4 240z"/><circle fill="#002776" cx="320" cy="240" r="109.2"/><path fill="#fff" fillRule="evenodd" d="M62.4 240l257.6 217.9L577.6 240 320 22.1z" opacity=".0"/><path fill="#fff" d="M228.6 268.4c52.2-12.7 112.9-7.9 174.4 12.8-3.4 3.7-7.2 7-11.2 10.1-55.9-19-111-23.7-158.6-12.4-1.7-3.7-3.2-7.1-4.6-10.5z"/></g></svg>;
+        const FlagUS = () => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="16" height="12"><path fill="#bd3d44" d="M0 0h640v480H0"/><path stroke="#fff" strokeWidth="37" d="M0 55.3h640M0 129h640M0 203h640M0 277h640M0 351h640M0 425h640"/><path fill="#192f5d" d="M0 0h364.8v258.5H0"/><marker id="us-a" markerHeight="30" markerWidth="30"><path fill="#fff" d="M14.7 0l4.5 14L4 14l11.8 8.6-4.5 14L14.7 28l11.4 8.6-4.5-14 11.8-8.6H19.2z"/></marker><path fill="none" markerMid="url(#us-a)" d="M0 0L364.8 258.5M0 258.5L364.8 0"/></svg>;
+        
+        // ICONS
         const PlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
         const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
         const MessageIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>;
@@ -544,6 +565,14 @@
         const Volume2Icon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>;
         const VolumeXIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>;
         const SplitIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="12" x2="21" y2="12"></line></svg>;
+        
+        // NEW ICONS
+        const GridIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>;
+        const LayoutTemplateIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="21" y1="9" x2="3" y2="9"></line><line x1="9" y1="9" x2="9" y2="21"></line></svg>;
+        const UsersIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
+        const SaveIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>;
+        const XIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
+
         const CarIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>;
         const BrokenCarIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M10 16H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1l2-4h8l2 4h1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-1"/><circle cx="7" cy="16" r="3"/><circle cx="17" cy="16" r="3"/><path d="M15 8l-2 3" strokeWidth="2"/><path d="M9 8l2 3" strokeWidth="2"/></svg>;
 
@@ -557,23 +586,17 @@
 
         const LoadingScreen = ({ isLoading, lang }) => {
             const [visible, setVisible] = useState(true);
-            const [phase, setPhase] = useState(0); // 0: blizzard, 1: fast cars, 2: broken car, 3: text, 4: end
+            const [phase, setPhase] = useState(0); 
             const t = (key) => translations[lang][key];
 
             useEffect(() => {
-                // Sequencia de Animação
                 if (visible) {
-                    setTimeout(() => setPhase(1), 500); // Entram os carros rápidos
-                    setTimeout(() => setPhase(2), 1500); // Entra o carro quebrado
-                    setTimeout(() => setPhase(3), 2800); // Texto dramático
+                    setTimeout(() => setPhase(1), 500);
+                    setTimeout(() => setPhase(2), 1500);
+                    setTimeout(() => setPhase(3), 2800);
                 }
 
                 if (!isLoading) {
-                    // Espera terminar a animação toda antes de liberar, se o loading for muito rápido
-                    const minTime = 4500;
-                    const now = Date.now();
-                    const diff = 4500; // Hardcoded para garantir a experiência cinematográfica
-                    
                     const timer = setTimeout(() => setPhase(4), 4500); 
                     const hideTimer = setTimeout(() => setVisible(false), 5500);
                     return () => { clearTimeout(timer); clearTimeout(hideTimer); };
@@ -585,8 +608,6 @@
             return (
                 <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050507] transition-opacity duration-1000 ease-in-out ${phase === 4 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-150 pointer-events-none"></div>
-                    
-                    {/* Nevasca Pesada */}
                     <div className="absolute inset-0 overflow-hidden pointer-events-none perspective-1000">
                         {[...Array(150)].map((_, i) => (
                             <div key={i} className="absolute bg-white rounded-full animate-blizzard" style={{
@@ -602,11 +623,7 @@
                     </div>
 
                     <div className="relative w-full max-w-4xl h-64 flex items-center justify-center overflow-hidden">
-                        
-                        {/* Pista / Chão (Implícito) */}
                         <div className="absolute bottom-10 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-
-                        {/* Carros Rápidos */}
                         {phase >= 1 && (
                             <div className="absolute inset-0 flex items-center justify-center gap-16 translate-y-4">
                                 <div className="animate-drive-fast opacity-0" style={{ animationDelay: '0.1s' }}>
@@ -620,13 +637,10 @@
                                 </div>
                             </div>
                         )}
-
-                        {/* Carro Quebrado */}
                         {phase >= 2 && (
                             <div className="absolute right-0 bottom-12 animate-drive-slow opacity-0">
                                 <div className="relative animate-rattle">
                                     <BrokenCarIcon className="w-16 h-16 text-amber-800 car-broken transform -scale-x-100" />
-                                    {/* Fumaça */}
                                     <div className="absolute -top-4 right-2 w-4 h-4 bg-gray-500 rounded-full blur-md animate-smoke-puff opacity-0"></div>
                                     <div className="absolute -top-6 right-0 w-3 h-3 bg-gray-400 rounded-full blur-sm animate-smoke-puff opacity-0" style={{ animationDelay: '0.3s' }}></div>
                                     <div className="absolute -top-2 right-4 w-2 h-2 bg-gray-600 rounded-full blur-sm animate-smoke-puff opacity-0" style={{ animationDelay: '0.6s' }}></div>
@@ -634,8 +648,6 @@
                             </div>
                         )}
                     </div>
-
-                    {/* Texto Dramático */}
                     <div className={`relative z-10 text-center space-y-2 p-6 transition-all duration-700 transform ${phase >= 3 ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-10 opacity-0 scale-90'}`}>
                          <h1 className="font-russo text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] italic">
                             {t('intro_title')}
@@ -675,7 +687,6 @@
             }
         };
 
-        // COMPONENTE PLATFORM SELECTOR RESTAURADO
         const PlatformSelector = ({ selected, onSelect }) => {
             const [isOpen, setIsOpen] = useState(false);
             const dropdownRef = useRef(null);
@@ -735,7 +746,6 @@
         };
 
         const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, isResizingAny }) => {
-            
             const getTwitchUrl = () => {
                 const candidates = [hostname, "localhost", "127.0.0.1", window.location.hostname, window.location.host];
                 const uniqueParents = [...new Set(candidates.filter(h => h && h.trim() !== ""))];
@@ -789,20 +799,73 @@
                     </div>
                 </div>
             );
-        }, (prevProps, nextProps) => {
-            return (
-                prevProps.stream.id === nextProps.stream.id &&
-                prevProps.stream.refreshKey === nextProps.stream.refreshKey &&
-                prevProps.widthClass === nextProps.widthClass &&
-                prevProps.heightClass === nextProps.heightClass && 
-                prevProps.style === nextProps.style && 
-                prevProps.isExpanded === nextProps.isExpanded &&
-                prevProps.isDraggable === nextProps.isDraggable &&
-                prevProps.index === nextProps.index &&
-                prevProps.isGlobalMuted === nextProps.isGlobalMuted &&
-                prevProps.isResizingAny === nextProps.isResizingAny
-            );
+        }, (prev, next) => {
+            return prev.stream.id === next.stream.id && prev.stream.refreshKey === next.stream.refreshKey && prev.widthClass === next.widthClass && prev.heightClass === next.heightClass && prev.isExpanded === next.isExpanded && prev.isDraggable === next.isDraggable && prev.index === next.index && prev.isGlobalMuted === next.isGlobalMuted && prev.isResizingAny === next.isResizingAny;
         });
+
+        // SQUADS MENU
+        const SquadsMenu = ({ isOpen, onClose, squads, currentStreamers, onSave, onLoad, onDelete, lang }) => {
+            const [newSquadName, setNewSquadName] = useState("");
+            const menuRef = useRef(null);
+            const t = (key) => translations[lang][key];
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (menuRef.current && !menuRef.current.contains(event.target)) onClose();
+                };
+                if (isOpen) document.addEventListener("mousedown", handleClickOutside);
+                return () => document.removeEventListener("mousedown", handleClickOutside);
+            }, [isOpen, onClose]);
+
+            if (!isOpen) return null;
+
+            return (
+                <div ref={menuRef} className="absolute bottom-16 left-1/2 -translate-x-1/2 w-72 bg-[#121215] border border-white/10 rounded-xl shadow-2xl p-4 animate-slide-up z-[70]">
+                    <div className="flex justify-between items-center mb-3">
+                        <h3 className="text-white font-bold text-sm flex items-center gap-2"><UsersIcon width={16} /> {t('squads_title')}</h3>
+                        <button onClick={onClose} className="text-gray-400 hover:text-white"><XIcon /></button>
+                    </div>
+
+                    <div className="flex gap-2 mb-4">
+                        <input 
+                            type="text" 
+                            placeholder={t('squad_name_ph')}
+                            value={newSquadName} 
+                            onChange={(e) => setNewSquadName(e.target.value)} 
+                            className="flex-1 bg-white/5 border border-white/10 rounded-lg px-2 text-xs text-white focus:outline-none focus:border-accent"
+                        />
+                        <button 
+                            onClick={() => { if(newSquadName) { onSave(newSquadName); setNewSquadName(""); } }} 
+                            className="bg-accent hover:bg-accentHover text-white p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={!newSquadName || currentStreamers.length === 0}
+                            title={t('squad_save')}
+                        >
+                            <SaveIcon />
+                        </button>
+                    </div>
+
+                    <div className="space-y-2 max-h-48 overflow-y-auto pr-1 scrollbar-hide">
+                        {squads.length === 0 && <p className="text-center text-gray-600 text-xs italic">Nenhum squad salvo</p>}
+                        {squads.map(squad => (
+                            <div key={squad.id} className="flex items-center justify-between bg-white/5 p-2 rounded-lg group hover:bg-white/10 transition-colors">
+                                <div className="flex flex-col overflow-hidden">
+                                    <span className="text-xs font-bold text-white truncate">{squad.name}</span>
+                                    <span className="text-[10px] text-gray-500">{squad.streams.length} streams</span>
+                                </div>
+                                <div className="flex gap-1">
+                                    <button onClick={() => onLoad(squad)} className="p-1.5 text-ice hover:bg-ice/10 rounded" title={t('squad_load')}>
+                                        <LayoutIcon />
+                                    </button>
+                                    <button onClick={() => onDelete(squad.id)} className="p-1.5 text-red-400 hover:bg-red-400/10 rounded" title="Excluir">
+                                        <TrashIcon />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
 
         const App = () => {
             const [streamers, setStreamers] = useState([]);
@@ -810,7 +873,7 @@
             const [platform, setPlatform] = useState("twitch");
             const [isSidebarOpen, setIsSidebarOpen] = useState(true);
             const [activeChatTab, setActiveChatTab] = useState(null);
-            const [secondaryChatTab, setSecondaryChatTab] = useState(null); // SPLIT VIEW STATE
+            const [secondaryChatTab, setSecondaryChatTab] = useState(null);
             const [showMap, setShowMap] = useState(true);
             const [expandedStreamId, setExpandedStreamId] = useState(null);
             const [isTheaterMode, setIsTheaterMode] = useState(false);
@@ -821,29 +884,32 @@
             const [mapHeight, setMapHeight] = useState(300);
             const [isResizingMap, setIsResizingMap] = useState(false);
             const [lang, setLang] = useState('pt');
+            const [layoutMode, setLayoutMode] = useState('auto'); // auto, grid
+            const [squads, setSquads] = useState([]);
+            const [showSquadMenu, setShowSquadMenu] = useState(false);
+
             const { toasts, addToast } = useToast();
             const sidebarRef = useRef(null);
-
-            // Refs para Drag and Drop
             const dragItem = useRef(null);
             const dragOverItem = useRef(null);
-
             const [hostname] = useState(() => {
                 if (typeof window !== 'undefined' && window.location.hostname) return window.location.hostname;
                 return "localhost";
             });
             const [isFileProtocol, setIsFileProtocol] = useState(false);
-
             const t = (key) => translations[lang][key];
 
             useEffect(() => {
-                setTimeout(() => setLoading(false), 4500); // Aumentado para acomodar a intro
+                setTimeout(() => setLoading(false), 4500);
                 const saved = localStorage.getItem('multlives-streamers');
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     setStreamers(parsed);
                     if (parsed.length > 0) setActiveChatTab(parsed[0].id);
                 }
+                const savedSquads = localStorage.getItem('multlives-squads');
+                if (savedSquads) setSquads(JSON.parse(savedSquads));
+
                 if (window.location.protocol === 'file:') setIsFileProtocol(true);
             }, []);
 
@@ -851,58 +917,37 @@
                 localStorage.setItem('multlives-streamers', JSON.stringify(streamers));
             }, [streamers]);
 
-            const startResizing = useCallback((e) => {
-                if(e.type === 'mousedown') e.preventDefault(); 
-                setIsResizing(true);
-            }, []);
+            useEffect(() => {
+                localStorage.setItem('multlives-squads', JSON.stringify(squads));
+            }, [squads]);
 
-            const startMapResizing = useCallback((e) => {
-                if(e.type === 'mousedown') e.preventDefault();
-                setIsResizingMap(true);
-            }, []);
-
-            const stopResizing = useCallback(() => {
-                setIsResizing(false);
-                setIsResizingMap(false);
-            }, []);
+            const startResizing = useCallback((e) => { if(e.type === 'mousedown') e.preventDefault(); setIsResizing(true); }, []);
+            const startMapResizing = useCallback((e) => { if(e.type === 'mousedown') e.preventDefault(); setIsResizingMap(true); }, []);
+            const stopResizing = useCallback(() => { setIsResizing(false); setIsResizingMap(false); }, []);
 
             const resize = useCallback((event) => {
                 let clientX, clientY;
-                if (event.type.startsWith('touch')) {
-                    clientX = event.touches[0].clientX;
-                    clientY = event.touches[0].clientY;
-                } else {
-                    clientX = event.clientX;
-                    clientY = event.clientY;
-                }
+                if (event.type.startsWith('touch')) { clientX = event.touches[0].clientX; clientY = event.touches[0].clientY; } 
+                else { clientX = event.clientX; clientY = event.clientY; }
 
                 if (isResizing) {
                     const newWidth = window.innerWidth - clientX;
-                    const maxWidth = Math.max(window.innerWidth * 0.8, 300); // Aumentado limite máximo do chat para telas grandes
-                    if (newWidth > 250 && newWidth < maxWidth) { 
-                        setSidebarWidth(newWidth);
-                    }
+                    const maxWidth = Math.max(window.innerWidth * 0.8, 300);
+                    if (newWidth > 250 && newWidth < maxWidth) setSidebarWidth(newWidth);
                 }
-                
                 if (isResizingMap && sidebarRef.current) {
                     const sidebarRect = sidebarRef.current.getBoundingClientRect();
                     const newHeight = clientY - sidebarRect.top;
-                    if (newHeight > 100 && newHeight < (sidebarRect.height - 150)) {
-                        setMapHeight(newHeight);
-                    }
+                    if (newHeight > 100 && newHeight < (sidebarRect.height - 150)) setMapHeight(newHeight);
                 }
             }, [isResizing, isResizingMap]);
 
             useEffect(() => {
-                window.addEventListener("mousemove", resize);
-                window.addEventListener("mouseup", stopResizing);
-                window.addEventListener("touchmove", resize, { passive: false });
-                window.addEventListener("touchend", stopResizing);
+                window.addEventListener("mousemove", resize); window.addEventListener("mouseup", stopResizing);
+                window.addEventListener("touchmove", resize, { passive: false }); window.addEventListener("touchend", stopResizing);
                 return () => {
-                    window.removeEventListener("mousemove", resize);
-                    window.removeEventListener("mouseup", stopResizing);
-                    window.removeEventListener("touchmove", resize);
-                    window.removeEventListener("touchend", stopResizing);
+                    window.removeEventListener("mousemove", resize); window.removeEventListener("mouseup", stopResizing);
+                    window.removeEventListener("touchmove", resize); window.removeEventListener("touchend", stopResizing);
                 };
             }, [resize, stopResizing]);
 
@@ -910,14 +955,8 @@
                 setStreamers(prev => prev.map(s => s.id === id ? { ...s, refreshKey: Date.now() } : s));
             }, []);
 
-            const toggleGlobalMute = () => {
-                setIsGlobalMuted(!isGlobalMuted);
-            };
-
-            const toggleLang = () => {
-                setLang(prev => prev === 'pt' ? 'en' : 'pt');
-            }
-
+            const toggleGlobalMute = () => setIsGlobalMuted(!isGlobalMuted);
+            const toggleLang = () => setLang(prev => prev === 'pt' ? 'en' : 'pt');
             const getPlaceholder = () => {
                 switch(platform) {
                     case 'twitch': return t('placeholder_twitch');
@@ -929,32 +968,18 @@
 
             const addStreamer = (e) => {
                 e.preventDefault();
-                if (!inputVal.trim()) {
-                    addToast(t('toast_empty'), 'info');
-                    return;
-                }
+                if (!inputVal.trim()) { addToast(t('toast_empty'), 'info'); return; }
                 let cleanName = inputVal.trim();
                 if (platform === 'youtube') {
                     const ytRegex = /(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/;
                     const match = cleanName.match(ytRegex);
                     if (match) cleanName = match[1];
-                } else {
-                    cleanName = cleanName.toLowerCase();
-                }
+                } else { cleanName = cleanName.toLowerCase(); }
 
-                if (streamers.some(s => s.name === cleanName && s.platform === platform)) {
-                    addToast(t('toast_exists'), 'error');
-                    return;
-                }
-                const newStreamer = {
-                    id: Date.now().toString(),
-                    name: cleanName,
-                    platform: platform,
-                    refreshKey: Date.now()
-                };
+                if (streamers.some(s => s.name === cleanName && s.platform === platform)) { addToast(t('toast_exists'), 'error'); return; }
+                const newStreamer = { id: Date.now().toString(), name: cleanName, platform: platform, refreshKey: Date.now() };
                 const updatedList = [...streamers, newStreamer];
                 setStreamers(updatedList);
-                // setSidebarOrder(prev => [...prev, newStreamer.id]); 
                 setInputVal("");
                 if (updatedList.length === 1) setActiveChatTab(newStreamer.id);
                 addToast(t('toast_added'), 'success');
@@ -964,28 +989,15 @@
                 if (expandedStreamId === id) setExpandedStreamId(null);
                 setStreamers(current => {
                     const newList = current.filter(s => s.id !== id);
-                    if (activeChatTab === id && newList.length > 0) {
-                        setActiveChatTab(newList[0].id);
-                    } else if (newList.length === 0) {
-                        setActiveChatTab(null);
-                    }
+                    if (activeChatTab === id && newList.length > 0) setActiveChatTab(newList[0].id);
+                    else if (newList.length === 0) setActiveChatTab(null);
                     return newList;
                 });
-                // setSidebarOrder(prev => prev.filter(sid => sid !== id)); 
             }, [expandedStreamId, activeChatTab]);
 
-            const toggleFocusMode = useCallback((id) => {
-                setExpandedStreamId(prev => prev === id ? null : id);
-            }, []);
-
-            const handleDragStart = useCallback((e, index) => {
-                dragItem.current = index;
-            }, []);
-
-            const handleDragEnter = useCallback((e, index) => {
-                dragOverItem.current = index;
-            }, []);
-
+            const toggleFocusMode = useCallback((id) => { setExpandedStreamId(prev => prev === id ? null : id); }, []);
+            const handleDragStart = useCallback((e, index) => { dragItem.current = index; }, []);
+            const handleDragEnter = useCallback((e, index) => { dragOverItem.current = index; }, []);
             const handleDragEnd = useCallback(() => {
                 setStreamers(currentStreamers => {
                     const _streamers = [...currentStreamers];
@@ -994,31 +1006,13 @@
                     _streamers.splice(dragOverItem.current, 0, draggedItemContent);
                     return _streamers;
                 });
-                dragItem.current = null;
-                dragOverItem.current = null;
+                dragItem.current = null; dragOverItem.current = null;
             }, []);
-
-            const handleTabDragStart = (e, index) => {
-                // setDraggedTabIndex(index);
-            };
-
-            const handleTabDragOver = (e, index) => {
-                e.preventDefault();
-                // if (draggedTabIndex === null || draggedTabIndex === index) return;
-                // const newOrder = [...sidebarOrder];
-                // const draggedId = newOrder[draggedTabIndex];
-                // newOrder.splice(draggedTabIndex, 1);
-                // newOrder.splice(index, 0, draggedId);
-                // setSidebarOrder(newOrder);
-                // setDraggedTabIndex(index);
-            };
-
-            const handleTabDragEnd = () => {
-                // setDraggedTabIndex(null);
-            };
-
+            const handleTabDragStart = (e, index) => {};
+            const handleTabDragOver = (e, index) => { e.preventDefault(); };
+            const handleTabDragEnd = () => {};
             const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-
+            
             const toggleTheaterMode = () => {
                 if (!document.fullscreenElement) {
                     document.documentElement.requestFullscreen().catch(err => console.log(err));
@@ -1028,14 +1022,39 @@
                     setIsTheaterMode(false);
                 }
             };
-
             useEffect(() => {
-                const handleFsChange = () => {
-                    setIsTheaterMode(!!document.fullscreenElement);
-                };
+                const handleFsChange = () => setIsTheaterMode(!!document.fullscreenElement);
                 document.addEventListener('fullscreenchange', handleFsChange);
                 return () => document.removeEventListener('fullscreenchange', handleFsChange);
             }, []);
+
+            // Layout Handlers
+            const changeLayout = (mode) => {
+                setLayoutMode(mode);
+                if (mode === 'focus') {
+                    if (streamers.length > 0) setExpandedStreamId(streamers[0].id);
+                } else {
+                    setExpandedStreamId(null);
+                }
+            };
+
+            // Squad Handlers
+            const saveSquad = (name) => {
+                const newSquad = { id: Date.now(), name, streams: streamers };
+                setSquads(prev => [...prev, newSquad]);
+                addToast(t('squad_saved'), 'success');
+            };
+            const loadSquad = (squad) => {
+                setStreamers(squad.streams);
+                if (squad.streams.length > 0) setActiveChatTab(squad.streams[0].id);
+                setLayoutMode('auto');
+                setExpandedStreamId(null);
+                setShowSquadMenu(false);
+            };
+            const deleteSquad = (id) => {
+                setSquads(prev => prev.filter(s => s.id !== id));
+                addToast(t('squad_deleted'), 'info');
+            };
 
             const renderStreams = () => {
                 const count = streamers.length;
@@ -1048,49 +1067,13 @@
                     return (
                         <div className="flex flex-col md:flex-row w-full h-full bg-transparent" style={{ paddingTop: isTheaterMode ? '0' : '' }}>
                             <div className={`relative ${otherStreams.length > 0 ? 'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5' : 'w-full'} h-2/3 md:h-full transition-all duration-300 flex items-center justify-center`}>
-                                <StreamPlayer 
-                                    key={expandedStream.id} 
-                                    stream={expandedStream} 
-                                    index={streamers.findIndex(s => s.id === expandedStream.id)}
-                                    widthClass="w-full"
-                                    heightClass="h-full"
-                                    isExpanded={true}
-                                    isDraggable={false}
-                                    onDragStart={handleDragStart}
-                                    onDragEnter={handleDragEnter}
-                                    onDragEnd={handleDragEnd}
-                                    onToggleFocus={toggleFocusMode}
-                                    onRemove={removeStreamer}
-                                    onRefresh={refreshStream}
-                                    hostname={hostname}
-                                    isGlobalMuted={isGlobalMuted}
-                                    isResizingAny={isResizingAny}
-                                />
+                                <StreamPlayer key={expandedStream.id} stream={expandedStream} index={streamers.findIndex(s => s.id === expandedStream.id)} widthClass="w-full" heightClass="h-full" isExpanded={true} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} />
                             </div>
-                            
                             {otherStreams.length > 0 && (
                                 <div className="w-full md:w-1/5 h-1/3 md:h-full bg-transparent overflow-x-auto md:overflow-y-auto md:overflow-x-hidden">
                                     <div className="min-h-full w-full flex flex-row md:flex-col justify-center gap-1">
                                         {otherStreams.map((s, idx) => (
-                                            <StreamPlayer 
-                                                key={s.id} 
-                                                stream={s} 
-                                                index={streamers.findIndex(st => st.id === s.id)}
-                                                widthClass="w-1/2 md:w-full min-w-[150px] md:min-w-0"
-                                                heightClass="h-auto" 
-                                                style={{ flexGrow: 0 }} 
-                                                isExpanded={false}
-                                                isDraggable={false}
-                                                onDragStart={handleDragStart}
-                                                onDragEnter={handleDragEnter}
-                                                onDragEnd={handleDragEnd}
-                                                onToggleFocus={toggleFocusMode}
-                                                onRemove={removeStreamer}
-                                                onRefresh={refreshStream}
-                                                hostname={hostname}
-                                                isGlobalMuted={isGlobalMuted}
-                                                isResizingAny={isResizingAny}
-                                            />
+                                            <StreamPlayer key={s.id} stream={s} index={streamers.findIndex(st => st.id === s.id)} widthClass="w-1/2 md:w-full min-w-[150px] md:min-w-0" heightClass="h-auto" style={{ flexGrow: 0 }} isExpanded={false} isDraggable={false} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} />
                                         ))}
                                     </div>
                                 </div>
@@ -1099,58 +1082,94 @@
                     );
                 }
 
+                // Grid Calculations based on layoutMode
+                let getWidthClass = (index) => {
+                    const mobileOverride = "w-full sm:w-[calc(50%-4px)] md:w-[calc(33.33%-4px)]";
+                    
+                    if (layoutMode === 'grid') {
+                        // Strict Grid Logic
+                        if (count === 1) return "w-full";
+                        if (count <= 4) return "w-[calc(50%-4px)]"; // 2x2
+                        if (count <= 9) return "w-[calc(33.33%-4px)]"; // 3x3
+                        return "w-[calc(25%-4px)]"; // 4x4
+                    } else {
+                        // Auto Logic (Original)
+                        if (count === 1) return "w-full";
+                        if (count === 2) return "w-[calc(50%-4px)] md:w-[calc(50%-4px)]";
+                        if (count === 3) return "w-[calc(50%-4px)] md:w-[calc(33.33%-4px)]"; 
+                        if (count === 4) return "w-[calc(50%-4px)]"; 
+                        if (count === 5) return index < 3 ? "w-[calc(33.33%-4px)]" : "w-[calc(50%-4px)]";
+                        if (count === 6) return "w-[calc(33.33%-4px)]"; 
+                        return mobileOverride;
+                    }
+                };
+
                 return (
                     <div className="flex flex-wrap justify-center content-center items-center w-full h-full bg-transparent gap-1 p-1 overflow-y-auto" style={{ paddingTop: isTheaterMode ? '0' : '' }}>
-                        {streamers.map((s, index) => {
-                            let width = "w-full"; 
-                            if (count === 1) width = "w-full";
-                            else if (count === 2) width = "w-[calc(50%-4px)] md:w-[calc(50%-4px)]";
-                            else if (count === 3) width = "w-[calc(50%-4px)] md:w-[calc(33.33%-4px)]"; 
-                            else if (count === 4) width = "w-[calc(50%-4px)]"; 
-                            else if (count === 5) width = index < 3 ? "w-[calc(33.33%-4px)]" : "w-[calc(50%-4px)]";
-                            else if (count === 6) width = "w-[calc(33.33%-4px)]"; 
-                            else if (count > 6) width = "w-[calc(33.33%-4px)]"; 
-                            const mobileOverride = "w-full sm:w-[calc(50%-4px)] md:w-[calc(33.33%-4px)]";
-
-                            return <StreamPlayer 
-                                key={s.id} 
-                                stream={s} 
-                                index={index} 
-                                widthClass={count > 6 ? mobileOverride : width} 
-                                heightClass="h-auto" 
-                                isExpanded={false}
-                                isDraggable={true}
-                                onDragStart={handleDragStart}
-                                onDragEnter={handleDragEnter}
-                                onDragEnd={handleDragEnd}
-                                onToggleFocus={toggleFocusMode}
-                                onRemove={removeStreamer}
-                                onRefresh={refreshStream}
-                                hostname={hostname}
-                                isGlobalMuted={isGlobalMuted}
-                                isResizingAny={isResizingAny}
-                            />;
-                        })}
+                        {streamers.map((s, index) => (
+                            <StreamPlayer key={s.id} stream={s} index={index} widthClass={getWidthClass(index)} heightClass="h-auto" isExpanded={false} isDraggable={true} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} onToggleFocus={toggleFocusMode} onRemove={removeStreamer} onRefresh={refreshStream} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizingAny} />
+                        ))}
                     </div>
                 );
             };
 
             return (
-                <div className="flex flex-col h-screen bg-background text-gray-100 font-sans selection:bg-accent selection:text-white relative overflow-hidden">
+                <div className={`flex flex-col h-screen bg-background text-gray-100 font-sans selection:bg-accent selection:text-white relative overflow-hidden ${isTheaterMode ? 'theater-mode-active' : ''}`}>
                     <LoadingScreen isLoading={loading} lang={lang} />
                     <ToastContainer toasts={toasts} />
                     
-                    {/* EFEITO AURORA RESTAURADO */}
                     <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-ice/20 blur-[120px] animate-aurora-1 mix-blend-screen"></div>
                          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/20 blur-[120px] animate-aurora-2 mix-blend-screen"></div>
                     </div>
 
-                    {(isResizing || isResizingMap) && (
-                        <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>
-                    )}
-
+                    {(isResizing || isResizingMap) && <div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}
                     {isTheaterMode && <div className="header-trigger-area"></div>}
+
+                    {/* CONTROL BAR (LAYOUT + SQUADS) */}
+                    <div className="floating-toolbar-trigger fixed bottom-0 left-0 right-0 h-16 z-50"></div>
+                    <div className="floating-toolbar">
+                         <button 
+                            onClick={() => changeLayout('auto')}
+                            className={`p-2 rounded-full transition-all ${layoutMode === 'auto' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
+                            title={t('layout_auto')}
+                        >
+                            <LayoutIcon width={18} height={18} />
+                        </button>
+                        <button 
+                            onClick={() => changeLayout('grid')}
+                            className={`p-2 rounded-full transition-all ${layoutMode === 'grid' && !expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
+                            title={t('layout_grid')}
+                        >
+                            <GridIcon width={18} height={18} />
+                        </button>
+                        <button 
+                            onClick={() => changeLayout('focus')}
+                            className={`p-2 rounded-full transition-all ${expandedStreamId ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
+                            title={t('layout_focus')}
+                        >
+                            <LayoutTemplateIcon width={18} height={18} />
+                        </button>
+                        <div className="w-[1px] h-6 bg-white/10 mx-1"></div>
+                        <button 
+                            onClick={() => setShowSquadMenu(!showSquadMenu)}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu ? 'bg-accent text-white' : 'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}
+                        >
+                            <UsersIcon width={14} height={14} />
+                            {t('squads_title')}
+                        </button>
+                        
+                        <SquadsMenu 
+                            isOpen={showSquadMenu} 
+                            onClose={() => setShowSquadMenu(false)}
+                            squads={squads}
+                            currentStreamers={streamers}
+                            onSave={saveSquad}
+                            onLoad={loadSquad}
+                            onDelete={deleteSquad}
+                            lang={lang}
+                        />
+                    </div>
 
                     <header className={`h-16 px-3 sm:px-6 flex items-center justify-between shrink-0 ${isTheaterMode ? 'theater-mode-header glass-header' : 'glass-header'}`}>
                         <div className={`flex items-center gap-2 sm:gap-4`}>
@@ -1182,50 +1201,17 @@
                         </form>
                         
                         <div className={`flex items-center gap-1 sm:gap-3 border-l border-white/10 pl-2 md:pl-6 shrink-0`}>
-                            <button 
-                                onClick={toggleLang}
-                                className="hidden sm:flex p-2 rounded-lg bg-surface hover:bg-white/10 border border-white/5 transition-all active:scale-95 items-center justify-center w-9 h-9"
-                                title={lang === 'pt' ? "Mudar para Inglês" : "Switch to Portuguese"}
-                            >
+                            <button onClick={toggleLang} className="hidden sm:flex p-2 rounded-lg bg-surface hover:bg-white/10 border border-white/5 transition-all active:scale-95 items-center justify-center w-9 h-9" title={lang === 'pt' ? "Mudar para Inglês" : "Switch to Portuguese"}>
                                 {lang === 'pt' ? <FlagBR /> : <FlagUS />}
                             </button>
-
-                            <button 
-                                onClick={toggleGlobalMute} 
-                                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all shadow-lg ${
-                                    isGlobalMuted 
-                                        ? 'bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500/30' 
-                                        : 'bg-surface hover:bg-white/10 text-gray-400 hover:text-white border border-white/5'
-                                }`}
-                                title={isGlobalMuted ? t('tt_unmute_all') : t('tt_mute_all')}
-                            >
+                            <button onClick={toggleGlobalMute} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all shadow-lg ${isGlobalMuted ? 'bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500/30' : 'bg-surface hover:bg-white/10 text-gray-400 hover:text-white border border-white/5'}`} title={isGlobalMuted ? t('tt_unmute_all') : t('tt_mute_all')}>
                                 {isGlobalMuted ? <VolumeXIcon /> : <Volume2Icon />}
                             </button>
-
-                            <button 
-                                onClick={toggleSidebar} 
-                                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all shadow-lg ${
-                                    !isSidebarOpen 
-                                        ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/50 hover:bg-indigo-500/30' 
-                                        : 'bg-surface hover:bg-white/10 text-gray-400 hover:text-white border border-white/5'
-                                }`}
-                                title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}
-                            >
-                                <LayoutIcon />
-                                <span className="hidden sm:inline">{isSidebarOpen ? t('chat_visible') : t('chat_hidden')}</span>
+                            <button onClick={toggleSidebar} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all shadow-lg ${!isSidebarOpen ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/50 hover:bg-indigo-500/30' : 'bg-surface hover:bg-white/10 text-gray-400 hover:text-white border border-white/5'}`} title={isSidebarOpen ? t('tt_hide_chat') : t('tt_show_chat')}>
+                                <LayoutIcon /> <span className="hidden sm:inline">{isSidebarOpen ? t('chat_visible') : t('chat_hidden')}</span>
                             </button>
-
-                            <button 
-                                onClick={toggleTheaterMode} 
-                                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all shadow-lg ${
-                                    isTheaterMode 
-                                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500/30' 
-                                        : 'bg-surface hover:bg-white/10 text-gray-400 hover:text-white border border-white/5'
-                                }`}
-                                title={isTheaterMode ? t('tt_lights_exit') : t('tt_lights_enter')}
-                            >
-                                {isTheaterMode ? <SunIcon /> : <MoonIcon />}
-                                <span className="hidden sm:inline">{isTheaterMode ? t('lights') : t('lights')}</span>
+                            <button onClick={toggleTheaterMode} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all shadow-lg ${isTheaterMode ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500/30' : 'bg-surface hover:bg-white/10 text-gray-400 hover:text-white border border-white/5'}`} title={isTheaterMode ? t('tt_lights_exit') : t('tt_lights_enter')}>
+                                {isTheaterMode ? <SunIcon /> : <MoonIcon />} <span className="hidden sm:inline">{isTheaterMode ? t('lights') : t('lights')}</span>
                             </button>
                         </div>
                     </header>
@@ -1250,135 +1236,44 @@
                                         </div>
                                     </div>
                                 </div>
-                            ) : (
-                                renderStreams()
-                            )}
+                            ) : renderStreams()}
                         </div>
                         
-                        <div 
-                            ref={sidebarRef}
-                            className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative
-                                ${isSidebarOpen 
-                                    ? 'translate-y-0 md:translate-x-0 opacity-100' 
-                                    : 'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden'
-                                }
-                            `}
-                            style={{ 
-                                width: isSidebarOpen ? (window.innerWidth < 768 ? '100%' : `${sidebarWidth}px`) : '0px',
-                                height: window.innerWidth < 768 && isSidebarOpen ? '45vh' : 'auto',
-                                transitionDuration: isResizing ? '0s' : '300ms'
-                            }}
-                        >
-                            <div 
-                                className="hidden md:flex absolute left-0 top-0 bottom-0 w-1.5 hover:w-3 items-center justify-center -ml-1.5 z-50 cursor-col-resize group/resizer"
-                                onMouseDown={startResizing}
-                                onTouchStart={startResizing}
-                            >
-                                <div className="h-8 w-1 rounded-full bg-white/20 group-hover/resizer:bg-accent/80 transition-colors"></div>
-                            </div>
-
+                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen ? 'translate-y-0 md:translate-x-0 opacity-100' : 'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden'}`} style={{ width: isSidebarOpen ? (window.innerWidth < 768 ? '100%' : `${sidebarWidth}px`) : '0px', height: window.innerWidth < 768 && isSidebarOpen ? '45vh' : 'auto', transitionDuration: isResizing ? '0s' : '300ms' }}>
+                            <div className="hidden md:flex absolute left-0 top-0 bottom-0 w-1.5 hover:w-3 items-center justify-center -ml-1.5 z-50 cursor-col-resize group/resizer" onMouseDown={startResizing} onTouchStart={startResizing}><div className="h-8 w-1 rounded-full bg-white/20 group-hover/resizer:bg-accent/80 transition-colors"></div></div>
                             <div className="flex flex-col h-full w-full">
-                                <div 
-                                    className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col relative group bg-black/40 border-b border-white/5`}
-                                    style={{ 
-                                        height: showMap ? `${mapHeight}px` : '0px',
-                                        transitionDuration: isResizingMap ? '0s' : '300ms'
-                                    }}
-                                >
-                                     <iframe 
-                                        src="https://rtirl.com/twitch:119611214" 
-                                        className={`w-full h-full border-none grayscale-[30%] invert-[5%] contrast-125 ${isResizingMap || isResizing ? 'pointer-events-none' : ''}`} 
-                                        scrolling="no"
-                                     ></iframe>
-                                     <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-[#09090b] to-transparent pointer-events-none flex justify-between items-end">
-                                        <span className="text-[10px] font-bold text-ice/80 tracking-widest uppercase mb-1 ml-1 drop-shadow-md">{t('realtime_loc')}</span>
-                                     </div>
-                                     {showMap && (
-                                        <div 
-                                            className="absolute bottom-0 left-0 right-0 h-2 flex justify-center items-center -mb-1 z-50 cursor-row-resize group/mapresizer"
-                                            onMouseDown={startMapResizing}
-                                            onTouchStart={startMapResizing}
-                                        >
-                                            <div className="w-8 h-1 rounded-full bg-white/20 group-hover/mapresizer:bg-accent/80 transition-colors"></div>
-                                        </div>
-                                     )}
+                                <div className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col relative group bg-black/40 border-b border-white/5`} style={{ height: showMap ? `${mapHeight}px` : '0px', transitionDuration: isResizingMap ? '0s' : '300ms' }}>
+                                     <iframe src="https://rtirl.com/twitch:119611214" className={`w-full h-full border-none grayscale-[30%] invert-[5%] contrast-125 ${isResizingMap || isResizing ? 'pointer-events-none' : ''}`} scrolling="no"></iframe>
+                                     <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-[#09090b] to-transparent pointer-events-none flex justify-between items-end"><span className="text-[10px] font-bold text-ice/80 tracking-widest uppercase mb-1 ml-1 drop-shadow-md">{t('realtime_loc')}</span></div>
+                                     {showMap && <div className="absolute bottom-0 left-0 right-0 h-2 flex justify-center items-center -mb-1 z-50 cursor-row-resize group/mapresizer" onMouseDown={startMapResizing} onTouchStart={startMapResizing}><div className="w-8 h-1 rounded-full bg-white/20 group-hover/mapresizer:bg-accent/80 transition-colors"></div></div>}
                                 </div>
-
                                 <div className="flex-1 flex flex-col min-h-0">
                                     <div className="flex bg-surface/50 border-b border-white/5 shrink-0 h-11 px-1 gap-1 items-center overflow-x-auto scrollbar-hide">
-                                        <button onClick={() => setShowMap(!showMap)} className={`flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${showMap ? 'border-ice text-white bg-white/5' : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}>
-                                            <MapIcon /> {showMap ? t('hide_btn') : t('map_btn')}
-                                        </button>
-
-                                        {/* SPLIT VIEW TOGGLE */}
-                                        <button 
-                                            onClick={() => setSecondaryChatTab(secondaryChatTab ? null : streamers.find(s => s.id !== activeChatTab)?.id || activeChatTab)}
-                                            className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ml-1 ${secondaryChatTab ? 'bg-accent/20 text-accent' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
-                                            title="Dividir Chat"
-                                        >
-                                            <SplitIcon />
-                                        </button>
-                                        
+                                        <button onClick={() => setShowMap(!showMap)} className={`flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${showMap ? 'border-ice text-white bg-white/5' : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}><MapIcon /> {showMap ? t('hide_btn') : t('map_btn')}</button>
+                                        <button onClick={() => setSecondaryChatTab(secondaryChatTab ? null : streamers.find(s => s.id !== activeChatTab)?.id || activeChatTab)} className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ml-1 ${secondaryChatTab ? 'bg-accent/20 text-accent' : 'text-gray-500 hover:text-white hover:bg-white/5'}`} title="Dividir Chat"><SplitIcon /></button>
                                         <div className="w-[1px] h-4 bg-white/10 mx-1 shrink-0"></div>
-                                        
-                                        {streamers.map((s, idx) => {
-                                            // const isActive = activeChatTab === s.id;
-                                            return (
-                                            <button 
-                                                key={s.id} 
-                                                onClick={() => setActiveChatTab(s.id)} 
-                                                draggable={true}
-                                                onDragStart={(e) => handleTabDragStart(e, idx)}
-                                                onDragOver={(e) => handleTabDragOver(e, idx)}
-                                                onDragEnd={handleTabDragEnd}
-                                                className={`group flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${activeChatTab === s.id ? getActiveTabStyle(s.platform) : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}
-                                            >
+                                        {streamers.map((s, idx) => (
+                                            <button key={s.id} onClick={() => setActiveChatTab(s.id)} draggable={true} onDragStart={(e) => handleTabDragStart(e, idx)} onDragOver={(e) => handleTabDragOver(e, idx)} onDragEnd={handleTabDragEnd} className={`group flex items-center gap-2 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-all border-b-2 ${activeChatTab === s.id ? getActiveTabStyle(s.platform) : 'border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}>
                                                 <span className={`flex items-center justify-center w-3 h-3 ${getPlatformColor(s.platform)}`}>{s.platform === 'twitch' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}{s.platform === 'kick' && <span className="block w-1.5 h-1.5 rounded-full bg-current"></span>}{s.platform === 'youtube' && <YoutubeIcon />}</span>
-                                                <span className={`truncate transition-all duration-300 ease-in-out ${activeChatTab === s.id ? 'max-w-[120px] opacity-100' : 'max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100'}`}>
-                                                    {s.name}
-                                                </span>
+                                                <span className={`truncate transition-all duration-300 ease-in-out ${activeChatTab === s.id ? 'max-w-[120px] opacity-100' : 'max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100'}`}>{s.name}</span>
                                             </button>
-                                            );
-                                        })}
-
+                                        ))}
                                         <div className="flex-1"></div>
                                     </div>
-
                                     <div className="flex-1 flex flex-col min-h-0 bg-[#09090b]">
-                                        {/* PRIMARY CHAT */}
                                         <div className={`flex-1 relative ${secondaryChatTab ? 'border-b border-white/10' : ''}`}>
-                                            {streamers.map(s => (
-                                                <div key={`chat-${s.id}`} className={`absolute inset-0 ${activeChatTab === s.id ? 'z-10' : 'hidden'}`}>
-                                                    {s.platform === 'kick' ? <KickChatEmbed streamName={s.name} isResizing={isResizing} idSuffix="-primary"/> :
-                                                     s.platform === 'youtube' ? <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT Indisponível em File</div> :
-                                                     <iframe src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0" />}
-                                                </div>
-                                            ))}
+                                            {streamers.map(s => (<div key={`chat-${s.id}`} className={`absolute inset-0 ${activeChatTab === s.id ? 'z-10' : 'hidden'}`}>{s.platform === 'kick' ? <KickChatEmbed streamName={s.name} isResizing={isResizing} idSuffix="-primary"/> : s.platform === 'youtube' ? <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT Indisponível em File</div> : <iframe src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0" />}</div>))}
                                             {streamers.length === 0 && <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-xs">Sem Chat</div>}
                                         </div>
-
-                                        {/* SECONDARY CHAT (SPLIT VIEW) */}
                                         {secondaryChatTab && (
                                             <div className="flex-1 relative flex flex-col">
                                                 <div className="h-8 bg-surface/80 border-b border-white/5 flex items-center px-2 gap-2">
                                                     <span className="text-[10px] font-bold text-accent uppercase">Chat 2</span>
-                                                    <select 
-                                                        className="bg-transparent text-xs text-white outline-none flex-1"
-                                                        value={secondaryChatTab}
-                                                        onChange={(e) => setSecondaryChatTab(e.target.value)}
-                                                    >
-                                                        {streamers.map(s => <option key={s.id} value={s.id} className="text-black">{s.name}</option>)}
-                                                    </select>
+                                                    <select className="bg-transparent text-xs text-white outline-none flex-1" value={secondaryChatTab} onChange={(e) => setSecondaryChatTab(e.target.value)}>{streamers.map(s => <option key={s.id} value={s.id} className="text-black">{s.name}</option>)}</select>
                                                     <button onClick={() => setSecondaryChatTab(null)} className="ml-auto text-gray-500 hover:text-white">✕</button>
                                                 </div>
                                                 <div className="flex-1 relative">
-                                                    {streamers.map(s => (
-                                                        <div key={`sec-chat-${s.id}`} className={`absolute inset-0 ${secondaryChatTab === s.id ? 'z-10' : 'hidden'}`}>
-                                                            {s.platform === 'kick' ? <KickChatEmbed streamName={s.name} isResizing={isResizing} idSuffix="-secondary"/> :
-                                                             s.platform === 'youtube' ? <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT Indisponível</div> :
-                                                             <iframe src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0" />}
-                                                        </div>
-                                                    ))}
+                                                    {streamers.map(s => (<div key={`sec-chat-${s.id}`} className={`absolute inset-0 ${secondaryChatTab === s.id ? 'z-10' : 'hidden'}`}>{s.platform === 'kick' ? <KickChatEmbed streamName={s.name} isResizing={isResizing} idSuffix="-secondary"/> : s.platform === 'youtube' ? <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT Indisponível</div> : <iframe src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0" />}</div>))}
                                                 </div>
                                             </div>
                                         )}
@@ -1388,18 +1283,20 @@
                         </div>
                     </main>
                     
-                    <div className="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-none z-40">
-                        <div className="pointer-events-auto flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">
-                            <span className="text-[10px] uppercase font-bold text-ice drop-shadow-[0_0_5px_rgba(165,243,252,0.5)] tracking-widest">{t('dev_by')}</span>
-                            <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white flex items-center gap-1 font-display font-black text-sm transition-transform hover:scale-105" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>
-                                <InstagramIcon width={14} height={14} /> EDUARDO MACÊDO
+                    {/* CRÉDITOS - REDESIGN ELEGANTE E SUTIL */}
+                    <div className={`fixed bottom-5 left-6 z-50 flex items-center gap-3 transition-all duration-500 ease-out group ${isTheaterMode ? 'opacity-0 translate-y-4 hover:opacity-100 hover:translate-y-0' : 'opacity-30 hover:opacity-100'}`}>
+                         <div className="w-8 h-[1px] bg-white/40 group-hover:bg-ice group-hover:w-12 transition-all duration-500"></div>
+                         <div className="flex flex-col items-start">
+                             <span className="text-[8px] uppercase font-bold text-gray-400 group-hover:text-ice tracking-[0.2em] leading-none mb-1 transition-colors">{t('dev_by')}</span>
+                             <a href="https://instagram.com/oeduardomacedo" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white flex items-center gap-1.5 font-display font-bold text-[11px] tracking-wide transition-colors">
+                                <InstagramIcon width={11} height={11} /> EDUARDO MACÊDO
                             </a>
-                        </div>
+                         </div>
                     </div>
+
                 </div>
             );
         };
-
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
