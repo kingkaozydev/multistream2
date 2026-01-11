@@ -174,7 +174,14 @@
 
         const AdUnit = memo(({ className = "", style = {} }) => {
             const adRef = useRef(null);
+            const [visible, setVisible] = useState(true);
+
             useEffect(() => {
+                // Timer para ocultar o anúncio automaticamente após 30 segundos de exibição
+                const hideTimer = setTimeout(() => {
+                    setVisible(false);
+                }, 30000);
+
                 try {
                     // Pequeno delay para garantir renderização correta em layouts dinâmicos
                     const timer = setTimeout(() => {
@@ -182,12 +189,17 @@
                             window.adsbygoogle.push({});
                         }
                     }, 500);
-                    return () => clearTimeout(timer);
+                    return () => {
+                        clearTimeout(timer);
+                        clearTimeout(hideTimer);
+                    };
                 } catch (e) { console.error("AdSense Error", e); }
             }, []);
 
+            if (!visible) return null;
+
             return (
-                <div className={`w-full bg-[#121215]/50 border border-white/5 rounded-xl overflow-hidden relative min-h-[100px] flex items-center justify-center ${className}`} style={style}>
+                <div className={`w-full bg-[#121215]/50 border border-white/5 rounded-xl overflow-hidden relative min-h-[100px] flex items-center justify-center animate-fade-in ${className}`} style={style}>
                     <span className="text-[8px] text-gray-700 uppercase tracking-widest absolute top-1 right-2 z-10 font-bold">Publicidade</span>
                     <ins className="adsbygoogle w-full block"
                          data-ad-format="fluid"
