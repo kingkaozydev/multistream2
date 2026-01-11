@@ -157,6 +157,21 @@
         const PopoutIcon = ({width, height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>;
         const InstagramIcon = ({width,height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
 
+        const fetchAvatar = async (platform, name) => {
+            try {
+                if (platform === 'twitch') {
+                    const res = await fetch(`https://decapi.me/twitch/avatar/${name}`);
+                    const url = await res.text();
+                    return url && url.startsWith('http') ? url : null;
+                }
+                // Kick e YT requerem proxy/backend para evitar CORS, mantemos fallback
+                return null; 
+            } catch (e) {
+                console.warn(`Erro ao buscar avatar para ${name}:`, e);
+                return null;
+            }
+        };
+
         const AdUnit = memo(() => {
             const adRef = useRef(null);
             useEffect(() => {
@@ -359,7 +374,34 @@
 
             useEffect(() => { const h=(e)=>{if(e.clientY<120||streamers.length===0){setIsHeaderVisible(true);if(headerTimerRef.current)clearTimeout(headerTimerRef.current)}else if(streamers.length>0&&!isTheaterMode&&isHeaderVisible){if(headerTimerRef.current)clearTimeout(headerTimerRef.current);headerTimerRef.current=setTimeout(()=>setIsHeaderVisible(false),1500)}}; window.addEventListener('mousemove',h); return ()=>{window.removeEventListener('mousemove',h);if(headerTimerRef.current)clearTimeout(headerTimerRef.current)} }, [streamers.length,isTheaterMode,isHeaderVisible]);
             useEffect(() => { let i; if(sleepTimer.active&&sleepTimer.endTime){i=setInterval(()=>{if(Date.now()>=sleepTimer.endTime){setIsTheaterMode(true);setIsGlobalMuted(true);if(window.innerWidth<768)setIsSidebarOpen(false);setSleepTimer({active:false,endTime:null,duration:null});addToast(t('sleep_msg'),'info');const o=document.querySelector('.blackout-overlay');if(o)o.style.opacity='1'}},1000)} return ()=>clearInterval(i) }, [sleepTimer,addToast,t]);
-            useEffect(() => { setTimeout(()=>setLoading(false),4500); const s=localStorage.getItem('multlives-streamers'); if(s)try{const p=JSON.parse(s),c=Array.isArray(p)?p.filter(x=>x&&x.id&&x.name):[];setStreamers(c);if(c.length)setActiveChatTab(c[0].id)}catch{} const sq=localStorage.getItem('multlives-squads');if(sq)setSquads(JSON.parse(sq)); const h=localStorage.getItem('multlives-history');if(h)setSearchHistory(JSON.parse(h)); const d=setTimeout(()=>setShowDonatePopup(true),15000); return ()=>clearTimeout(d) }, []);
+            
+            // Atualizado para carregar e buscar avatares faltantes
+            useEffect(() => { 
+                setTimeout(()=>setLoading(false),4500); 
+                const s=localStorage.getItem('multlives-streamers'); 
+                if(s) {
+                    try {
+                        const p=JSON.parse(s);
+                        const c=Array.isArray(p)?p.filter(x=>x&&x.id&&x.name):[];
+                        setStreamers(c);
+                        if(c.length) setActiveChatTab(c[0].id);
+                        
+                        // Busca avatares para streamers salvos que não tenham
+                        c.forEach(async (st) => {
+                            if (!st.avatar && st.platform === 'twitch') {
+                                const url = await fetchAvatar(st.platform, st.name);
+                                if (url) {
+                                    setStreamers(prev => prev.map(x => x.id === st.id ? {...x, avatar: url} : x));
+                                }
+                            }
+                        });
+                    } catch {}
+                }
+                const sq=localStorage.getItem('multlives-squads');if(sq)setSquads(JSON.parse(sq)); 
+                const h=localStorage.getItem('multlives-history');if(h)setSearchHistory(JSON.parse(h)); 
+                const d=setTimeout(()=>setShowDonatePopup(true),15000); return ()=>clearTimeout(d) 
+            }, []);
+
             useEffect(() => localStorage.setItem('multlives-streamers',JSON.stringify(streamers)), [streamers]);
             useEffect(() => localStorage.setItem('multlives-squads',JSON.stringify(squads)), [squads]);
             useEffect(() => localStorage.setItem('multlives-history',JSON.stringify(searchHistory)), [searchHistory]);
@@ -378,17 +420,29 @@
 
             const toggleTheaterMode = () => setIsTheaterMode(p=>{const n=!p; if(n&&window.innerWidth<768)setIsSidebarOpen(false); return n});
 
-            const addStreamer = (e) => { 
+            const addStreamer = async (e) => { 
                 e.preventDefault(); 
                 if(!inputVal.trim()) return addToast(t('toast_empty'),'info'); 
                 let n=inputVal.trim(); 
                 if(platform==='youtube'){ const m=n.match(/(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/); if(m)n=m[1] } else n=n.toLowerCase(); 
                 if(streamers.some(s=>s.name===n&&s.platform===platform)) return addToast(t('toast_exists'),'error'); 
-                const ns={id:Date.now().toString(),name:n,platform,refreshKey:Date.now(),customWidth:null}; 
+                
+                const ns={id:Date.now().toString(),name:n,platform,refreshKey:Date.now(),customWidth:null, avatar: null}; 
+                
+                // Adiciona primeiro para feedback rápido
                 setStreamers(p=>[...p,ns]); 
                 setSearchHistory(p=>{ const historyItem={name:n,platform}; const f=p.filter(x=>!(x.name===historyItem.name&&x.platform===historyItem.platform)); return [historyItem,...f].slice(0,5) }); 
-                setInputVal(""); if(!streamers.length) setActiveChatTab(ns.id); addToast(t('toast_added'),'success') 
+                setInputVal(""); 
+                if(!streamers.length) setActiveChatTab(ns.id); 
+                addToast(t('toast_added'),'success');
+
+                // Busca avatar em background
+                const avatarUrl = await fetchAvatar(platform, n);
+                if(avatarUrl) {
+                    setStreamers(prev => prev.map(s => s.id === ns.id ? {...s, avatar: avatarUrl} : s));
+                }
             };
+            
             const removeStreamer = (id) => { if(expandedStreamId===id)setExpandedStreamId(null); setStreamers(p=>{const n=p.filter(x=>x.id!==id);if(activeChatTab===id)setActiveChatTab(n[0]?.id||null);return n}) };
             const handleDragEnd = () => { setIsDragging(false); if(dragItem.current!==null&&dragOverItem.current!==null&&dragItem.current!==dragOverItem.current)setStreamers(p=>{if(!p[dragItem.current]||(dragOverItem.current>=p.length&&dragOverItem.current<0))return p;const c=[...p],d=c[dragItem.current];c.splice(dragItem.current,1);c.splice(dragOverItem.current,0,d);return c}); dragItem.current=null; dragOverItem.current=null };
             const changeLayout = (m) => { setLayoutMode(m); if(m==='auto'||m==='grid')setStreamers(p=>p.map(s=>({...s,customWidth:null}))); setExpandedStreamId(m==='focus'&&streamers.length?streamers[0].id:null) };
@@ -466,10 +520,14 @@
                                         <div className="w-8 h-[1px] bg-white/10"></div>
                                         {streamers.map(s => (
                                             <Tooltip key={s.id} text={s.name} className="w-10 h-10">
-                                                <button onClick={() => setActiveChatTab(s.id)} className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all border-2 ${activeChatTab === s.id ? (s.platform==='twitch'?'border-[#9146ff] bg-[#9146ff]/20 text-white shadow-[0_0_10px_rgba(145,70,255,0.4)]' : s.platform==='kick'?'border-[#53fc18] bg-[#53fc18]/20 text-white shadow-[0_0_10px_rgba(83,252,24,0.4)]' : s.platform==='youtube'?'border-[#ff0000] bg-[#ff0000]/20 text-white shadow-[0_0_10px_rgba(255,0,0,0.4)]' : 'border-white text-white') : 'border-transparent bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'}`}>
-                                                    {activeChatTab === s.id && <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-r-full"></div>}
-                                                    <span className="font-bold text-xs uppercase">{s.name.substring(0, 2)}</span>
-                                                    <div className="absolute -bottom-1 -right-1 bg-[#121215] rounded-full p-[2px]">
+                                                <button onClick={() => setActiveChatTab(s.id)} className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all border-2 overflow-hidden ${activeChatTab === s.id ? (s.platform==='twitch'?'border-[#9146ff] bg-[#9146ff]/20 text-white shadow-[0_0_10px_rgba(145,70,255,0.4)]' : s.platform==='kick'?'border-[#53fc18] bg-[#53fc18]/20 text-white shadow-[0_0_10px_rgba(83,252,24,0.4)]' : s.platform==='youtube'?'border-[#ff0000] bg-[#ff0000]/20 text-white shadow-[0_0_10px_rgba(255,0,0,0.4)]' : 'border-white text-white') : 'border-transparent bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'}`}>
+                                                    {activeChatTab === s.id && <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-r-full z-10"></div>}
+                                                    {s.avatar ? (
+                                                        <img src={s.avatar} alt={s.name} className="w-full h-full object-cover rounded-full" />
+                                                    ) : (
+                                                        <span className="font-bold text-xs uppercase">{s.name.substring(0, 2)}</span>
+                                                    )}
+                                                    <div className="absolute -bottom-1 -right-1 bg-[#121215] rounded-full p-[2px] z-10">
                                                         <div className={`w-3 h-3 rounded-full flex items-center justify-center text-[6px] ${getPlatformColor(s.platform)}`}>{getPlatformIcon(s.platform)}</div>
                                                     </div>
                                                 </button>
