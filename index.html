@@ -265,7 +265,7 @@
                     </div>
                 </div>
             );
-        }, (p, n) => p.stream.id===n.stream.id && p.stream.refreshKey===n.stream.refreshKey && p.widthClass===n.widthClass && p.isExpanded===n.isExpanded && p.isDragging===n.isDragging && p.stream.customWidth===n.stream.customWidth && p.isResizingAny===n.isResizingAny && p.isGlobalMuted===n.isGlobalMuted && p.isTheaterMode===n.isTheaterMode);
+        }, (p, n) => p.stream.id===n.stream.id && p.stream.refreshKey===n.stream.refreshKey && p.widthClass===n.widthClass && p.isExpanded===n.isExpanded && p.isDragging===n.isDragging && p.stream.customWidth===n.stream.customWidth && p.isResizingAny===n.isResizingAny && p.isGlobalMuted===n.isGlobalMuted && p.isTheaterMode===n.isTheaterMode && p.style?.height === n.style?.height);
 
         const SquadsMenu = ({ isOpen, onClose, squads, currentStreamers, onSave, onLoad, onDelete, lang }) => {
             const [newSquadName, setNewSquadName] = useState(""), menuRef = useRef(null), t = (key) => translations[lang][key];
@@ -332,73 +332,9 @@
 
             const togglePip = useCallback(async () => {
                 if (pipWindow) { pipWindow.close(); setPipWindow(null); return; }
-                
-                const copyStyles = (targetDoc) => {
-                    [...document.styleSheets].forEach((styleSheet) => {
-                        try {
-                            if (styleSheet.cssRules) {
-                                const newStyle = targetDoc.createElement('style');
-                                [...styleSheet.cssRules].forEach(rule => newStyle.appendChild(targetDoc.createTextNode(rule.cssText)));
-                                targetDoc.head.appendChild(newStyle);
-                            } else if (styleSheet.href) {
-                                const newLink = targetDoc.createElement('link');
-                                newLink.rel = 'stylesheet';
-                                newLink.href = styleSheet.href;
-                                targetDoc.head.appendChild(newLink);
-                            }
-                        } catch (e) {
-                            if (styleSheet.ownerNode) targetDoc.head.appendChild(styleSheet.ownerNode.cloneNode(true));
-                        }
-                    });
-                    const twScript = document.querySelector('script[src*="tailwindcss"]');
-                    if (twScript) { const s = targetDoc.createElement('script'); s.src = twScript.src; targetDoc.head.appendChild(s); }
-                    targetDoc.body.className = "bg-[#09090b] text-white overflow-hidden";
-                };
-
-                // Tenta API nativa Document PiP (Chrome/Edge)
-                if (typeof window !== 'undefined' && window.documentPictureInPicture) {
-                    try {
-                        const w = await window.documentPictureInPicture.requestWindow({ width: 800, height: 600 });
-                        copyStyles(w.document);
-                        w.addEventListener("pagehide", () => setPipWindow(null));
-                        setPipWindow(w);
-                        return;
-                    } catch (err) {
-                        console.error("PiP Error:", err);
-                    }
-                }
-
-                // Fallback para Firefox/Outros: Pop-up Window
-                try {
-                    const w = window.open("", "_blank", "width=800,height=600,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes");
-                    if (!w) {
-                        addToast("Pop-up bloqueado. Permita para usar.", 'error');
-                        return;
-                    }
-                    
-                    // Pequeno delay para garantir que o documento esteja pronto
-                    setTimeout(() => {
-                        w.document.title = "MultLives - Player Flutuante";
-                        copyStyles(w.document);
-                        
-                        // Handler para limpar estado quando fechar
-                        const timer = setInterval(() => {
-                            if (w.closed) {
-                                clearInterval(timer);
-                                setPipWindow(null);
-                            }
-                        }, 500);
-                        
-                        w.addEventListener("beforeunload", () => {
-                            setPipWindow(null);
-                        });
-                        
-                        setPipWindow(w);
-                    }, 100);
-                } catch (err) {
-                    console.error("Popup Fallback Error:", err);
-                    addToast("Erro ao abrir janela.", 'error');
-                }
+                const copyStyles = (targetDoc) => { [...document.styleSheets].forEach((styleSheet) => { try { if (styleSheet.cssRules) { const newStyle = targetDoc.createElement('style'); [...styleSheet.cssRules].forEach(rule => newStyle.appendChild(targetDoc.createTextNode(rule.cssText))); targetDoc.head.appendChild(newStyle); } else if (styleSheet.href) { const newLink = targetDoc.createElement('link'); newLink.rel = 'stylesheet'; newLink.href = styleSheet.href; targetDoc.head.appendChild(newLink); } } catch (e) { if (styleSheet.ownerNode) targetDoc.head.appendChild(styleSheet.ownerNode.cloneNode(true)); } }); const twScript = document.querySelector('script[src*="tailwindcss"]'); if (twScript) { const s = targetDoc.createElement('script'); s.src = twScript.src; targetDoc.head.appendChild(s); } targetDoc.body.className = "bg-[#09090b] text-white overflow-hidden"; };
+                if (typeof window !== 'undefined' && window.documentPictureInPicture) { try { const w = await window.documentPictureInPicture.requestWindow({ width: 800, height: 600 }); copyStyles(w.document); w.addEventListener("pagehide", () => setPipWindow(null)); setPipWindow(w); return; } catch (err) { console.error("PiP Error:", err); } }
+                try { const w = window.open("", "_blank", "width=800,height=600,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes"); if (!w) { addToast("Pop-up bloqueado. Permita para usar.", 'error'); return; } setTimeout(() => { w.document.title = "MultLives - Player Flutuante"; copyStyles(w.document); const timer = setInterval(() => { if (w.closed) { clearInterval(timer); setPipWindow(null); } }, 500); w.addEventListener("beforeunload", () => { setPipWindow(null); }); setPipWindow(w); }, 100); } catch (err) { console.error("Popup Fallback Error:", err); addToast("Erro ao abrir janela.", 'error'); }
             }, [pipWindow, t, addToast]);
 
             const toggleTheaterMode = () => setIsTheaterMode(p=>{const n=!p; if(n&&window.innerWidth<768)setIsSidebarOpen(false); return n});
@@ -407,39 +343,54 @@
                 e.preventDefault(); 
                 if(!inputVal.trim()) return addToast(t('toast_empty'),'info'); 
                 let n=inputVal.trim(); 
-                if(platform==='youtube'){
-                    const m=n.match(/(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/);
-                    if(m)n=m[1]
-                } else n=n.toLowerCase(); 
-                
+                if(platform==='youtube'){ const m=n.match(/(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/); if(m)n=m[1] } else n=n.toLowerCase(); 
                 if(streamers.some(s=>s.name===n&&s.platform===platform)) return addToast(t('toast_exists'),'error'); 
-                
                 const ns={id:Date.now().toString(),name:n,platform,refreshKey:Date.now(),customWidth:null}; 
                 setStreamers(p=>[...p,ns]); 
-                
-                setSearchHistory(p=>{
-                    const historyItem={name:n,platform}; // Correção: nome da variável alterado para evitar conflito com 'n'
-                    const f=p.filter(x=>!(x.name===historyItem.name&&x.platform===historyItem.platform)); 
-                    return [historyItem,...f].slice(0,5)
-                }); 
-                
-                setInputVal(""); 
-                if(!streamers.length) setActiveChatTab(ns.id); 
-                addToast(t('toast_added'),'success') 
+                setSearchHistory(p=>{ const historyItem={name:n,platform}; const f=p.filter(x=>!(x.name===historyItem.name&&x.platform===historyItem.platform)); return [historyItem,...f].slice(0,5) }); 
+                setInputVal(""); if(!streamers.length) setActiveChatTab(ns.id); addToast(t('toast_added'),'success') 
             };
             const removeStreamer = (id) => { if(expandedStreamId===id)setExpandedStreamId(null); setStreamers(p=>{const n=p.filter(x=>x.id!==id);if(activeChatTab===id)setActiveChatTab(n[0]?.id||null);return n}) };
             const handleDragEnd = () => { setIsDragging(false); if(dragItem.current!==null&&dragOverItem.current!==null&&dragItem.current!==dragOverItem.current)setStreamers(p=>{if(!p[dragItem.current]||(dragOverItem.current>=p.length&&dragOverItem.current<0))return p;const c=[...p],d=c[dragItem.current];c.splice(dragItem.current,1);c.splice(dragOverItem.current,0,d);return c}); dragItem.current=null; dragOverItem.current=null };
             const changeLayout = (m) => { setLayoutMode(m); if(m==='auto'||m==='grid')setStreamers(p=>p.map(s=>({...s,customWidth:null}))); setExpandedStreamId(m==='focus'&&streamers.length?streamers[0].id:null) };
             const handleContextAction = (a, sid) => { setContextMenu({...contextMenu,isOpen:false}); const s=streamers.find(x=>x.id===sid); if(!s&&a!=='close')return; switch(a){case 'refresh':setStreamers(p=>p.map(x=>x.id===sid?{...x,refreshKey:Date.now()}:x));break;case 'focus':setExpandedStreamId(p=>p===sid?null:sid);break;case 'copy':const u=s.platform==='twitch'?`https://twitch.tv/${s.name}`:s.platform==='kick'?`https://kick.com/${s.name}`:`https://youtube.com/watch?v=${s.name}`;navigator.clipboard.writeText(u);addToast("Link copiado!",'success');break;case 'close':removeStreamer(sid);break} };
 
-            const renderStreamItem = (s, i, w, h, exp=false) => s ? <StreamPlayer key={s.id} stream={s} index={i} widthClass={w} heightClass={h} isExpanded={exp} isDraggable={!exp} onDragStart={(e,idx)=>{setIsDragging(true);dragItem.current=idx}} onDragEnter={(e,idx)=>dragOverItem.current=idx} onDragEnd={handleDragEnd} onToggleFocus={id=>setExpandedStreamId(p=>p===id?null:id)} onRemove={removeStreamer} onRefresh={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,refreshKey:Date.now()}:x))} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizing||isResizingMap||resizingStreamId!==null} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,customWidth:null}:x))} onContextMenu={(e,sid)=>{e.preventDefault();let x=e.clientX,y=e.clientY;if(x+192>window.innerWidth)x=window.innerWidth-192-10;if(y+160>window.innerHeight)y=window.innerHeight-160-10;setContextMenu({isOpen:true,x,y,streamId:sid})}} /> : null;
-            const renderStreams = () => { if(expandedStreamId){const m=streamers.find(s=>s.id===expandedStreamId),o=streamers.filter(s=>s.id!==expandedStreamId);if(!m)return null;return <div className="flex flex-col md:flex-row w-full h-full bg-transparent"><div className={`relative ${o.length?'w-full md:w-4/5 border-b md:border-b-0 md:border-r border-white/5':'w-full'} h-2/3 md:h-full flex items-center justify-center`}>{renderStreamItem(m,streamers.findIndex(x=>x.id===m.id),"w-full","h-full",true)}</div>{o.length>0&&<div className="w-full md:w-1/5 h-1/3 md:h-full overflow-auto"><div className="min-h-full flex flex-row md:flex-col justify-center gap-1">{o.map(s=>renderStreamItem(s,streamers.findIndex(x=>x.id===s.id),"w-full min-w-[150px]","h-auto"))}</div></div>}</div>} const cnt=streamers.length,getW=i=>{if(layoutMode==='grid')return cnt<=1?"w-full":cnt<=4?"w-full md:w-[calc(50%-1rem)]":cnt<=9?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(25%-1rem)]";return cnt===1?"w-full":cnt===2||cnt===4?"w-full md:w-[calc(50%-1rem)]":cnt===3||cnt>=6?"w-full md:w-[calc(33.33%-1rem)]":i<3?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(50%-1rem)]"};return (
-                <div className="w-full h-full overflow-y-auto scrollbar-hide z-20 relative overscroll-y-contain touch-pan-y" style={{WebkitOverflowScrolling:'touch'}}>
-                    <div className="min-h-full flex flex-wrap justify-center content-center items-center gap-4 p-4">
-                        {streamers.map((s,i)=>renderStreamItem(s,i,getW(i),"h-auto"))}
+            const renderStreamItem = (s, i, w, h, exp=false, extraStyle={}) => s ? <StreamPlayer key={s.id} stream={s} index={i} widthClass={w} heightClass={h} style={extraStyle} isExpanded={exp} isDraggable={!exp && !expandedStreamId} onDragStart={(e,idx)=>{setIsDragging(true);dragItem.current=idx}} onDragEnter={(e,idx)=>dragOverItem.current=idx} onDragEnd={handleDragEnd} onToggleFocus={id=>setExpandedStreamId(p=>p===id?null:id)} onRemove={removeStreamer} onRefresh={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,refreshKey:Date.now()}:x))} hostname={hostname} isGlobalMuted={isGlobalMuted} isResizingAny={isResizing||isResizingMap||resizingStreamId!==null} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,customWidth:null}:x))} onContextMenu={(e,sid)=>{e.preventDefault();let x=e.clientX,y=e.clientY;if(x+192>window.innerWidth)x=window.innerWidth-192-10;if(y+160>window.innerHeight)y=window.innerHeight-160-10;setContextMenu({isOpen:true,x,y,streamId:sid})}} /> : null;
+            
+            const renderStreams = () => {
+                const isFocusMode = !!expandedStreamId && streamers.some(s => s.id === expandedStreamId);
+                
+                if (isFocusMode) {
+                    const expandedStream = streamers.find(s => s.id === expandedStreamId);
+                    const expandedIndex = streamers.findIndex(s => s.id === expandedStreamId);
+                    const sideStreams = streamers.map((s, i) => ({ s, i })).filter(item => item.s.id !== expandedStreamId);
+                    
+                    return (
+                        <div className="w-full h-full flex flex-col md:flex-row bg-background overflow-hidden">
+                            <div className="flex-1 h-[40vh] md:h-full relative order-1 md:order-1">
+                                {renderStreamItem(expandedStream, expandedIndex, "w-full h-full", "", true)}
+                            </div>
+                            {sideStreams.length > 0 && (
+                                <div className="w-full md:w-[320px] h-auto md:h-full bg-surface/30 border-t md:border-t-0 md:border-l border-white/5 flex flex-row md:flex-col items-center md:justify-center p-2 gap-2 order-2 md:order-2 shrink-0 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden scrollbar-hide">
+                                    {sideStreams.map(({ s, i }) => renderStreamItem(s, i, "w-[240px] md:w-full shrink-0", "h-auto aspect-video", false))}
+                                </div>
+                            )}
+                        </div>
+                    );
+                }
+
+                const cnt = streamers.length;
+                const getW = i => { if(layoutMode==='grid')return cnt<=1?"w-full":cnt<=4?"w-full md:w-[calc(50%-1rem)]":cnt<=9?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(25%-1rem)]";return cnt===1?"w-full":cnt===2||cnt===4?"w-full md:w-[calc(50%-1rem)]":cnt===3||cnt>=6?"w-full md:w-[calc(33.33%-1rem)]":i<3?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(50%-1rem)]"};
+
+                return (
+                    <div className="w-full h-full overflow-y-auto scrollbar-hide z-20 relative overscroll-y-contain touch-pan-y" style={{WebkitOverflowScrolling:'touch'}}>
+                        <div className="min-h-full flex flex-wrap justify-center content-center items-center gap-4 p-4">
+                            {streamers.map((s, i) => renderStreamItem(s, i, getW(i), "h-auto", false))}
+                        </div>
                     </div>
-                </div>
-            ); };
+                );
+            };
+
             const renderContent = () => pipWindow ? createPortal(<div className="h-full w-full bg-[#09090b] flex flex-col">{renderStreams()}</div>, pipWindow.document.body) || <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in"><div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-pulse-glow"><ExternalLinkIcon width={48} height={48} className="text-ice" /></div><h2 className="text-2xl font-bold text-white mb-2">{t('pip_active')}</h2><p className="text-gray-400 max-w-sm mb-8">{t('pip_desc')}</p><button onClick={togglePip} className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-bold hover:scale-105">{t('pip_bring_back')}</button></div> : renderStreams();
 
             return (
