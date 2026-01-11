@@ -200,7 +200,16 @@
             return (
                 <div className={outerClassName} style={{ maxHeight: '280px', ...style }}>
                     <div className={`w-full bg-[#121215]/50 border border-white/5 rounded-xl overflow-hidden relative min-h-[100px] flex items-center justify-center animate-fade-in ${className}`} style={{ maxHeight: '100%' }}>
-                        <span className="text-[8px] text-gray-700 uppercase tracking-widest absolute top-1 right-2 z-10 font-bold">Publicidade</span>
+                        <span className="text-[8px] text-gray-700 uppercase tracking-widest absolute top-1 left-2 z-10 font-bold pointer-events-none">Publicidade</span>
+                        {onExpire && (
+                            <button 
+                                onClick={(e) => { e.stopPropagation(); onExpire(); }}
+                                className="absolute top-1 right-1 z-20 p-1.5 text-gray-400 hover:text-white bg-black/40 hover:bg-red-500/80 rounded-full transition-all backdrop-blur-sm shadow-sm"
+                                title="Fechar anúncio"
+                            >
+                                <XIcon width={10} height={10} />
+                            </button>
+                        )}
                         <ins className="adsbygoogle w-full block"
                              style={{ display: 'block' }}
                              data-ad-format="fluid"
