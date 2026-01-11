@@ -172,18 +172,15 @@
             }
         };
 
-        const AdUnit = memo(({ className = "", outerClassName = "", style = {} }) => {
+        const AdUnit = memo(({ className = "", outerClassName = "", style = {}, onExpire }) => {
             const adRef = useRef(null);
-            const [visible, setVisible] = useState(true);
 
             useEffect(() => {
-                // Timer para ocultar o anúncio automaticamente após 30 segundos de exibição
                 const hideTimer = setTimeout(() => {
-                    setVisible(false);
+                    if (onExpire) onExpire();
                 }, 30000);
 
                 try {
-                    // Pequeno delay para garantir renderização correta em layouts dinâmicos
                     const timer = setTimeout(() => {
                         if (window.adsbygoogle && adRef.current && adRef.current.innerHTML === "") {
                             window.adsbygoogle.push({});
@@ -194,9 +191,7 @@
                         clearTimeout(hideTimer);
                     };
                 } catch (e) { console.error("AdSense Error", e); }
-            }, []);
-
-            if (!visible) return null;
+            }, [onExpire]);
 
             return (
                 <div className={outerClassName}>
@@ -384,6 +379,7 @@
             const [resizingStreamId, setResizingStreamId] = useState(null), [pipWindow, setPipWindow] = useState(null), [searchHistory, setSearchHistory] = useState([]), [showHistory, setShowHistory] = useState(false);
             const [contextMenu, setContextMenu] = useState({ isOpen: false, x: 0, y: 0, streamId: null }), [sleepTimer, setSleepTimer] = useState({ active: false, endTime: null, duration: null });
             const [soloStreamId, setSoloStreamId] = useState(null);
+            const [adsHidden, setAdsHidden] = useState(false);
             
             const headerTimerRef = useRef(null), toolbarTimeoutRef = useRef(null), { toasts, addToast } = useToast(), sidebarRef = useRef(null);
             const dragItem = useRef(null), dragOverItem = useRef(null), startResizeX = useRef(0), startResizeWidth = useRef(0);
@@ -483,9 +479,11 @@
                             {sideStreams.length > 0 && (
                                 <div className="w-full md:w-[320px] h-auto md:h-full bg-surface/30 border-t md:border-t-0 md:border-l border-white/5 flex flex-row md:flex-col items-center md:justify-center p-2 gap-2 order-2 md:order-2 shrink-0 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden scrollbar-hide">
                                     {sideStreams.map(({ s, i }) => renderStreamItem(s, i, "w-[240px] md:w-full shrink-0", "h-auto aspect-video", false))}
-                                    <div className="w-[240px] md:w-full shrink-0 aspect-video p-1">
-                                        <AdUnit outerClassName="w-full h-full" className="h-full bg-black/40" />
-                                    </div>
+                                    {!adsHidden && (
+                                        <div className="w-[240px] md:w-full shrink-0 aspect-video p-1">
+                                            <AdUnit outerClassName="w-full h-full" className="h-full bg-black/40" onExpire={() => setAdsHidden(true)} />
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -499,10 +497,11 @@
                     <div className="w-full h-full overflow-y-auto scrollbar-hide z-20 relative overscroll-y-contain touch-pan-y" style={{WebkitOverflowScrolling:'touch'}}>
                         <div className="min-h-full flex flex-wrap justify-center content-center items-center gap-4 p-4">
                             {streamers.map((s, i) => renderStreamItem(s, i, getW(i), "h-auto", false))}
-                            {streamers.length > 0 && (
+                            {streamers.length > 0 && !adsHidden && (
                                 <AdUnit 
                                     outerClassName={`${getW(streamers.length)} h-auto min-h-[200px] flex items-center justify-center p-1`} 
                                     className="h-full w-full bg-black/20 hover:bg-black/40 transition-colors" 
+                                    onExpire={() => setAdsHidden(true)}
                                 />
                             )}
                         </div>
@@ -575,7 +574,7 @@
                                         </div>
                                         <div className="flex-1 flex flex-col min-h-0 bg-[#09090b] overflow-hidden transition-opacity duration-500 ease-out md:opacity-80 md:hover:opacity-100">{[activeChatTab,secondaryChatTab].filter(Boolean).map((tid,idx)=>{const s=streamers.find(st=>st.id===tid);if(!s)return null;const isSec=idx===1;return <div key={isSec?'sec':'pri'} className={`flex-1 relative flex flex-col ${isSec?'border-t border-white/10':''}`}>{isSec?<div className="h-8 bg-surface/80 border-b border-white/5 flex items-center px-2 gap-2"><span className="text-[10px] font-bold text-accent uppercase">Chat 2</span><select className="bg-transparent text-xs text-white outline-none flex-1" value={secondaryChatTab} onChange={e=>setSecondaryChatTab(e.target.value)}>{streamers.map(st=><option key={st.id} value={st.id} className="text-black">{st.name}</option>)}</select><button onClick={()=>setSecondaryChatTab(null)} className="ml-auto text-gray-500 hover:text-white">✕</button></div>:<div className="h-9 bg-[#121215] border-b border-white/5 flex items-center justify-between px-3 shrink-0 z-20 shadow-sm"><div className="flex items-center gap-2"><div className={`flex items-center justify-center w-5 h-5 rounded bg-white/5 ${getPlatformColor(s.platform)}`}>{getPlatformIcon(s.platform)}</div><span className="text-xs font-bold text-white tracking-tight">{s.name}</span><span className="text-[9px] uppercase tracking-widest text-gray-500 border border-white/10 px-1.5 rounded bg-white/5">{s.platform} chat</span></div><div className="flex items-center gap-1"><button onClick={()=>setChatRefreshTriggers(p=>({...p,[s.id]:Date.now()}))} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors"><RefreshCwIcon width={12} height={12}/></button><button onClick={()=>{if(s.platform==='twitch')window.open(`https://www.twitch.tv/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else if(s.platform==='kick')window.open(`https://kick.com/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else window.open(`https://www.youtube.com/live_chat?v=${s.name}`,`c-${s.name}`,"width=400,height=600")}} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors"><ExternalLinkIcon width={12} height={12}/></button><button onClick={()=>setIsSidebarOpen(false)} className="md:hidden ml-2 flex items-center justify-center w-8 h-8 text-gray-400 hover:text-white bg-white/5 border border-white/5 rounded active:bg-white/10"><ChevronDownIcon/></button></div></div>}<div className="flex-1 relative">{s.platform==='kick'?<KickChatEmbed key={chatRefreshTriggers[s.id]||'init'} streamName={s.name} isResizing={isResizing} idSuffix={isSec?'-sec':'-pri'}/>:s.platform==='youtube'?<div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT N/A</div>:<iframe key={chatRefreshTriggers[s.id]||'init'} src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0"/>}</div></div>})}{streamers.length===0&&<div className="flex-1 flex items-center justify-center text-gray-600 text-xs"><AdUnit className="max-w-sm"/></div>}</div>
                                         <div className="shrink-0">
-                                            <AdUnit outerClassName="shrink-0" className="border-t border-white/10 rounded-none bg-black/20" style={{minHeight: '90px'}}/>
+                                            {!adsHidden && <AdUnit outerClassName="shrink-0" className="border-t border-white/10 rounded-none bg-black/20" style={{minHeight: '90px'}} onExpire={() => setAdsHidden(true)} />}
                                         </div>
                                     </div>
                                 </div>
