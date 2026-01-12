@@ -266,40 +266,40 @@
                 };
             }, [onExpire]);
 
-    return (
-        <div className={outerClassName} style={{ maxHeight: '280px', ...style }}>
-            <div 
-                className={`w-full bg-[#121215]/50 border border-white/5 rounded-xl overflow-hidden relative min-h-[100px] flex items-center justify-center animate-fade-in ${className}`} 
-                style={{ maxHeight: '100%' }}
-            >
-                <span className="text-[8px] text-gray-700 uppercase tracking-widest absolute top-1 left-2 z-10 font-bold pointer-events-none">
-                    Publicidade
-                </span>
-                
-                {onExpire && (
-                    <button 
-                        onClick={(e) => { e.stopPropagation(); onExpire(); }}
-                        className="absolute top-1 right-1 z-20 p-1.5 text-gray-400 hover:text-white bg-black/40 hover:bg-red-500/80 rounded-full transition-all backdrop-blur-sm shadow-sm"
-                        title="Fechar anúncio"
-                    >
-                        <XIcon width={10} height={10} />
-                    </button>
-                )}
-
-                {/* Eu substituí as tags <ins> do Google pelo container específico exigido pelo novo script.
-                  Note que o ID deve ser exatamente o mesmo fornecido pelo seu provedor de anúncios.
-                */}
-                <div 
-                    id="container-75d2f9f94258952cd883d1a8e5e7305d" 
-                    className="w-full flex justify-center"
-                    ref={adRef}
-                >
-                    {/* O anúncio será injetado aqui pelo invoke.js */}
+            return (
+                <div className={outerClassName} style={{ maxHeight: '280px', ...style }}>
+                    <div className={`w-full bg-[#121215]/50 border border-white/5 rounded-xl overflow-hidden relative min-h-[100px] flex items-center justify-center animate-fade-in ${className}`} style={{ maxHeight: '100%' }}>
+                        <span className="text-[8px] text-gray-700 uppercase tracking-widest absolute top-1 left-2 z-10 font-bold pointer-events-none">Publicidade</span>
+                        {onExpire && (
+                            <button 
+                                onClick={(e) => { e.stopPropagation(); onExpire(); }}
+                                className="absolute top-1 right-1 z-20 p-1.5 text-gray-400 hover:text-white bg-black/40 hover:bg-red-500/80 rounded-full transition-all backdrop-blur-sm shadow-sm"
+                                title="Fechar anúncio"
+                            >
+                                <XIcon width={10} height={10} />
+                            </button>
+                        )}
+                        {isChat ? (
+                            <ins className="adsbygoogle w-full block"
+                                 style={{ display: 'block' }}
+                                 data-ad-format="fluid"
+                                 data-ad-layout-key="-h6-c+2i-1u-38"
+                                 data-ad-client="ca-pub-6392386276634224"
+                                 data-ad-slot="6876860882"
+                                 ref={adRef}></ins>
+                        ) : (
+                            <ins className="adsbygoogle"
+                                 style={{ display: 'block' }}
+                                 data-ad-client="ca-pub-6392386276634224"
+                                 data-ad-slot="4691171933"
+                                 data-ad-format="auto"
+                                 data-full-width-responsive="true"
+                                 ref={adRef}></ins>
+                        )}
+                    </div>
                 </div>
-            </div>
-        </div>
-    );
-};
+            );
+        });
 
         const Tooltip = ({ text, children, className="" }) => (
             <div className={`group/tooltip relative flex items-center justify-center ${className}`}>
