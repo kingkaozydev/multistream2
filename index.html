@@ -95,7 +95,23 @@
         .theater-mode-active .hero-brand,.theater-mode-active .command-bar-container{transform:translateY(-200%)!important;opacity:0!important;pointer-events:none;display:none}
         .sidebar-glass{background:rgba(18,18,21,.95);border-left:1px solid rgba(255,255,255,.06);transition:all .5s ease;z-index:60;height:100%}
         .theater-mode-active .sidebar-glass{background:rgba(18,18,21,.98);border-left-color:rgba(165,243,252,.2);box-shadow:-10px 0 50px rgba(0,0,0,.8);height:100%!important}
-        @media (max-width:768px){.sidebar-glass{border-left:none;border-top:1px solid rgba(255,255,255,.06);position:relative;box-shadow:0 -4px 20px rgba(0,0,0,.5);z-index:80}.theater-mode-active .sidebar-glass{display:flex !important;height:auto !important; background:rgba(0,0,0,0.95) !important}}
+        @media (max-width:768px){
+            .sidebar-glass{
+                border-left: 1px solid rgba(255,255,255,.1);
+                border-top: none;
+                position: fixed !important;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                z-index: 100 !important;
+                box-shadow: -10px 0 40px rgba(0,0,0,.8);
+            }
+            .theater-mode-active .sidebar-glass{
+                display: flex !important;
+                background: rgba(0,0,0,0.98) !important;
+                height: 100% !important;
+            }
+        }
         .nevethon-text{color:#fff;font-weight:900;letter-spacing:.1em;position:relative;display:inline-block;text-shadow:0 0 10px rgba(165,243,252,.8),0 0 20px rgba(165,243,252,.5),0 0 40px rgba(99,102,241,.3);font-size:2.5rem;font-family:'Russo One',sans-serif;font-style:italic}
         .multlives-wrapper{display:flex;align-items:center;gap:1rem} .snow-particle{position:absolute;top:-10px;background:#fff;border-radius:50%;pointer-events:none;animation:iceFall 2s linear infinite;box-shadow:0 0 4px rgba(255,255,255,.9)}
         .snow-particle:nth-child(1){left:10%;width:2px;height:2px;animation-duration:1.5s;animation-delay:0s} .snow-particle:nth-child(2){left:30%;width:3px;height:3px;animation-duration:2s;animation-delay:.2s}
@@ -113,16 +129,16 @@
         /* Mobile UX Improvements */
         @media (max-width:768px) {
             .floating-toolbar {
-                bottom: 0.8rem !important; /* Mais baixo */
-                padding: 0.2rem 0.4rem !important; /* Bem menor padding */
-                transform: translateX(-50%) scale(0.85) !important; /* Reduz escala geral */
+                bottom: 0.8rem !important;
+                padding: 0.2rem 0.4rem !important;
+                transform: translateX(-50%) scale(0.85) !important;
                 border-radius: 999px;
                 gap: 0.2rem !important;
                 max-width: 95vw;
                 height: auto;
             }
             .floating-toolbar button {
-                padding: 0.35rem !important; /* Botões menores */
+                padding: 0.35rem !important;
             }
             .floating-toolbar svg {
                 width: 16px !important;
@@ -132,22 +148,8 @@
                 padding: 0.3rem 0.5rem !important;
                 transform: translateX(-50%) scale(0.9) !important;
             }
-            /* When chat is open (sidebar visible), move toolbar above chat */
-            .floating-toolbar.mobile-chat-open {
-                bottom: 52vh !important; /* Ajustado para nova altura de 50vh */
-                background: rgba(13,13,16,.9) !important;
-                backdrop-filter: blur(8px) !important;
-                border: 1px solid rgba(255,255,255,0.1);
-            }
             .sidebar-glass {
-                position: fixed !important;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                z-index: 100 !important;
-                border-radius: 20px 20px 0 0;
-                border-top: 1px solid rgba(255,255,255,0.15);
-                box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+                border-radius: 0;
             }
         }
     </style>
@@ -156,7 +158,7 @@
     <script src="https://pl28458628.effectivegatecpm.com/ef/fe/31/effe31fa00adabe36895dd7f63ade17f.js"></script>
     <div id="root"></div>
     <script type="text/babel">
-        const { useState, useEffect, useRef, memo, useCallback } = React, { createPortal } = ReactDOM;
+        const { useState, useEffect, useRef, memo, useCallback, useMemo } = React, { createPortal } = ReactDOM;
 
         const translations={pt:{welcome:"Bem vindos ao",add_btn:"Adicionar",placeholder_twitch:"Canal Twitch...",placeholder_kick:"Canal Kick...",placeholder_yt:"Vídeo YT...",placeholder_default:"Adicionar Canal...",map_btn:"Mapa",hide_btn:"Ocultar",realtime_loc:"Localização",empty_title:"Seu painel está vazio",empty_desc:"Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior.",dev_by:"Desenvolvido por",cinema_mode:"Cinema",chat_btn:"Chat",tt_add:"Adicionar Stream",tt_mute_all:"Mutar todas",tt_unmute_all:"Desmutar todas",tt_cinema_exit:"Sair do Modo Cinema",tt_cinema_enter:"Ativar Modo Cinema",tt_hide_chat:"Ocultar chat",tt_show_chat:"Mostrar chat",chat_visible:"Visível",chat_hidden:"Chat",warning_title:"Aviso Importante",warning_text:"Hospede no Vercel.",toast_added:"Streamer adicionado!",toast_exists:"Streamer já na lista!",toast_empty:"Digite o nome!",intro_title:"NEVETHON",intro_msg:"O COMBUSTÍVEL É O SEU DONATE",intro_sub:"SÓ DURA SE VOCÊ DOAR",layout_auto:"Auto",layout_grid:"Grade",layout_focus:"Foco",squads_title:"Squads",squad_save:"Salvar",squad_load:"Carregar",squad_name_ph:"Nome do Grupo",squad_saved:"Squad Saved!",squad_deleted:"Squad Removido!",skip_intro:"Pular Intro",pip_active:"Super PiP Ativo",pip_desc:"Vídeos em janela flutuante.",pip_bring_back:"Trazer de Volta",tt_pip:"Janela Flutuante",pip_error:"PiP não suportado. Use Chrome Desktop.",tt_reset_size:"Redefinir Tamanho",history:"Recentes",history_clear:"Limpar",sleep_title:"Modo Sono",sleep_active:"Modo Sono Ativo",sleep_msg:"Boa noite!",ctx_refresh:"Recarregar",ctx_focus:"Focar/Desfocar",ctx_copy:"Copiar Link",ctx_close:"Fechar Stream",tt_menu:"Menu", tt_solo: "Modo Solo (Foco de Áudio)", tt_unsolo: "Desativar Solo"},en:{welcome:"Welcome to",add_btn:"Add",placeholder_twitch:"Twitch Channel...",placeholder_kick:"Kick Channel...",placeholder_yt:"YT Video...",placeholder_default:"Add Channel...",map_btn:"Map",hide_btn:"Hide",realtime_loc:"Location",empty_title:"Dashboard empty",empty_desc:"Add Twitch, Kick channels, or YouTube videos.",dev_by:"Developed by",cinema_mode:"Cinema",chat_btn:"Chat",tt_add:"Add Stream",tt_mute_all:"Mute all",tt_unmute_all:"Unmute all",tt_cinema_exit:"Exit Cinema Mode",tt_cinema_enter:"Enable Cinema Mode",tt_hide_chat:"Hide chat",tt_show_chat:"Show chat",chat_visible:"Visível",chat_hidden:"Chat",warning_title:"Notice",warning_text:"Host online.",toast_added:"Streamer added!",toast_exists:"Already listed!",toast_empty:"Enter name!",intro_title:"NEVETHON",intro_msg:"FUEL IS YOUR SUB",intro_sub:"ONLY LASTS IF YOU DONATE",layout_auto:"Auto",layout_grid:"Grid",layout_focus:"Focus",squads_title:"Squads",squad_save:"Save",squad_load:"Load",squad_name_ph:"Group Name",squad_saved:"Squad Saved!",squad_deleted:"Deleted!",skip_intro:"Skip Intro",pip_active:"Super PiP Active",pip_desc:"Videos floating.",pip_bring_back:"Bring Back",tt_pip:"Floating Window",pip_error:"PiP not supported. Use Chrome Desktop.",tt_reset_size:"Reset Size",history:"Recent",history_clear:"Clear",sleep_title:"Sleep Timer",sleep_active:"Sleep Mode Active",sleep_msg:"Good night!",ctx_refresh:"Reload",ctx_focus:"Focus/Unfocus",ctx_copy:"Copy Link",ctx_close:"Close Stream",tt_menu:"Menu", tt_solo: "Solo Mode (Audio Focus)", tt_unsolo: "Disable Solo"}};
 
@@ -249,15 +251,72 @@
             );
         });
 
-        const Tooltip = ({ text, children, className="" }) => (
-            <div className={`group/tooltip relative flex items-center justify-center ${className}`}>
-                {children}
-                <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-[#1e1e24]/90 backdrop-blur-md border border-white/10 text-white text-[10px] font-bold rounded-lg shadow-xl opacity-0 group-hover/tooltip:opacity-100 transition-all duration-200 transform translate-y-1 group-hover/tooltip:translate-y-0 pointer-events-none whitespace-nowrap z-[80] select-none">
-                    {text}
-                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1e1e24]/90 border-r border-b border-white/10 rotate-45"></div>
+        // Componente Tooltip Melhorado com Portals para evitar cortes de overflow
+        const Tooltip = ({ text, children, className="", position="top" }) => {
+            const [show, setShow] = useState(false);
+            const [coords, setCoords] = useState({ top: 0, left: 0 });
+            const triggerRef = useRef(null);
+
+            const updateCoords = () => {
+                if (triggerRef.current) {
+                    const rect = triggerRef.current.getBoundingClientRect();
+                    if (position === 'top') {
+                        setCoords({
+                            top: rect.top - 12,
+                            left: rect.left + rect.width / 2,
+                            origin: 'bottom'
+                        });
+                    } else if (position === 'left') {
+                        setCoords({
+                            top: rect.top + rect.height / 2,
+                            left: rect.left - 12,
+                            origin: 'right'
+                        });
+                    }
+                }
+            };
+
+            const handleMouseEnter = () => {
+                updateCoords();
+                setShow(true);
+            };
+
+            return (
+                <div 
+                    ref={triggerRef}
+                    className={`relative flex items-center justify-center ${className}`}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={() => setShow(false)}
+                >
+                    {children}
+                    {show && createPortal(
+                        <div 
+                            style={{
+                                position: 'fixed',
+                                top: `${coords.top}px`,
+                                left: `${coords.left}px`,
+                                transform: position === 'top' ? 'translate(-50%, -100%)' : 'translate(-100%, -50%)',
+                                zIndex: 9999,
+                                pointerEvents: 'none'
+                            }}
+                            className="animate-fade-in"
+                        >
+                            <div className="px-2.5 py-1 bg-[#1e1e24] border border-white/10 text-white text-[10px] font-bold rounded-lg shadow-2xl whitespace-nowrap">
+                                {text}
+                                <div 
+                                    className={`absolute w-2 h-2 bg-[#1e1e24] rotate-45 border-white/10 ${
+                                        position === 'top' 
+                                        ? 'left-1/2 -translate-x-1/2 -bottom-1 border-r border-b' 
+                                        : 'top-1/2 -translate-y-1/2 -right-1 border-t border-r'
+                                    }`}
+                                ></div>
+                            </div>
+                        </div>,
+                        document.body
+                    )}
                 </div>
-            </div>
-        );
+            );
+        };
 
         const useToast = () => {
             const [toasts, setToasts] = useState([]);
@@ -442,7 +501,7 @@
 
         const App = () => {
             const [streamers, setStreamers] = useState([]), [inputVal, setInputVal] = useState(""), [platform, setPlatform] = useState("twitch"), [isSidebarOpen, setIsSidebarOpen] = useState(()=>typeof window!=='undefined'?window.innerWidth>768:true);
-            const [activeChatTab, setActiveChatTab] = useState(null), [isHeaderVisible, setIsHeaderVisible] = useState(true), [secondaryChatTab, setSecondaryChatTab] = useState(null), [showMap, setShowMap] = useState(false); // MAPA COMEÇA MINIMIZADO
+            const [activeChatTab, setActiveChatTab] = useState(null), [isHeaderVisible, setIsHeaderVisible] = useState(true), [secondaryChatTab, setSecondaryChatTab] = useState(null), [showMap, setShowMap] = useState(false); 
             const [expandedStreamId, setExpandedStreamId] = useState(null), [isTheaterMode, setIsTheaterMode] = useState(false), [loading, setLoading] = useState(true), [sidebarWidth, setSidebarWidth] = useState(340);
             const [isResizing, setIsResizing] = useState(false), [isGlobalMuted, setIsGlobalMuted] = useState(false), [mapHeight, setMapHeight] = useState(300), [isResizingMap, setIsResizingMap] = useState(false);
             const [lang, setLang] = useState('pt'), [layoutMode, setLayoutMode] = useState('auto'), [squads, setSquads] = useState([]), [showSquadMenu, setShowSquadMenu] = useState(false), [showSleepMenu, setShowSleepMenu] = useState(false);
@@ -464,8 +523,7 @@
                         if(headerTimerRef.current)clearTimeout(headerTimerRef.current)
                     }else if(streamers.length>0&&!isTheaterMode&&isHeaderVisible){
                         if(headerTimerRef.current)clearTimeout(headerTimerRef.current);
-                        // AQUI: Altere o valor 1500 (1.5s) para o tempo que desejar que o cabeçalho espere antes de sumir
-                        headerTimerRef.current=setTimeout(()=>setIsHeaderVisible(false),1500)
+                        headerTimerRef.current=setTimeout(()=>setIsHeaderVisible(false), 1500)
                     }
                 }; 
                 window.addEventListener('mousemove',h); 
@@ -510,7 +568,7 @@
                 try { const w = window.open("", "_blank", "width=800,height=600,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes"); if (!w) { addToast("Pop-up bloqueado. Permita para usar.", 'error'); return; } setTimeout(() => { w.document.title = "MultLives - Player Flutuante"; copyStyles(w.document); const timer = setInterval(() => { if (w.closed) { clearInterval(timer); setPipWindow(null); } }, 500); w.addEventListener("beforeunload", () => { setPipWindow(null); }); setPipWindow(w); }, 100); } catch (err) { console.error("Popup Fallback Error:", err); addToast("Erro ao abrir janela.", 'error'); }
             }, [pipWindow, t, addToast]);
 
-            const toggleTheaterMode = () => setIsTheaterMode(p=>{const n=!p; if(n&&window.innerWidth<768)setIsSidebarOpen(false); return n});
+            const toggleTheaterMode = () => setIsTheaterMode(p=> !p);
 
             const addStreamer = async (e) => { 
                 e.preventDefault(); 
@@ -559,7 +617,6 @@
                     <div className="w-full h-full overflow-y-auto scrollbar-hide z-20 relative overscroll-y-contain touch-pan-y" style={{WebkitOverflowScrolling:'touch'}}>
                         <div className="min-h-full flex flex-wrap justify-center content-center items-center gap-4 p-4">
                             {streamers.map((s, i) => renderStreamItem(s, i, getW(i), "h-auto", false))}
-                            {/* Ajustado: min-h menor no mobile (100px vs 200px no desktop) */}
                             {streamers.length > 0 && !adsHidden && <AdUnit outerClassName={`${getW(streamers.length)} h-auto min-h-[100px] md:min-h-[200px] flex items-center justify-center p-1`} className="h-full w-full bg-black/20 hover:bg-black/40 transition-colors" onExpire={() => setAdsHidden(true)} />}
                         </div>
                     </div>
@@ -575,7 +632,7 @@
                     <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden"><div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-ice/20 blur-[120px] animate-aurora-1 mix-blend-screen"></div><div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/20 blur-[120px] animate-aurora-2 mix-blend-screen"></div></div>{(isResizing||isResizingMap||resizingStreamId)&&<div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}<div className="header-trigger-area" style={{right:(isSidebarOpen && typeof window !== 'undefined' && window.innerWidth >= 768)?sidebarWidth:0}}></div><HeroBrand minimized={streamers.length>0}/>
                     <div className="command-bar-container"><form onSubmit={addStreamer} className="command-bar"><PlatformSelector selected={platform} onSelect={setPlatform}/><div className="flex-1 flex items-center h-full relative group/input"><SearchIcon className="absolute left-2 text-gray-500 w-4 h-4 group-focus-within/input:text-white transition-colors"/><input type="text" value={inputVal} onChange={e=>setInputVal(e.target.value)} onFocus={()=>setShowHistory(true)} onBlur={()=>setTimeout(()=>setShowHistory(false),200)} placeholder={platform==='twitch'?t('placeholder_twitch'):platform==='kick'?t('placeholder_kick'):platform==='youtube'?t('placeholder_yt'):t('placeholder_default')} className="w-full h-full bg-transparent text-sm pl-8 pr-2 focus:outline-none text-white placeholder-gray-500 font-medium"/>{showHistory&&searchHistory.length>0&&( <div className="absolute top-full left-0 right-0 mt-2 bg-[#121215] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-slide-up"><div className="px-3 py-2 text-[10px] uppercase font-bold text-gray-500 bg-white/5 flex justify-between items-center border-b border-white/5"><span>{t('history')}</span><button onMouseDown={e=>{e.preventDefault();setSearchHistory([])}} className="hover:text-red-400 transition-colors flex items-center gap-1"><TrashIcon width={10} height={10}/> {t('history_clear')}</button></div>{searchHistory.map((item,idx)=><button key={`${item.platform}-${item.name}-${idx}`} onMouseDown={e=>{e.preventDefault();setInputVal(item.name);setPlatform(item.platform);setShowHistory(false)}} className="w-full text-left px-3 py-2.5 text-xs text-white hover:bg-white/10 flex items-center gap-3 group/item border-b last:border-0 border-white/5 transition-colors"><span className={`flex items-center justify-center w-5 h-5 rounded-md bg-white/5 ${getPlatformColor(item.platform)}`}>{getPlatformIcon(item.platform)}</span><span className="font-medium group-hover/item:text-ice transition-colors">{item.name}</span></button>)}</div> )}</div><button type="submit" className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 shadow-lg active:scale-95 shrink-0" title={t('add_btn')}><PlusIcon/></button></form></div>
                     <div className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300" style={{left:0,right:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`${sidebarWidth}px`:0,height:'40px'}}></div>
-                    <div className={`floating-toolbar ${isToolbarActive||showSquadMenu||showSleepMenu?'active':''} ${(typeof window!=='undefined'&&window.innerWidth<768&&isSidebarOpen)?'mobile-chat-open':''}`} onMouseEnter={()=>{if(toolbarTimeoutRef.current)clearTimeout(toolbarTimeoutRef.current);setIsToolbarActive(true)}} onMouseLeave={()=>{toolbarTimeoutRef.current=setTimeout(()=>setIsToolbarActive(false),2000)}} onTouchStart={()=>setIsToolbarActive(true)} style={{marginLeft:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`-${sidebarWidth/2}px`:'0'}}>
+                    <div className={`floating-toolbar ${isToolbarActive||showSquadMenu||showSleepMenu?'active':''}`} onMouseEnter={()=>{if(toolbarTimeoutRef.current)clearTimeout(toolbarTimeoutRef.current);setIsToolbarActive(true)}} onMouseLeave={()=>{toolbarTimeoutRef.current=setTimeout(()=>setIsToolbarActive(false),2000)}} onTouchStart={()=>setIsToolbarActive(true)} style={{marginLeft:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`-${sidebarWidth/2}px`:'0'}}>
                         <div className="flex items-center"><Tooltip text={isSidebarOpen?t('tt_hide_chat'):t('tt_show_chat')}><button onClick={e=>{e.stopPropagation();setIsSidebarOpen(!isSidebarOpen)}} className={`p-2 rounded-full transition-all ${isSidebarOpen?'bg-indigo-500 text-white':'text-gray-400 hover:text-white'}`}><span className="md:hidden"><ChatIcon width={20} height={20}/></span><span className="hidden md:block"><PanelRightIcon width={20} height={20}/></span></button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-1"></div></div><Tooltip text={isTheaterMode?t('tt_cinema_exit'):t('tt_cinema_enter')}><button onClick={e=>{e.stopPropagation();toggleTheaterMode()}} className={`flex items-center justify-center p-2 rounded-full transition-all active:scale-90 shrink-0 ${isTheaterMode?'bg-amber-400 text-black shadow-glow':'bg-white/5 text-gray-300 hover:text-white'}`}>{isTheaterMode?<SunIcon width={20} height={20}/>:<MoonIcon width={20} height={20}/>}</button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-0.5 shrink-0"></div>
                         {!(isToolbarActive||showSquadMenu||showSleepMenu)?<Tooltip text={t('tt_menu')}><div className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><SettingsIcon width={22} height={22}/></div></Tooltip>:( <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
                             <Tooltip text={isGlobalMuted?t('tt_unmute_all'):t('tt_mute_all')}><button onClick={e=>{e.stopPropagation();setIsGlobalMuted(!isGlobalMuted)}} className={`p-2 rounded-full transition-all ${isGlobalMuted?'bg-red-500 text-white animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}>{isGlobalMuted?<VolumeXIcon width={20} height={20}/>:<Volume2Icon width={20} height={20}/>}</button></Tooltip>
@@ -587,15 +644,14 @@
                         <div className="w-[1px] h-5 bg-white/10"></div><button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);setShowSleepMenu(false)}} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={16} height={16}/>{t('squads_title')}</button><SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success')}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false)}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info')}} lang={lang}/></div> )}
                     </div>
                     <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-1 md:pt-1 ${isTheaterMode?'!pt-0 !h-full':''} z-10 relative transition-all duration-700`}>
-                        {/* Ajustado: Anúncio da tela vazia menor no mobile */}
                         <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-0">{streamers.length===0?<div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in"><div className="p-8 max-w-md w-full mx-4 opacity-50"><p className="text-gray-500 text-sm mb-6 leading-relaxed mt-20">{t('empty_desc')}</p></div><AdUnit className="max-w-[280px] md:max-w-sm my-2 md:my-4"/></div>:renderContent()}</div>
-                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen?'translate-y-0 md:translate-x-0 opacity-100':(typeof window!=='undefined'&&window.innerWidth<768?'translate-y-0':'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden')}`} style={{width:typeof window!=='undefined'&&window.innerWidth<768?'100%':(isSidebarOpen?`${sidebarWidth}px`:'0px'),height:typeof window!=='undefined'&&window.innerWidth<768?(isSidebarOpen?'50vh':'0px'):'100%',transitionDuration:isResizing?'0s':'300ms'}}>
+                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen?'translate-y-0 translate-x-0 opacity-100':(typeof window!=='undefined'&&window.innerWidth<768?'translate-x-full opacity-0':'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden')}`} style={{width:typeof window!=='undefined'&&window.innerWidth<768?'min(340px, 85vw)':(isSidebarOpen?`${sidebarWidth}px`:'0px'),height:'100%',transitionDuration:isResizing?'0s':'300ms'}}>
                             <div className="hidden md:flex absolute left-0 top-0 bottom-0 w-1.5 hover:w-3 items-center justify-center -ml-1.5 z-50 cursor-col-resize group/resizer" onMouseDown={startResizing} onTouchStart={startResizing}><div className="h-8 w-1 rounded-full bg-white/20 group-hover/resizer:bg-accent/80 transition-colors"></div></div>
                             <div className="flex flex-col h-full w-full overflow-hidden">
                                 <div className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col relative group bg-black/40 border-b border-white/5`} style={{height:showMap?`${mapHeight}px`:'0px',transitionDuration:isResizingMap?'0s':'300ms'}}><iframe src="https://rtirl.com/twitch:119611214" className={`w-full h-full border-none grayscale-[30%] invert-[5%] contrast-125 ${isResizingMap||isResizing?'pointer-events-none':''}`} scrolling="no"></iframe><div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-[#09090b] to-transparent pointer-events-none flex justify-between items-end"><span className="text-[10px] font-bold text-ice/80 tracking-widest uppercase mb-1 ml-1 drop-shadow-md">{t('realtime_loc')}</span></div>{showMap&&<div className="absolute bottom-0 left-0 right-0 h-2 flex justify-center items-center -mb-1 z-50 cursor-row-resize group/mapresizer" onMouseDown={startMapResizing} onTouchStart={startMapResizing}><div className="w-8 h-1 rounded-full bg-white/20 group-hover/mapresizer:bg-accent/80 transition-colors"></div></div>}</div>
-                                <div className="flex-1 flex min-h-0 overflow-hidden">
-                                    <div className="w-[60px] flex flex-col items-center bg-[#09090b] border-r border-white/5 py-3 gap-3 shrink-0 z-20 overflow-y-auto scrollbar-hide">
-                                        <Tooltip text={showMap?t('hide_btn'):t('map_btn')} className="w-10 h-10">
+                                <div className="flex-1 flex min-h-0 overflow-visible">
+                                    <div className="w-[60px] flex flex-col items-center bg-[#09090b] border-r border-white/5 py-3 gap-3 shrink-0 z-20 overflow-visible relative">
+                                        <Tooltip text={showMap?t('hide_btn'):t('map_btn')} className="w-10 h-10" position="left">
                                             <button 
                                                 onClick={()=>setShowMap(!showMap)} 
                                                 className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-lg active:scale-90 ${showMap 
@@ -607,20 +663,23 @@
                                             </button>
                                         </Tooltip>
                                         <div className="w-8 h-[1px] bg-white/10"></div>
-                                        {streamers.map(s => (
-                                            <Tooltip key={s.id} text={s.name} className="w-10 h-10">
-                                                <button onClick={() => setActiveChatTab(s.id)} className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all border-2 overflow-hidden ${activeChatTab === s.id ? (s.platform==='twitch'?'border-[#9146ff] bg-[#9146ff]/20 text-white shadow-[0_0_10px_rgba(145,70,255,0.4)]' : s.platform==='kick'?'border-[#53fc18] bg-[#53fc18]/20 text-white shadow-[0_0_10px_rgba(83,252,24,0.4)]' : s.platform==='youtube'?'border-[#ff0000] bg-[#ff0000]/20 text-white shadow-[0_0_10px_rgba(255,0,0,0.4)]' : 'border-white text-white') : 'border-transparent bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'}`}>
-                                                    {activeChatTab === s.id && <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-r-full z-10"></div>}
-                                                    {s.avatar ? <img src={s.avatar} alt={s.name} className="w-full h-full object-cover rounded-full" /> : <span className="font-bold text-xs uppercase">{s.name.substring(0, 2)}</span>}
-                                                    <div className="absolute -bottom-1 -right-1 bg-[#121215] rounded-full p-[2px] z-10"><div className={`w-3 h-3 rounded-full flex items-center justify-center text-[6px] ${getPlatformColor(s.platform)}`}>{getPlatformIcon(s.platform)}</div></div>
-                                                </button>
-                                            </Tooltip>
-                                        ))}
-                                        <div className="mt-auto"></div>
-                                        <Tooltip text="Split Chat" className="w-10 h-10"><button onClick={()=>setSecondaryChatTab(secondaryChatTab?null:streamers.find(s=>s.id!==activeChatTab)?.id||activeChatTab)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${secondaryChatTab?'bg-accent text-white shadow-glow':'text-gray-500 hover:text-white hover:bg-white/5'}`}><SplitIcon width={18} height={18}/></button></Tooltip>
+                                        <div className="flex flex-col gap-3 overflow-y-auto overflow-x-visible scrollbar-hide w-full items-center pb-20">
+                                            {streamers.map(s => (
+                                                <Tooltip key={s.id} text={s.name} className="w-10 h-10 shrink-0" position="left">
+                                                    <button onClick={() => setActiveChatTab(s.id)} className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all border-2 overflow-hidden ${activeChatTab === s.id ? (s.platform==='twitch'?'border-[#9146ff] bg-[#9146ff]/20 text-white shadow-[0_0_10px_rgba(145,70,255,0.4)]' : s.platform==='kick'?'border-[#53fc18] bg-[#53fc18]/20 text-white shadow-[0_0_10px_rgba(83,252,24,0.4)]' : s.platform==='youtube'?'border-[#ff0000] bg-[#ff0000]/20 text-white shadow-[0_0_10px_rgba(255,0,0,0.4)]' : 'border-white text-white') : 'border-transparent bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'}`}>
+                                                        {activeChatTab === s.id && <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-r-full z-10"></div>}
+                                                        {s.avatar ? <img src={s.avatar} alt={s.name} className="w-full h-full object-cover rounded-full" /> : <span className="font-bold text-xs uppercase">{s.name.substring(0, 2)}</span>}
+                                                        <div className="absolute -bottom-1 -right-1 bg-[#121215] rounded-full p-[2px] z-10"><div className={`w-3 h-3 rounded-full flex items-center justify-center text-[6px] ${getPlatformColor(s.platform)}`}>{getPlatformIcon(s.platform)}</div></div>
+                                                    </button>
+                                                </Tooltip>
+                                            ))}
+                                        </div>
+                                        <div className="mt-auto absolute bottom-4 left-0 right-0 flex justify-center bg-transparent z-30">
+                                            <Tooltip text="Split Chat" className="w-10 h-10" position="left"><button onClick={()=>setSecondaryChatTab(secondaryChatTab?null:streamers.find(s=>s.id!==activeChatTab)?.id||activeChatTab)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${secondaryChatTab?'bg-accent text-white shadow-glow':'text-gray-500 hover:text-white hover:bg-white/5'}`}><SplitIcon width={18} height={18}/></button></Tooltip>
+                                        </div>
                                     </div>
-                                    <div className="flex-1 flex-col bg-[#0b0e11] min-w-0 relative flex">
-                                        <div className="md:hidden bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 flex items-center justify-between shadow-lg z-30"><span>💡 Dica: Chat externo economiza bateria</span><button onClick={()=>{const s=streamers.find(st=>st.id===activeChatTab); if(s) {if(s.platform==='twitch')window.open(`https://www.twitch.tv/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else if(s.platform==='kick')window.open(`https://kick.com/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else window.open(`https://www.youtube.com/live_chat?v=${s.name}`,`c-${s.name}`,"width=400,height=600");}}} className="bg-white text-indigo-600 px-2 py-0.5 rounded uppercase tracking-wider hover:bg-indigo-50 flex items-center gap-1"><PopoutIcon width={10} height={10} /> Abrir Janela</button></div>
+                                    <div className="flex-1 flex-col bg-[#0b0e11] min-w-0 relative flex overflow-hidden">
+                                        <div className="md:hidden bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 flex items-center justify-between shadow-lg z-30 shrink-0"><span>💡 Dica: Chat externo economiza bateria</span><button onClick={()=>{const s=streamers.find(st=>st.id===activeChatTab); if(s) {if(s.platform==='twitch')window.open(`https://www.twitch.tv/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else if(s.platform==='kick')window.open(`https://kick.com/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else window.open(`https://www.youtube.com/live_chat?v=${s.name}`,`c-${s.name}`,"width=400,height=600");}}} className="bg-white text-indigo-600 px-2 py-0.5 rounded uppercase tracking-wider hover:bg-indigo-50 flex items-center gap-1"><PopoutIcon width={10} height={10} /> Abrir Janela</button></div>
                                         <div className="flex-1 flex flex-col min-h-0 bg-[#09090b] overflow-hidden transition-opacity duration-500 ease-out md:opacity-80 md:hover:opacity-100">{[activeChatTab,secondaryChatTab].filter(Boolean).map((tid,idx)=>{const s=streamers.find(st=>st.id===tid);if(!s)return null;const isSec=idx===1;return <div key={isSec?'sec':'pri'} className={`flex-1 relative flex flex-col ${isSec?'border-t border-white/10':''}`}>{isSec?<div className="h-8 bg-surface/80 border-b border-white/5 flex items-center px-2 gap-2"><span className="text-[10px] font-bold text-accent uppercase">Chat 2</span><select className="bg-transparent text-xs text-white outline-none flex-1" value={secondaryChatTab} onChange={e=>setSecondaryChatTab(e.target.value)}>{streamers.map(st=><option key={st.id} value={st.id} className="text-black">{st.name}</option>)}</select><button onClick={()=>setSecondaryChatTab(null)} className="ml-auto text-gray-500 hover:text-white">✕</button></div>:<div className="h-9 bg-[#121215] border-b border-white/5 flex items-center justify-between px-3 shrink-0 z-20 shadow-sm"><div className="flex items-center gap-2"><div className={`flex items-center justify-center w-5 h-5 rounded bg-white/5 ${getPlatformColor(s.platform)}`}>{getPlatformIcon(s.platform)}</div><span className="text-xs font-bold text-white tracking-tight">{s.name}</span><span className="text-[9px] uppercase tracking-widest text-gray-500 border border-white/10 px-1.5 rounded bg-white/5">{s.platform} chat</span></div><div className="flex items-center gap-1"><button onClick={()=>setChatRefreshTriggers(p=>({...p,[s.id]:Date.now()}))} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors"><RefreshCwIcon width={12} height={12}/></button><button onClick={()=>{if(s.platform==='twitch')window.open(`https://www.twitch.tv/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else if(s.platform==='kick')window.open(`https://kick.com/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else window.open(`https://www.youtube.com/live_chat?v=${s.name}`,`c-${s.name}`,"width=400,height=600")}} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors"><ExternalLinkIcon width={12} height={12}/></button><button onClick={()=>setIsSidebarOpen(false)} className="md:hidden ml-2 flex items-center justify-center w-8 h-8 text-gray-400 hover:text-white bg-white/5 border border-white/5 rounded active:bg-white/10"><ChevronDownIcon/></button></div></div>}<div className="flex-1 relative">{s.platform==='kick'?<KickChatEmbed key={chatRefreshTriggers[s.id]||'init'} streamName={s.name} isResizing={isResizing} idSuffix={isSec?'-sec':'-pri'}/>:s.platform==='youtube'?<div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT N/A</div>:<iframe key={chatRefreshTriggers[s.id]||'init'} src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0"/>}</div></div>})}{streamers.length===0&&<div className="flex-1 flex items-center justify-center text-gray-600 text-xs"><AdUnit className="max-w-[280px] md:max-w-sm" type="chat"/></div>}</div>
                                     </div>
                                 </div>
