@@ -216,7 +216,7 @@
             useEffect(() => {
                 const hideTimer = setTimeout(() => {
                     if (onExpire) onExpire();
-                }, 20000);
+                }, 30000);
 
                 if (containerRef.current && !scriptInjected.current) {
                     const script = document.createElement('script');
