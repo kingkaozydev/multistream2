@@ -4,31 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="referrer" content="no-referrer">
-    
-    <!-- SEO Principal -->
     <title>MultLives - Multistream Player (Twitch, Kick, YouTube)</title>
-    <meta name="description" content="Assista Twitch, Kick e YouTube simultaneamente na mesma tela. Multistream player gratuito com chat integrado, modo cinema, PiP e suporte a squads. Acompanhe o Nevethon e seus streamers favoritos juntos.">
-    <meta name="keywords" content="multistream, multiview, twitch, kick, youtube, assistir lives, chat integrado, nevethon, multlives, squad stream, player multiplo, ao vivo, stream, gamer">
+    <meta name="description" content="Assista Twitch, Kick e YouTube simultaneamente na mesma tela. Multistream player gratuito com chat integrado, modo cinema, PiP e suporte a squads.">
+    <meta name="keywords" content="multistream, multiview, twitch, kick, youtube, assistir lives, chat integrado, nevethon, multlives, squad stream, player multiplo">
     <meta name="author" content="KaozyKing">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://multlives-nevethon.vercel.app/" />
-
-    <!-- Open Graph / Facebook / WhatsApp / Discord -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://multlives-nevethon.vercel.app/">
     <meta property="og:title" content="MultLives - Assista Twitch, Kick e YouTube Juntos">
     <meta property="og:description" content="O melhor multiview para acompanhar seus streamers favoritos. Suporte a Twitch, Kick e YouTube com chat integrado e modo cinema.">
     <meta property="og:image" content="https://multlives-nevethon.vercel.app/og-image.png">
-
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://multlives-nevethon.vercel.app/">
     <meta property="twitter:title" content="MultLives - Nevethon Multistream">
     <meta property="twitter:description" content="Assista várias lives ao mesmo tempo. Twitch, Kick e YouTube em uma única tela com chat.">
     <meta property="twitter:image" content="https://multlives-nevethon.vercel.app/og-image.png">
-
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6392386276634224" crossorigin="anonymous"></script>
-    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"> </script>
+    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"></script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M5 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M19 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M19 19V5' stroke='white' stroke-width='3' stroke-linecap='round' /><path d='M5 5L12 13L19 5' stroke='%23a5f3fc' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' /></svg>">
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -37,176 +30,49 @@
     <script type="module">import { inject } from 'https://esm.sh/@vercel/analytics'; inject({ mode: 'production', debug: false }); console.log("Vercel Analytics Injected");</script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;900&family=Russo+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script>
-        tailwind.config = {
-            theme: { extend: {
-                fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], display: ['"Inter"', 'sans-serif'], russo: ['"Russo One"', 'sans-serif'], mono: ['"Share Tech Mono"', 'monospace'] },
-                colors: { background: '#09090b', surface: '#121215', surfaceHighlight: '#1e1e24', accent: '#6366f1', accentHover: '#4f46e5', ice: '#a5f3fc', kick: '#53fc18', kickDark: '#0b0e11' },
-                animation: { 'spin-slow': 'spin 3s linear infinite', 'aurora-1': 'aurora 20s infinite alternate', 'aurora-2': 'aurora 25s infinite alternate-reverse', 'toast-in': 'toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)', 'slide-up': 'slideUp 0.3s ease-out forwards', 'rattle': 'rattle 0.1s linear infinite', 'drive-fast': 'driveFast 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards', 'drive-slow': 'driveSlow 2s cubic-bezier(0.4, 0, 1, 1) forwards', 'smoke-puff': 'smokePuff 1s ease-out infinite', 'speed-lines': 'speedLines 0.5s linear infinite', 'pulse-glow': 'pulseGlow 2s ease-in-out infinite', 'heart-beat': 'heartBeat 1.5s infinite', 'blizzard-fast': 'blizzard 2s linear infinite', 'blizzard-slow': 'blizzard 5s linear infinite', 'fade-in': 'fadeIn 0.5s ease-out forwards' },
-                keyframes: {
-                    aurora: { '0%': { transform: 'translate(0, 0) rotate(0deg)' }, '100%': { transform: 'translate(10%, 10%) rotate(10deg)' } },
-                    toastIn: { '0%': { transform: 'translateX(100%)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
-                    slideUp: { '0%': { transform: 'translateY(100%)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
-                    rattle: { '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' }, '25%': { transform: 'translate(-1px, 1px) rotate(-1deg)' }, '75%': { transform: 'translate(1px, -1px) rotate(1deg)' } },
-                    driveFast: { '0%': { transform: 'translateX(-200%) skewX(10deg)', opacity: '0' }, '100%': { transform: 'translateX(0) skewX(0deg)', opacity: '1' } },
-                    driveSlow: { '0%': { transform: 'translateX(-150%)', opacity: '0' }, '20%': { transform: 'translateX(-100%)', opacity: '1' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
-                    smokePuff: { '0%': { transform: 'translate(0, 0) scale(0.5)', opacity: '0.8' }, '100%': { transform: 'translate(-10px, -20px) scale(2)', opacity: '0' } },
-                    speedLines: { '0%': { transform: 'translateX(100%)', opacity: '0' }, '50%': { opacity: '0.5' }, '100%': { transform: 'translateX(-100%)', opacity: '0' } },
-                    pulseGlow: { '0%, 100%': { opacity: '0.6', filter: 'brightness(1)' }, '50%': { opacity: '1', filter: 'brightness(1.5) blur(1px)' } },
-                    heartBeat: { '0%': { transform: 'scale(1)' }, '14%': { transform: 'scale(1.3)' }, '28%': { transform: 'scale(1)' }, '42%': { transform: 'scale(1.3)' }, '70%': { transform: 'scale(1)' } },
-                    blizzard: { '0%': { transform: 'translate(0, 0) rotate(0deg)' }, '100%': { transform: 'translate(-20px, 100vh) rotate(360deg)' } },
-                    fadeIn: { '0%': { opacity: '0', transform: 'translateY(-10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
-                },
-                cursor: { 'col-resize': 'col-resize', 'row-resize': 'row-resize', 'nwse-resize': 'nwse-resize' }
-            }}
-        }
+        tailwind.config={theme:{extend:{fontFamily:{sans:['"Plus Jakarta Sans"','sans-serif'],display:['"Inter"','sans-serif'],russo:['"Russo One"','sans-serif'],mono:['"Share Tech Mono"','monospace']},colors:{background:'#09090b',surface:'#121215',surfaceHighlight:'#1e1e24',accent:'#6366f1',accentHover:'#4f46e5',ice:'#a5f3fc',kick:'#53fc18',kickDark:'#0b0e11'},animation:{'spin-slow':'spin 3s linear infinite','aurora-1':'aurora 20s infinite alternate','aurora-2':'aurora 25s infinite alternate-reverse','toast-in':'toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)','slide-up':'slideUp 0.3s ease-out forwards','rattle':'rattle 0.1s linear infinite','drive-fast':'driveFast 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards','drive-slow':'driveSlow 2s cubic-bezier(0.4, 0, 1, 1) forwards','smoke-puff':'smokePuff 1s ease-out infinite','speed-lines':'speedLines 0.5s linear infinite','pulse-glow':'pulseGlow 2s ease-in-out infinite','heart-beat':'heartBeat 1.5s infinite','blizzard-fast':'blizzard 2s linear infinite','blizzard-slow':'blizzard 5s linear infinite','fade-in':'fadeIn 0.5s ease-out forwards'},keyframes:{aurora:{'0%':{transform:'translate(0, 0) rotate(0deg)'},'100%':{transform:'translate(10%, 10%) rotate(10deg)'}},toastIn:{'0%':{transform:'translateX(100%)',opacity:'0'},'100%':{transform:'translateX(0)',opacity:'1'}},slideUp:{'0%':{transform:'translateY(100%)',opacity:'0'},'100%':{transform:'translateY(0)',opacity:'1'}},rattle:{'0%, 100%':{transform:'translate(0, 0) rotate(0deg)'},'25%':{transform:'translate(-1px, 1px) rotate(-1deg)'},'75%':{transform:'translate(1px, -1px) rotate(1deg)'}},driveFast:{'0%':{transform:'translateX(-200%) skewX(10deg)',opacity:'0'},'100%':{transform:'translateX(0) skewX(0deg)',opacity:'1'}},driveSlow:{'0%':{transform:'translateX(-150%)',opacity:'0'},'20%':{transform:'translateX(-100%)',opacity:'1'},'100%':{transform:'translateX(0)',opacity:'1'}},smokePuff:{'0%':{transform:'translate(0, 0) scale(0.5)',opacity:'0.8'},'100%':{transform:'translate(-10px, -20px) scale(2)',opacity:'0'}},speedLines:{'0%':{transform:'translateX(100%)',opacity:'0'},'50%':{opacity:'0.5'},'100%':{transform:'translateX(-100%)',opacity:'0'}},pulseGlow:{'0%, 100%':{opacity:'0.6',filter:'brightness(1)'},'50%':{opacity:'1',filter:'brightness(1.5) blur(1px)'}},heartBeat:{'0%':{transform:'scale(1)'},'14%':{transform:'scale(1.3)'},'28%':{transform:'scale(1)'},'42%':{transform:'scale(1.3)'},'70%':{transform:'scale(1)'}},blizzard:{'0%':{transform:'translate(0, 0) rotate(0deg)'},'100%':{transform:'translate(-20px, 100vh) rotate(360deg)'}},fadeIn:{'0%':{opacity:'0',transform:'translateY(-10px)'},'100%':{opacity:'1',transform:'translateY(0)'}}},cursor:{'col-resize':'col-resize','row-resize':'row-resize','nwse-resize':'nwse-resize'}}}};
     </script>
     <style>
-        body{background-color:#09090b;color:#e2e8f0;overflow:hidden;margin:0;padding:0;transition:background-color .8s ease;-webkit-overflow-scrolling:touch}
-        iframe{pointer-events:auto} ::-webkit-scrollbar{width:4px;height:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:10px} ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.2)}
+        body{background-color:#09090b;color:#e2e8f0;margin:0;padding:0;overflow:hidden} iframe{pointer-events:auto} ::-webkit-scrollbar{width:4px;height:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:10px} ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.2)}
         .animate-fade-in{animation:fadeIn .4s ease-out forwards} @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
         .command-bar-container{position:fixed;top:2rem;left:50%;transform:translateX(-50%);z-index:60;width:90%;max-width:800px;transition:all .5s cubic-bezier(.16,1,.3,1)}
         .command-bar{background:rgba(18,18,21,.6);backdrop-filter:blur(25px);border:1px solid rgba(255,255,255,.08);border-radius:999px;box-shadow:0 10px 40px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.05);padding:.5rem;display:flex;align-items:center;gap:.5rem;height:3.5rem}
         .command-bar:hover,.command-bar:focus-within{background:rgba(18,18,21,.85);border-color:rgba(255,255,255,.15);box-shadow:0 20px 50px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1)}
-        @media (max-width:768px){
-            .command-bar-container{
-                top: 70px !important; /* Posiciona logo abaixo do brand */
-                width: 95%;
-                z-index: 60;
-            }
-            .command-bar{height:3.5rem;padding:.25rem .5rem}
-        }
         .hero-brand{padding-top:8rem;padding-bottom:2rem;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .8s cubic-bezier(.16,1,.3,1);position:relative;z-index:10;pointer-events:none;max-height:500px;opacity:1;overflow:visible}
         .hero-brand.minimized{padding-top:5.5rem;padding-bottom:0;transform:scale(.6);opacity:.9;margin-bottom:-1.5rem;height:auto}
-        @media (max-width: 768px) {
-            .hero-brand, .hero-brand.minimized {
-                position: absolute !important;
-                top: 0;
-                left: 0;
-                right: 0;
-                padding-top: 0.5rem !important;
-                margin-bottom: 0 !important;
-                transform: none !important; /* Controlado via scale no wrapper filho */
-                height: auto !important;
-                z-index: 55;
-                background: linear-gradient(to bottom, #09090b 0%, rgba(9,9,11,0.9) 60%, transparent 100%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .brand-flip-container {
-                transform: scale(0.65);
-                transform-origin: top center;
-            }
-        }
         .brand-flip-container{perspective:1000px;width:280px;height:80px;position:relative} .brand-flipper{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,0,.2,1)}
         .brand-front,.brand-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;align-items:center;justify-content:center} .brand-back{transform:rotateY(180deg)} .flipped .brand-flipper{transform:rotateY(180deg)}
-        .header-hidden-active .command-bar-container{transform:translateX(-50%) translateY(-150%);opacity:0;pointer-events:none}
-        .header-hidden-active .hero-brand{position:absolute!important;top:0;left:0;width:100%;z-index:20;transform:scale(.5) translateY(-20px)!important;padding-top:1rem!important;padding-bottom:0!important;margin-bottom:0!important;opacity:.6!important;height:auto!important;min-height:0!important;overflow:visible!important;visibility:visible!important;pointer-events:none}
-        .header-hidden-active main{padding-top:0!important;height:auto!important;flex:1} 
-        /* Sidebar Glass - Desktop Only Styles for border/shadow. Position handled by class utility */
         .sidebar-glass{background:rgba(18,18,21,.95);border-left:1px solid rgba(255,255,255,.06);transition:all .5s ease;z-index:60;height:100%}
-        .theater-mode-active .hero-brand,.theater-mode-active .command-bar-container{transform:translateY(-200%)!important;opacity:0!important;pointer-events:none;display:none}
-        .theater-mode-active .sidebar-glass{background:rgba(18,18,21,.98);border-left-color:rgba(165,243,252,.2);box-shadow:-10px 0 50px rgba(0,0,0,.8);height:100%!important}
-        @media (max-width:768px){
-            /* Mobile Sidebar Overrides are now handled in the component class list for "fixed inset-0" */
-            .sidebar-glass{border-left:none;border-top:none;box-shadow:none;}
-            .theater-mode-active .sidebar-glass{display:flex !important;height:100% !important; background:rgba(0,0,0,0.95) !important}
-        }
-        /* Mobile Content Adjustment */
-        @media (max-width: 768px) {
-            .mobile-stream-container {
-                display: flex !important;
-                flex-direction: column !important;
-                align-content: flex-start !important;
-                justify-content: flex-start !important;
-                align-items: center !important;
-                padding-top: 150px !important; /* Espaço generoso para Header + Barra */
-                padding-bottom: 100px !important; /* Espaço para a toolbar */
-                width: 100% !important;
-                min-height: 100vh;
-            }
-            /* Garante que o scroll aconteça no main */
-            main {
-                height: 100dvh;
-                overflow: hidden;
-            }
-            /* Scroll container interno */
-            .stream-scroll-area {
-                height: 100%;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-        }
         .nevethon-text{color:#fff;font-weight:900;letter-spacing:.1em;position:relative;display:inline-block;text-shadow:0 0 10px rgba(165,243,252,.8),0 0 20px rgba(165,243,252,.5),0 0 40px rgba(99,102,241,.3);font-size:2.5rem;font-family:'Russo One',sans-serif;font-style:italic}
         .multlives-wrapper{display:flex;align-items:center;gap:1rem} .snow-particle{position:absolute;top:-10px;background:#fff;border-radius:50%;pointer-events:none;animation:iceFall 2s linear infinite;box-shadow:0 0 4px rgba(255,255,255,.9)}
         .snow-particle:nth-child(1){left:10%;width:2px;height:2px;animation-duration:1.5s;animation-delay:0s} .snow-particle:nth-child(2){left:30%;width:3px;height:3px;animation-duration:2s;animation-delay:.2s}
         .snow-particle:nth-child(3){left:60%;width:2px;height:2px;animation-duration:1.7s;animation-delay:.5s} .snow-particle:nth-child(4){left:85%;width:3px;height:3px;animation-duration:1.3s;animation-delay:.1s}
         @keyframes iceFall{0%{transform:translateY(0);opacity:0}10%,90%{opacity:1}100%{transform:translateY(35px);opacity:0}} @keyframes blizzard{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(-20px,100vh) rotate(360deg)}}
-        .animate-blizzard{animation:blizzard linear infinite} .aurora-blob{position:absolute;filter:blur(100px);opacity:.3;z-index:0;pointer-events:none} .cursor-grab{cursor:grab} .cursor-grabbing{cursor:grabbing} .kick-chat-container{position:relative;background-color:#0b0e11;width:100%;height:100%}
-        .car-neon{filter:drop-shadow(0 0 10px rgba(99,102,241,.8))} .car-fire{filter:drop-shadow(0 0 10px rgba(249,115,22,.8))} .car-ice{filter:drop-shadow(0 0 10px rgba(165,243,252,.8))} .car-broken{filter:sepia(100%) saturate(300%) hue-rotate(315deg) contrast(80%)}
+        .animate-blizzard{animation:blizzard linear infinite} .aurora-blob{position:absolute;filter:blur(100px);opacity:.3;z-index:0;pointer-events:none}
         .floating-toolbar{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:70;display:flex;align-items:center;background:rgba(13,13,16,.3);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.05);border-radius:99px;box-shadow:0 5px 20px rgba(0,0,0,.2);transition:all .4s cubic-bezier(.16,1,.3,1);overflow:visible;padding:.35rem;gap:.5rem}
         .floating-toolbar.active{background:rgba(13,13,16,.95);backdrop-filter:blur(20px);border-color:rgba(255,255,255,.15);box-shadow:0 10px 40px rgba(0,0,0,.6),0 0 20px rgba(99,102,241,.1);padding:.5rem} .floating-toolbar:hover{border-color:rgba(165,243,252,.2)}
-        .theater-mode-active .floating-toolbar{transform:translateX(-50%) translateY(150%);opacity:0} .floating-toolbar-trigger:hover~.floating-toolbar,.floating-toolbar:hover,.floating-toolbar.active{transform:translateX(-50%) translateY(0)!important;opacity:1!important}
         .header-trigger-area{position:fixed;top:0;left:0;right:0;height:20px;z-index:70} .header-trigger-area:hover~.command-bar-container,.command-bar-container:hover{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
-        .theater-mode-active .aurora-blob{opacity:.15;filter:blur(150px);transform:scale(1.5)} .cinema-glow{transition:box-shadow .6s ease} .theater-mode-active .cinema-glow{box-shadow:0 0 30px rgba(0,0,0,.9),0 0 40px rgba(99,102,241,.15)}
+        .cinema-glow{transition:box-shadow .6s ease} .theater-mode-active .cinema-glow{box-shadow:0 0 30px rgba(0,0,0,.9),0 0 40px rgba(99,102,241,.15)}
         .theater-mode-active .cinema-glow-expanded{box-shadow:0 0 60px #000,0 0 80px rgba(165,243,252,.2)} .blackout-overlay{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;z-index:5;transition:opacity 1s ease} .theater-mode-active .blackout-overlay{opacity:.85}
-        
-        /* Mobile UX Improvements */
         @media (max-width: 768px) {
-            .floating-toolbar {
-                bottom: 1.5rem !important; /* Start position */
-                padding: 0.25rem 0.5rem !important;
-                transform: translateX(-50%);
-                border-radius: 999px;
-                gap: 0.5rem;
-                max-width: 90vw;
-                height: auto;
-                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-            .floating-toolbar button { padding: 0.4rem !important; }
-
-            /* State: Mobile Chat Open -> Minimized Toolbar (Collapsed) */
-            .floating-toolbar.mobile-chat-open {
-                width: auto !important;
-                padding: 4px !important;
-                gap: 0 !important;
-                background: rgba(18,18,21, 0.4) !important;
-                backdrop-filter: blur(4px) !important;
-                border-color: rgba(255,255,255,0.05) !important;
-                box-shadow: none !important;
-                bottom: 1rem !important;
-                z-index: 80 !important; /* Above chat but subtle */
-            }
-
-            /* Hiding Elements smoothly */
-            .toolbar-item-hidden {
-                width: 0 !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                opacity: 0 !important;
-                pointer-events: none;
-                overflow: hidden;
-            }
-            
-            .toolbar-separator-hidden {
-                width: 0 !important;
-                margin: 0 !important;
-                opacity: 0 !important;
-            }
-
-            .chat-toggle-active-mobile {
-                background: #6366f1 !important; /* Indigo for active state */
-                color: white !important;
-                box-shadow: 0 0 10px rgba(99,102,241,0.5);
-                transform: scale(0.9);
-            }
+            body { position: fixed !important; width: 100% !important; height: 100% !important; overflow: hidden !important; }
+            .hero-brand, .hero-brand.minimized { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; height: 60px !important; z-index: 100 !important; background: rgba(9,9,11,0.95) !important; backdrop-filter: blur(10px); padding: 0 !important; margin: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; border-bottom: 1px solid rgba(255,255,255,0.05); transform: none !important; }
+            .brand-flip-container { transform: scale(0.6) !important; margin-top: 5px; }
+            .command-bar-container { position: fixed !important; top: 65px !important; left: 0 !important; right: 0 !important; width: 96% !important; margin: 0 auto !important; transform: none !important; z-index: 99 !important; opacity: 1 !important; pointer-events: auto !important; }
+            .command-bar { height: 3rem !important; background: #18181b !important; box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important; }
+            main { position: fixed !important; top: 125px !important; bottom: 0 !important; left: 0 !important; right: 0 !important; width: 100% !important; height: auto !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; display: block !important; padding: 0 !important; z-index: 10 !important; }
+            .theater-mode-active main { top: 0 !important; z-index: 200 !important; }
+            .mobile-stream-container { display: flex !important; flex-direction: column !important; width: 100% !important; height: auto !important; min-height: auto !important; padding: 10px !important; padding-bottom: 120px !important; gap: 15px !important; box-sizing: border-box !important; }
+            .stream-player-wrapper { display: block !important; width: 100% !important; height: auto !important; aspect-ratio: 16/9 !important; flex: none !important; margin: 0 !important; padding: 0 !important; opacity: 1 !important; visibility: visible !important; max-width: none !important; }
+            .stream-player-wrapper > div { width: 100% !important; height: 100% !important; padding: 0 !important; max-width: none !important; }
+            .sidebar-glass { display: none !important; } body.mobile-sidebar-active .sidebar-glass { display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; z-index: 200 !important; background: #09090b !important; padding-top: 0 !important; }
+            .floating-toolbar { width: 90% !important; max-width: 350px !important; bottom: 20px !important; padding: 5px !important; justify-content: space-evenly !important; }
+            .credits-container, .desktop-only { display: none !important; }
         }
     </style>
 </head>
 <body>
-    <amp-auto-ads type="adsense"
-        data-ad-client="ca-pub-6392386276634224">
-    </amp-auto-ads>
+    <amp-auto-ads type="adsense" data-ad-client="ca-pub-6392386276634224"></amp-auto-ads>
     <div id="root"></div>
     <script type="text/babel">
         const { useState, useEffect, useRef, memo, useCallback } = React, { createPortal } = ReactDOM;
@@ -240,8 +106,6 @@
         const ScaleIcon=()=><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"></path><path d="M7 9v2"></path><path d="M11 9v2"></path><path d="M15 9v2"></path></svg>;
         const ChatIcon=({width,height})=><svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>;
         const HeartIcon=({className,width,height})=><svg xmlns="http://www.w3.org/2000/svg" width={width||20} height={height||20} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>;
-        const CarIcon=({className})=><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>;
-        const BrokenCarIcon=({className})=><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M10 16H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1l2-4h8l2 4h1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-1"/><circle cx="7" cy="16" r="3"/><circle cx="17" cy="16" r="3"/><path d="M15 8l-2 3" strokeWidth="2"/><path d="M9 8l2 3" strokeWidth="2"/></svg>;
         const LogoML=()=><svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 19V5" stroke="white" strokeWidth="3" strokeLinecap="round" /><path d="M19 19V5" stroke="white" strokeWidth="3" strokeLinecap="round" /><path d="M5 5L12 13L19 5" stroke="#a5f3fc" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg>;
         const ClockIcon=({width,height})=><svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>;
         const ZapIcon=({width,height})=><svg xmlns="http://www.w3.org/2000/svg" width={width||14} height={height||14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>;
@@ -252,112 +116,37 @@
         const InstagramIcon = ({width,height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
 
         const fetchAvatar = async (platform, name) => {
-            try {
-                if (platform === 'twitch') {
-                    const res = await fetch(`https://decapi.me/twitch/avatar/${name}`);
-                    const url = await res.text();
-                    return url && url.startsWith('http') ? url : null;
-                }
-                // Kick e YT requerem proxy/backend para evitar CORS, mantemos fallback
-                return null; 
-            } catch (e) {
-                console.warn(`Erro ao buscar avatar para ${name}:`, e);
-                return null;
-            }
+            try { if (platform === 'twitch') { const res = await fetch(`https://decapi.me/twitch/avatar/${name}`); const url = await res.text(); return url && url.startsWith('http') ? url : null; } return null; } catch (e) { console.warn(`Erro ao buscar avatar para ${name}:`, e); return null; }
         };
 
         const AdUnit = memo(({ className = "", outerClassName = "", style = {}, onExpire, type = 'main' }) => {
-            const adRef = useRef(null);
-            const isChat = type === 'chat';
-            const initialized = useRef(false);
-
+            const adRef = useRef(null), isChat = type === 'chat', initialized = useRef(false);
             useEffect(() => {
-                const hideTimer = setTimeout(() => {
-                    if (onExpire) onExpire();
-                }, 15000);
-
-                let retryCount = 0;
-                const maxRetries = 20;
-
+                const hideTimer = setTimeout(() => { if (onExpire) onExpire(); }, 15000);
+                let retryCount = 0, maxRetries = 20;
                 const loadAd = () => {
                     if (!adRef.current || initialized.current) return;
-
-                    // Só tenta carregar se tiver dimensões reais
                     if (adRef.current.offsetWidth > 0 && adRef.current.offsetHeight > 0) {
-                        try {
-                            if (window.adsbygoogle) {
-                                // Verifica se o slot já não está preenchido
-                                const alreadyFilled = adRef.current.querySelector('iframe') || adRef.current.getAttribute('data-adsbygoogle-status');
-                                if (!alreadyFilled) {
-                                    window.adsbygoogle.push({});
-                                    initialized.current = true;
-                                }
-                            }
-                        } catch (e) { 
-                            console.warn("AdSense push error suppressed:", e);
-                            // Se falhar o push, talvez marque como inicializado para evitar loops, 
-                            // ou não, dependendo se é recuperável. Aqui vamos assumir que falha = para de tentar
-                            initialized.current = true; 
-                        }
-                    } else {
-                        if (retryCount < maxRetries) {
-                            retryCount++;
-                            setTimeout(loadAd, 500);
-                        }
-                    }
+                        try { if (window.adsbygoogle) { const alreadyFilled = adRef.current.querySelector('iframe') || adRef.current.getAttribute('data-adsbygoogle-status'); if (!alreadyFilled) { window.adsbygoogle.push({}); initialized.current = true; } } } catch (e) { initialized.current = true; }
+                    } else if (retryCount < maxRetries) { retryCount++; setTimeout(loadAd, 500); }
                 };
-
                 const timer = setTimeout(loadAd, 500);
-
-                return () => {
-                    clearTimeout(timer);
-                    clearTimeout(hideTimer);
-                };
+                return () => { clearTimeout(timer); clearTimeout(hideTimer); };
             }, [onExpire]);
 
             return (
                 <div className={outerClassName} style={{ maxHeight: '280px', ...style }}>
                     <div className={`w-full bg-[#121215]/50 border border-white/5 rounded-xl overflow-hidden relative min-h-[100px] flex items-center justify-center animate-fade-in ${className}`} style={{ maxHeight: '100%' }}>
                         <span className="text-[8px] text-gray-700 uppercase tracking-widest absolute top-1 left-2 z-10 font-bold pointer-events-none">Publicidade</span>
-                        {onExpire && (
-                            <button 
-                                onClick={(e) => { e.stopPropagation(); onExpire(); }}
-                                className="absolute top-1 right-1 z-20 p-1.5 text-gray-400 hover:text-white bg-black/40 hover:bg-red-500/80 rounded-full transition-all backdrop-blur-sm shadow-sm"
-                                title="Fechar anúncio"
-                            >
-                                <XIcon width={10} height={10} />
-                            </button>
-                        )}
-                        {isChat ? (
-                            <ins className="adsbygoogle w-full block"
-                                 style={{ display: 'block' }}
-                                 data-ad-format="fluid"
-                                 data-ad-layout-key="-h6-c+2i-1u-38"
-                                 data-ad-client="ca-pub-6392386276634224"
-                                 data-ad-slot="6876860882"
-                                 ref={adRef}></ins>
-                        ) : (
-                            <ins className="adsbygoogle"
-                                 style={{ display: 'block' }}
-                                 data-ad-client="ca-pub-6392386276634224"
-                                 data-ad-slot="4691171933"
-                                 data-ad-format="auto"
-                                 data-full-width-responsive="true"
-                                 ref={adRef}></ins>
-                        )}
+                        {onExpire && <button onClick={(e) => { e.stopPropagation(); onExpire(); }} className="absolute top-1 right-1 z-20 p-1.5 text-gray-400 hover:text-white bg-black/40 hover:bg-red-500/80 rounded-full transition-all backdrop-blur-sm shadow-sm" title="Fechar anúncio"><XIcon width={10} height={10} /></button>}
+                        {isChat ? <ins className="adsbygoogle w-full block" style={{ display: 'block' }} data-ad-format="fluid" data-ad-layout-key="-h6-c+2i-1u-38" data-ad-client="ca-pub-6392386276634224" data-ad-slot="6876860882" ref={adRef}></ins> : <ins className="adsbygoogle" style={{ display: 'block' }} data-ad-client="ca-pub-6392386276634224" data-ad-slot="4691171933" data-ad-format="auto" data-full-width-responsive="true" ref={adRef}></ins>}
                     </div>
                 </div>
             );
         });
 
         const Tooltip = ({ text, children, className="" }) => (
-            <div className={`group/tooltip relative flex items-center justify-center ${className}`}>
-                {children}
-                <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-[#1e1e24]/90 backdrop-blur-md border border-white/10 text-white text-[10px] font-bold rounded-lg shadow-xl opacity-0 group-hover/tooltip:opacity-100 transition-all duration-200 transform translate-y-1 group-hover/tooltip:translate-y-0 pointer-events-none whitespace-nowrap z-[80] select-none">
-                    {text}
-                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1e1e24]/90 border-r border-b border-white/10 rotate-45"></div>
-                </div>
-            </div>
+            <div className={`group/tooltip relative flex items-center justify-center ${className}`}>{children}<div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-[#1e1e24]/90 backdrop-blur-md border border-white/10 text-white text-[10px] font-bold rounded-lg shadow-xl opacity-0 group-hover/tooltip:opacity-100 transition-all duration-200 transform translate-y-1 group-hover/tooltip:translate-y-0 pointer-events-none whitespace-nowrap z-[80] select-none">{text}<div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1e1e24]/90 border-r border-b border-white/10 rotate-45"></div></div></div>
         );
 
         const useToast = () => {
@@ -367,37 +156,21 @@
         };
 
         const ToastContainer = ({ toasts }) => (
-            <div className="fixed bottom-24 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
-                {toasts.map(t => <div key={t.id} className="animate-toast-in bg-black/80 backdrop-blur-md border border-white/10 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 min-w-[200px]">{t.type==='error'&&<span className="text-red-400">✕</span>}{t.type==='success'&&<span className="text-green-400">✓</span>}{t.type==='info'&&<span className="text-ice">ℹ</span>}<span className="text-sm font-medium">{t.message}</span></div>)}
-            </div>
+            <div className="fixed bottom-24 right-6 z-[100] flex flex-col gap-3 pointer-events-none">{toasts.map(t => <div key={t.id} className="animate-toast-in bg-black/80 backdrop-blur-md border border-white/10 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 min-w-[200px]">{t.type==='error'&&<span className="text-red-400">✕</span>}{t.type==='success'&&<span className="text-green-400">✓</span>}{t.type==='info'&&<span className="text-ice">ℹ</span>}<span className="text-sm font-medium">{t.message}</span></div>)}</div>
         );
 
         const Credits = ({ isSidebarOpen, sidebarWidth }) => {
             const [visible, setVisible] = useState(true);
             useEffect(() => { const t = setTimeout(() => setVisible(false), 5000); return () => clearTimeout(t); }, []);
-            
             return (
-                <div className={`fixed z-[60] flex items-center gap-2 transition-all duration-700 ease-out group/credits
-                    bottom-4 right-4 md:bottom-6 md:right-6
-                    ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 md:opacity-30 md:translate-y-0 md:hover:opacity-100'}
-                `}
-                style={{ right: (typeof window !== 'undefined' && window.innerWidth >= 768 && isSidebarOpen) ? `${sidebarWidth + 30}px` : undefined }}
-                >
-                    <div className={`flex items-center gap-2 overflow-hidden transition-all duration-500 ${visible ? 'w-auto opacity-100' : 'w-0 opacity-0 group-hover/credits:w-auto group-hover/credits:opacity-100'}`}>
-                        <a href="https://www.twitch.tv/kaozyking" target="_blank" className="p-1.5 bg-[#9146ff] text-white rounded-full hover:scale-110 transition-transform shadow-lg"><TwitchIcon width={12} height={12}/></a>
-                        <a href="https://www.instagram.com/oeduardomacedo" target="_blank" className="p-1.5 bg-pink-600 text-white rounded-full hover:scale-110 transition-transform shadow-lg"><InstagramIcon width={12} height={12}/></a>
-                    </div>
-                    <div className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 rounded-full text-[10px] font-medium text-gray-400 group-hover/credits:text-white group-hover/credits:bg-black/80 transition-colors shadow-xl cursor-default">
-                        Dev by <span className="font-bold text-ice">KaozyKing</span>
-                    </div>
+                <div className={`fixed z-[60] flex items-center gap-2 transition-all duration-700 ease-out group/credits credits-container bottom-4 right-4 md:bottom-6 md:right-6 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 md:opacity-30 md:translate-y-0 md:hover:opacity-100'}`} style={{ right: (typeof window !== 'undefined' && window.innerWidth >= 768 && isSidebarOpen) ? `${sidebarWidth + 30}px` : undefined }}>
+                    <div className={`flex items-center gap-2 overflow-hidden transition-all duration-500 ${visible ? 'w-auto opacity-100' : 'w-0 opacity-0 group-hover/credits:w-auto group-hover/credits:opacity-100'}`}><a href="https://www.twitch.tv/kaozyking" target="_blank" className="p-1.5 bg-[#9146ff] text-white rounded-full hover:scale-110 transition-transform shadow-lg"><TwitchIcon width={12} height={12}/></a><a href="https://www.instagram.com/oeduardomacedo" target="_blank" className="p-1.5 bg-pink-600 text-white rounded-full hover:scale-110 transition-transform shadow-lg"><InstagramIcon width={12} height={12}/></a></div><div className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 rounded-full text-[10px] font-medium text-gray-400 group-hover/credits:text-white group-hover/credits:bg-black/80 transition-colors shadow-xl cursor-default">Dev by <span className="font-bold text-ice">KaozyKing</span></div>
                 </div>
             )
         };
 
         const DonatePopup = ({ onClose }) => (
-            <div className="fixed bottom-24 left-4 right-4 md:left-auto md:right-6 md:w-96 z-[90] animate-slide-up pointer-events-auto">
-                <div className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 rounded-2xl blur opacity-30 group-hover:opacity-70 transition duration-1000"></div><div className="relative bg-[#121215]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl flex gap-4 items-start ring-1 ring-white/5"><button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-full p-1.5 transition-colors"><XIcon width={12} height={12}/></button><div className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-white/10 flex items-center justify-center shadow-inner"><HeartIcon className="text-pink-500 animate-heart-beat drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]" width={24} height={24} /></div><div className="flex-1 pr-2"><h3 className="text-white font-bold text-sm mb-1.5 flex items-center gap-2">Apoie o NEVETHON! <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/30">Donate</span></h3><p className="text-gray-300 text-xs leading-relaxed font-medium">Já enviou uma mensagem para seu streamer? <br className="mb-2 block"/>Digite <span className="text-black font-extrabold bg-cyan-400 px-1.5 py-0.5 rounded mx-0.5 shadow-[0_0_10px_rgba(34,211,238,0.5)] cursor-pointer hover:scale-105 inline-block transition-transform select-all">!pix</span> no chat e mande agora mesmo.</p></div></div></div>
-            </div>
+            <div className="fixed bottom-24 left-4 right-4 md:left-auto md:right-6 md:w-96 z-[90] animate-slide-up pointer-events-auto"><div className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 rounded-2xl blur opacity-30 group-hover:opacity-70 transition duration-1000"></div><div className="relative bg-[#121215]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl flex gap-4 items-start ring-1 ring-white/5"><button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-full p-1.5 transition-colors"><XIcon width={12} height={12}/></button><div className="shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-white/10 flex items-center justify-center shadow-inner"><HeartIcon className="text-pink-500 animate-heart-beat drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]" width={24} height={24} /></div><div className="flex-1 pr-2"><h3 className="text-white font-bold text-sm mb-1.5 flex items-center gap-2">Apoie o NEVETHON! <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/30">Donate</span></h3><p className="text-gray-300 text-xs leading-relaxed font-medium">Já enviou uma mensagem para seu streamer? <br className="mb-2 block"/>Digite <span className="text-black font-extrabold bg-cyan-400 px-1.5 py-0.5 rounded mx-0.5 shadow-[0_0_10px_rgba(34,211,238,0.5)] cursor-pointer hover:scale-105 inline-block transition-transform select-all">!pix</span> no chat e mande agora mesmo.</p></div></div></div></div>
         );
 
         const KickChatEmbed = ({ streamName, isResizing, idSuffix='' }) => {
@@ -421,70 +194,19 @@
         };
 
         const LoadingScreen = ({ isLoading }) => {
-            const [visible, setVisible] = useState(() => !sessionStorage.getItem('nevethon_intro_seen'));
-            const [phase, setPhase] = useState(0);
-
-            useEffect(() => {
-                if (visible) {
-                    sessionStorage.setItem('nevethon_intro_seen', 'true');
-                    const timer = setTimeout(() => setPhase(1), 3500);
-                    const removeTimer = setTimeout(() => setVisible(false), 4500);
-                    return () => { clearTimeout(timer); clearTimeout(removeTimer); };
-                }
-            }, [visible]);
-
+            const [visible, setVisible] = useState(() => !sessionStorage.getItem('nevethon_intro_seen')), [phase, setPhase] = useState(0);
+            useEffect(() => { if (visible) { sessionStorage.setItem('nevethon_intro_seen', 'true'); const t1 = setTimeout(() => setPhase(1), 3500), t2 = setTimeout(() => setVisible(false), 4500); return () => { clearTimeout(t1); clearTimeout(t2); }; } }, [visible]);
             if (!visible) return null;
-
             return (
                 <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050507] transition-opacity duration-1000 ease-in-out ${phase === 1 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#1e293b] via-[#050507] to-[#000000] opacity-80"></div>
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-150 pointer-events-none mix-blend-overlay"></div>
-                    
-                    {/* Efeito de Nevasca */}
-                    <div className="absolute inset-0 overflow-hidden pointer-events-none perspective-1000">
-                        {[...Array(60)].map((_, i) => (
-                            <div key={i} className="absolute bg-white rounded-full animate-blizzard" style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `-${Math.random() * 20}%`,
-                                width: `${Math.random() * 3 + 1}px`,
-                                height: `${Math.random() * 3 + 1}px`,
-                                opacity: Math.random() * 0.8,
-                                animationDuration: `${Math.random() * 2 + 3}s`,
-                                animationDelay: `${Math.random() * 2}s`
-                            }}></div>
-                        ))}
-                    </div>
-                    
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none perspective-1000">{[...Array(60)].map((_, i) => (<div key={i} className="absolute bg-white rounded-full animate-blizzard" style={{ left: `${Math.random() * 100}%`, top: `-${Math.random() * 20}%`, width: `${Math.random() * 3 + 1}px`, height: `${Math.random() * 3 + 1}px`, opacity: Math.random() * 0.8, animationDuration: `${Math.random() * 2 + 3}s`, animationDelay: `${Math.random() * 2}s` }}></div>))}</div>
                     <div className="relative z-10 text-center flex flex-col items-center justify-center gap-6 p-4 animate-slide-up">
-                        <div className="flex items-center gap-3 mb-2 opacity-80">
-                           <div className="h-[1px] w-8 md:w-16 bg-gradient-to-r from-transparent to-cyan-400"></div>
-                           <p className="text-cyan-200 font-mono text-[10px] md:text-xs tracking-[0.4em] uppercase drop-shadow-md">Bem Vindo Ao</p>
-                           <div className="h-[1px] w-8 md:w-16 bg-gradient-to-l from-transparent to-cyan-400"></div>
-                        </div>
-                        
-                        {/* Título NEVETHON Corrigido */}
-                        <div className="relative">
-                            <h1 className="font-russo text-6xl md:text-8xl lg:text-9xl tracking-tighter italic text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-blue-600 drop-shadow-[0_0_25px_rgba(34,211,238,0.6)] z-20 relative select-none pr-4">
-                                NEVETHON
-                            </h1>
-                            <h1 className="absolute top-0 left-0 w-full h-full font-russo text-6xl md:text-8xl lg:text-9xl tracking-tighter italic text-cyan-500/30 blur-sm scale-105 select-none -z-10 pr-4" aria-hidden="true">
-                                NEVETHON
-                            </h1>
-                        </div>
-                        
-                        {/* Subtítulo */}
-                        <div className="relative px-6 py-3 bg-[#09090b]/60 border border-cyan-500/20 rounded-full backdrop-blur-md flex items-center gap-3 shadow-[0_0_15px_rgba(34,211,238,0.1)] mt-4">
-                            <span className="text-cyan-300 text-xs">❄</span>
-                            <p className="text-gray-300 font-bold tracking-[0.2em] text-[9px] md:text-xs uppercase">
-                                O Subathon Extremo dos Streamers
-                            </p>
-                            <span className="text-cyan-300 text-xs">❄</span>
-                        </div>
-
-                        {/* Barra de Carregamento */}
-                        <div className="mt-8 w-48 h-[2px] bg-white/10 rounded-full overflow-hidden">
-                             <div className="h-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,1)] animate-[width_3.5s_ease-out_forwards]" style={{width: '0%'}}></div>
-                        </div>
+                        <div className="flex items-center gap-3 mb-2 opacity-80"><div className="h-[1px] w-8 md:w-16 bg-gradient-to-r from-transparent to-cyan-400"></div><p className="text-cyan-200 font-mono text-[10px] md:text-xs tracking-[0.4em] uppercase drop-shadow-md">Bem Vindo Ao</p><div className="h-[1px] w-8 md:w-16 bg-gradient-to-l from-transparent to-cyan-400"></div></div>
+                        <div className="relative"><h1 className="font-russo text-6xl md:text-8xl lg:text-9xl tracking-tighter italic text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-blue-600 drop-shadow-[0_0_25px_rgba(34,211,238,0.6)] z-20 relative select-none pr-4">NEVETHON</h1><h1 className="absolute top-0 left-0 w-full h-full font-russo text-6xl md:text-8xl lg:text-9xl tracking-tighter italic text-cyan-500/30 blur-sm scale-105 select-none -z-10 pr-4" aria-hidden="true">NEVETHON</h1></div>
+                        <div className="relative px-6 py-3 bg-[#09090b]/60 border border-cyan-500/20 rounded-full backdrop-blur-md flex items-center gap-3 shadow-[0_0_15px_rgba(34,211,238,0.1)] mt-4"><span className="text-cyan-300 text-xs">❄</span><p className="text-gray-300 font-bold tracking-[0.2em] text-[9px] md:text-xs uppercase">O Subathon Extremo dos Streamers</p><span className="text-cyan-300 text-xs">❄</span></div>
+                        <div className="mt-8 w-48 h-[2px] bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,1)] animate-[width_3.5s_ease-out_forwards]" style={{width: '0%'}}></div></div>
                     </div>
                 </div>
             );
@@ -499,27 +221,10 @@
 
         const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, soloStreamId, onToggleSolo, isResizingAny, isTheaterMode, isDragging, onResizeStart, onResetSize, onContextMenu }) => {
             const isMuted = (soloStreamId && soloStreamId !== stream.id) || (!soloStreamId && isGlobalMuted);
-            
-            const getUrl = () => { 
-                if(stream.platform==='twitch'){
-                    const c=[hostname,"localhost","127.0.0.1",window.location.hostname],p=[...new Set(c.filter(h=>h&&h.trim()!=="").map(x=>x.split(':')[0]))];
-                    if(!p.length)p.push("localhost");
-                    return `https://player.twitch.tv/?channel=${stream.name}&${p.map(x=>`parent=${x}`).join("&")}&muted=${isMuted}`;
-                } 
-                if(stream.platform==='kick'){
-                    // Adicionando parametros de autoplay e mute que a Kick pode respeitar dependendo da versão do player
-                    return `https://player.kick.com/${stream.name}?muted=${isMuted}&autoplay=true`;
-                } 
-                if(stream.platform==='youtube'){
-                    return `https://www.youtube.com/embed/${stream.name}?autoplay=1&mute=${isMuted?1:0}`;
-                }
-                return '' 
-            };
-            
+            const getUrl = () => { if(stream.platform==='twitch'){const c=[hostname,"localhost","127.0.0.1",window.location.hostname],p=[...new Set(c.filter(h=>h&&h.trim()!=="").map(x=>x.split(':')[0]))]; if(!p.length)p.push("localhost"); return `https://player.twitch.tv/?channel=${stream.name}&${p.map(x=>`parent=${x}`).join("&")}&muted=${isMuted}`; } if(stream.platform==='kick'){ return `https://player.kick.com/${stream.name}?muted=${isMuted}&autoplay=true`; } if(stream.platform==='youtube'){ return `https://www.youtube.com/embed/${stream.name}?autoplay=1&mute=${isMuted?1:0}`; } return '' };
             const isSolo = soloStreamId === stream.id;
-
             return (
-                <div className={`relative group bg-transparent overflow-hidden transition-all duration-300 ${!stream.customWidth?widthClass:''} ${heightClass||''} flex items-center justify-center p-1 z-10 max-w-[100vw]`} style={{flexGrow:0,width:stream.customWidth?`${stream.customWidth}px`:undefined,...style}} draggable={isDraggable} onDragStart={e=>isDraggable&&onDragStart(e,index)} onDragEnter={e=>isDraggable&&onDragEnter(e,index)} onDragEnd={onDragEnd} onDragOver={e=>e.preventDefault()}>
+                <div className={`stream-player-wrapper relative group bg-transparent overflow-hidden transition-all duration-300 ${!stream.customWidth?widthClass:''} ${heightClass||''} flex items-center justify-center p-1 z-10 max-w-[100vw]`} style={{flexGrow:0,width:stream.customWidth?`${stream.customWidth}px`:undefined,...style}} draggable={isDraggable} onDragStart={e=>isDraggable&&onDragStart(e,index)} onDragEnter={e=>isDraggable&&onDragEnter(e,index)} onDragEnd={onDragEnd} onDragOver={e=>e.preventDefault()}>
                     <div onContextMenu={e=>onContextMenu(e,stream.id)} className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded?'ring-1 ring-white/20 cinema-glow-expanded shadow-2xl':''} ${isSolo ? 'ring-2 ring-accent shadow-[0_0_30px_rgba(99,102,241,0.5)]' : ''}`}>
                         {(isDragging||isResizingAny)&&<div className="absolute inset-0 z-50 bg-transparent"></div>} {!isExpanded&&<div className="absolute bottom-0 right-0 w-12 h-12 z-40 cursor-nwse-resize opacity-0 group-hover:opacity-100 transition-opacity touch-none flex items-end justify-end pb-1 pr-1" onMouseDown={e=>onResizeStart(e,stream.id)} onTouchStart={e=>onResizeStart(e,stream.id)}><div className="w-4 h-4 border-r-2 border-b-2 border-white/30 rounded-br-sm active:border-accent active:bg-accent/20 transition-colors"></div></div>}
                         <div className={`absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-2 bg-gradient-to-b from-black/90 via-black/40 to-transparent transition-opacity duration-200 pointer-events-none opacity-0 group-hover:opacity-100`}>
@@ -576,58 +281,15 @@
             const [showDonatePopup, setShowDonatePopup] = useState(false), [chatRefreshTriggers, setChatRefreshTriggers] = useState({}), [isToolbarActive, setIsToolbarActive] = useState(false), [isDragging, setIsDragging] = useState(false);
             const [resizingStreamId, setResizingStreamId] = useState(null), [pipWindow, setPipWindow] = useState(null), [searchHistory, setSearchHistory] = useState([]), [showHistory, setShowHistory] = useState(false);
             const [contextMenu, setContextMenu] = useState({ isOpen: false, x: 0, y: 0, streamId: null }), [sleepTimer, setSleepTimer] = useState({ active: false, endTime: null, duration: null });
-            const [soloStreamId, setSoloStreamId] = useState(null);
-            const [adsHidden, setAdsHidden] = useState(false);
-            
+            const [soloStreamId, setSoloStreamId] = useState(null), [adsHidden, setAdsHidden] = useState(false);
             const headerTimerRef = useRef(null), toolbarTimeoutRef = useRef(null), { toasts, addToast } = useToast(), sidebarRef = useRef(null);
             const dragItem = useRef(null), dragOverItem = useRef(null), startResizeX = useRef(0), startResizeWidth = useRef(0);
             const hostname = typeof window!=='undefined'&&window.location.hostname?window.location.hostname:"localhost", t = (key) => translations[lang][key];
-            const isMobile = typeof window!=='undefined'&&window.innerWidth<768;
-            const isMobileChatOpen = isMobile && isSidebarOpen;
+            const isMobile = typeof window!=='undefined'&&window.innerWidth<768, isMobileChatOpen = isMobile && isSidebarOpen;
 
-            useEffect(() => { 
-                const h=(e)=>{
-                    // Verifica se o mouse está sobre a área do chat (lado direito)
-                    const isOverSidebar = isSidebarOpen && window.innerWidth >= 768 && e.clientX > (window.innerWidth - sidebarWidth);
-                    
-                    // Só mostra o header se NÃO estiver sobre o sidebar
-                    if((e.clientY<120 && !isOverSidebar)||streamers.length===0){
-                        setIsHeaderVisible(true);
-                        if(headerTimerRef.current)clearTimeout(headerTimerRef.current)
-                    }else if(streamers.length>0&&!isTheaterMode&&isHeaderVisible){
-                        if(headerTimerRef.current)clearTimeout(headerTimerRef.current);
-                        headerTimerRef.current=setTimeout(()=>setIsHeaderVisible(false),1500)
-                    }
-                }; 
-                window.addEventListener('mousemove',h); 
-                return ()=>{window.removeEventListener('mousemove',h);if(headerTimerRef.current)clearTimeout(headerTimerRef.current)} 
-            }, [streamers.length,isTheaterMode,isHeaderVisible,isSidebarOpen,sidebarWidth]);
-
-            useEffect(() => { 
-                setTimeout(()=>setLoading(false),4500); 
-                const s=localStorage.getItem('multlives-streamers'); 
-                if(s) {
-                    try {
-                        const p=JSON.parse(s);
-                        const c=Array.isArray(p)?p.filter(x=>x&&x.id&&x.name):[];
-                        setStreamers(c);
-                        if(c.length) setActiveChatTab(c[0].id);
-                        
-                        c.forEach(async (st) => {
-                            if (!st.avatar && st.platform === 'twitch') {
-                                const url = await fetchAvatar(st.platform, st.name);
-                                if (url) {
-                                    setStreamers(prev => prev.map(s => s.id === ns.id ? {...s, avatar: url} : s));
-                                }
-                            }
-                        });
-                    } catch {}
-                }
-                const sq=localStorage.getItem('multlives-squads');if(sq)setSquads(JSON.parse(sq)); 
-                const h=localStorage.getItem('multlives-history');if(h)setSearchHistory(JSON.parse(h)); 
-                const d=setTimeout(()=>setShowDonatePopup(true),15000); return ()=>clearTimeout(d) 
-            }, []);
-
+            useEffect(() => { if(isMobile) document.body.classList.toggle('mobile-sidebar-active', isSidebarOpen); }, [isSidebarOpen, isMobile]);
+            useEffect(() => { const h=(e)=>{const isOverSidebar = isSidebarOpen && window.innerWidth >= 768 && e.clientX > (window.innerWidth - sidebarWidth); if((e.clientY<120 && !isOverSidebar)||streamers.length===0){setIsHeaderVisible(true);if(headerTimerRef.current)clearTimeout(headerTimerRef.current)}else if(streamers.length>0&&!isTheaterMode&&isHeaderVisible){if(headerTimerRef.current)clearTimeout(headerTimerRef.current);headerTimerRef.current=setTimeout(()=>setIsHeaderVisible(false),1500)}}; window.addEventListener('mousemove',h); return ()=>{window.removeEventListener('mousemove',h);if(headerTimerRef.current)clearTimeout(headerTimerRef.current)} }, [streamers.length,isTheaterMode,isHeaderVisible,isSidebarOpen,sidebarWidth]);
+            useEffect(() => { setTimeout(()=>setLoading(false),4500); const s=localStorage.getItem('multlives-streamers'); if(s) { try { const p=JSON.parse(s), c=Array.isArray(p)?p.filter(x=>x&&x.id&&x.name):[]; setStreamers(c); if(c.length) setActiveChatTab(c[0].id); c.forEach(async (st) => { if (!st.avatar && st.platform === 'twitch') { const url = await fetchAvatar(st.platform, st.name); if (url) setStreamers(prev => prev.map(s => s.id === st.id ? {...s, avatar: url} : s)); } }); } catch {} } const sq=localStorage.getItem('multlives-squads');if(sq)setSquads(JSON.parse(sq)); const h=localStorage.getItem('multlives-history');if(h)setSearchHistory(JSON.parse(h)); const d=setTimeout(()=>setShowDonatePopup(true),15000); return ()=>clearTimeout(d) }, []);
             useEffect(() => localStorage.setItem('multlives-streamers',JSON.stringify(streamers)), [streamers]);
             useEffect(() => localStorage.setItem('multlives-squads',JSON.stringify(squads)), [squads]);
             useEffect(() => localStorage.setItem('multlives-history',JSON.stringify(searchHistory)), [searchHistory]);
@@ -637,92 +299,24 @@
             const resize = useCallback((e) => { const cX=e.type.startsWith('touch')?e.touches[0].clientX:e.clientX, cY=e.type.startsWith('touch')?e.touches[0].clientY:e.clientY; if(isResizing)setSidebarWidth(Math.max(250,Math.min(window.innerWidth*0.8,window.innerWidth-cX))); if(isResizingMap&&sidebarRef.current)setMapHeight(Math.max(100,Math.min(sidebarRef.current.getBoundingClientRect().height-150,cY-sidebarRef.current.getBoundingClientRect().top))); if(resizingStreamId)setStreamers(p=>p.map(s=>s.id===resizingStreamId?{...s,customWidth:Math.max(200,startResizeWidth.current+(cX-startResizeX.current))}:s)) }, [isResizing,isResizingMap,resizingStreamId]);
             useEffect(() => { window.addEventListener("mousemove",resize); window.addEventListener("mouseup",stopResizing); window.addEventListener("touchmove",resize,{passive:false}); window.addEventListener("touchend",stopResizing); return ()=>{window.removeEventListener("mousemove",resize);window.removeEventListener("mouseup",stopResizing);window.removeEventListener("touchmove",resize);window.removeEventListener("touchend",stopResizing)} }, [resize,stopResizing]);
 
-            const togglePip = useCallback(async () => {
-                if (pipWindow) { pipWindow.close(); setPipWindow(null); return; }
-                const copyStyles = (targetDoc) => { [...document.styleSheets].forEach((styleSheet) => { try { if (styleSheet.cssRules) { const newStyle = targetDoc.createElement('style'); [...styleSheet.cssRules].forEach(rule => newStyle.appendChild(targetDoc.createTextNode(rule.cssText))); targetDoc.head.appendChild(newStyle); } else if (styleSheet.href) { const newLink = targetDoc.createElement('link'); newLink.rel = 'stylesheet'; newLink.href = styleSheet.href; targetDoc.head.appendChild(newLink); } } catch (e) { if (styleSheet.ownerNode) targetDoc.head.appendChild(styleSheet.ownerNode.cloneNode(true)); } }); const twScript = document.querySelector('script[src*="tailwindcss"]'); if (twScript) { const s = targetDoc.createElement('script'); s.src = twScript.src; targetDoc.head.appendChild(s); } targetDoc.body.className = "bg-[#09090b] text-white overflow-hidden"; };
-                if (typeof window !== 'undefined' && window.documentPictureInPicture) { try { const w = await window.documentPictureInPicture.requestWindow({ width: 800, height: 600 }); copyStyles(w.document); w.addEventListener("pagehide", () => setPipWindow(null)); setPipWindow(w); return; } catch (err) { console.error("PiP Error:", err); } }
-                try { const w = window.open("", "_blank", "width=800,height=600,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes"); if (!w) { addToast("Pop-up bloqueado. Permita para usar.", 'error'); return; } setTimeout(() => { w.document.title = "MultLives - Player Flutuante"; copyStyles(w.document); const timer = setInterval(() => { if (w.closed) { clearInterval(timer); setPipWindow(null); } }, 500); w.addEventListener("beforeunload", () => { setPipWindow(null); }); setPipWindow(w); }, 100); } catch (err) { console.error("Popup Fallback Error:", err); addToast("Erro ao abrir janela.", 'error'); }
-            }, [pipWindow, t, addToast]);
-
+            const togglePip = useCallback(async () => { if (pipWindow) { pipWindow.close(); setPipWindow(null); return; } const copyStyles = (targetDoc) => { [...document.styleSheets].forEach((styleSheet) => { try { if (styleSheet.cssRules) { const newStyle = targetDoc.createElement('style'); [...styleSheet.cssRules].forEach(rule => newStyle.appendChild(targetDoc.createTextNode(rule.cssText))); targetDoc.head.appendChild(newStyle); } else if (styleSheet.href) { const newLink = targetDoc.createElement('link'); newLink.rel = 'stylesheet'; newLink.href = styleSheet.href; targetDoc.head.appendChild(newLink); } } catch (e) { if (styleSheet.ownerNode) targetDoc.head.appendChild(styleSheet.ownerNode.cloneNode(true)); } }); const twScript = document.querySelector('script[src*="tailwindcss"]'); if (twScript) { const s = targetDoc.createElement('script'); s.src = twScript.src; targetDoc.head.appendChild(s); } targetDoc.body.className = "bg-[#09090b] text-white overflow-hidden"; }; if (typeof window !== 'undefined' && window.documentPictureInPicture) { try { const w = await window.documentPictureInPicture.requestWindow({ width: 800, height: 600 }); copyStyles(w.document); w.addEventListener("pagehide", () => setPipWindow(null)); setPipWindow(w); return; } catch (err) { console.error("PiP Error:", err); } } try { const w = window.open("", "_blank", "width=800,height=600,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes"); if (!w) { addToast("Pop-up bloqueado. Permita para usar.", 'error'); return; } setTimeout(() => { w.document.title = "MultLives - Player Flutuante"; copyStyles(w.document); const timer = setInterval(() => { if (w.closed) { clearInterval(timer); setPipWindow(null); } }, 500); w.addEventListener("beforeunload", () => { setPipWindow(null); }); setPipWindow(w); }, 100); } catch (err) { console.error("Popup Fallback Error:", err); addToast("Erro ao abrir janela.", 'error'); } }, [pipWindow, t, addToast]);
             const toggleTheaterMode = () => setIsTheaterMode(p=>{const n=!p; if(n&&window.innerWidth<768)setIsSidebarOpen(false); return n});
-
-            const addStreamer = async (e) => { 
-                e.preventDefault(); 
-                if(!inputVal.trim()) return addToast(t('toast_empty'),'info'); 
-                let n=inputVal.trim(); 
-                if(platform==='youtube'){ const m=n.match(/(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/); if(m)n=m[1] } else n=n.toLowerCase(); 
-                if(streamers.some(s=>s.name===n&&s.platform===platform)) return addToast(t('toast_exists'),'error'); 
-                
-                const ns={id:Date.now().toString(),name:n,platform,refreshKey:Date.now(),customWidth:null, avatar: null}; 
-                
-                setStreamers(p=>[...p,ns]); 
-                setSearchHistory(p=>{ const historyItem={name:n,platform}; const f=p.filter(x=>!(x.name===historyItem.name&&x.platform===historyItem.platform)); return [historyItem,...f].slice(0,5) }); 
-                setInputVal(""); 
-                if(!streamers.length) setActiveChatTab(ns.id); 
-                addToast(t('toast_added'),'success');
-
-                const avatarUrl = await fetchAvatar(platform, n);
-                if(avatarUrl) {
-                    setStreamers(prev => prev.map(s => s.id === ns.id ? {...s, avatar: avatarUrl} : s));
-                }
-            };
-            
+            const addStreamer = async (e) => { e.preventDefault(); if(!inputVal.trim()) return addToast(t('toast_empty'),'info'); let n=inputVal.trim(); if(platform==='youtube'){ const m=n.match(/(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})/); if(m)n=m[1] } else n=n.toLowerCase(); if(streamers.some(s=>s.name===n&&s.platform===platform)) return addToast(t('toast_exists'),'error'); const ns={id:Date.now().toString(),name:n,platform,refreshKey:Date.now(),customWidth:null, avatar: null}; setStreamers(p=>[...p,ns]); setSearchHistory(p=>{ const historyItem={name:n,platform}; const f=p.filter(x=>!(x.name===historyItem.name&&x.platform===historyItem.platform)); return [historyItem,...f].slice(0,5) }); setInputVal(""); if(!streamers.length) setActiveChatTab(ns.id); addToast(t('toast_added'),'success'); const avatarUrl = await fetchAvatar(platform, n); if(avatarUrl) setStreamers(prev => prev.map(s => s.id === ns.id ? {...s, avatar: avatarUrl} : s)); };
             const removeStreamer = (id) => { if(expandedStreamId===id)setExpandedStreamId(null); setStreamers(p=>{const n=p.filter(x=>x.id!==id);if(activeChatTab===id)setActiveChatTab(n[0]?.id||null);return n}) };
             const handleDragEnd = () => { setIsDragging(false); if(dragItem.current!==null&&dragOverItem.current!==null&&dragItem.current!==dragOverItem.current)setStreamers(p=>{if(!p[dragItem.current]||(dragOverItem.current>=p.length&&dragOverItem.current<0))return p;const c=[...p],d=c[dragItem.current];c.splice(dragItem.current,1);c.splice(dragOverItem.current,0,d);return c}); dragItem.current=null; dragOverItem.current=null };
             const changeLayout = (m) => { setLayoutMode(m); if(m==='auto'||m==='grid')setStreamers(p=>p.map(s=>({...s,customWidth:null}))); setExpandedStreamId(m==='focus'&&streamers.length?streamers[0].id:null) };
             const handleContextAction = (a, sid) => { setContextMenu({...contextMenu,isOpen:false}); const s=streamers.find(x=>x.id===sid); if(!s&&a!=='close')return; switch(a){case 'refresh':setStreamers(p=>p.map(x=>x.id===sid?{...x,refreshKey:Date.now()}:x));break;case 'focus':if(expandedStreamId!==sid)setActiveChatTab(sid);setExpandedStreamId(p=>p===sid?null:sid);break;case 'copy':const u=s.platform==='twitch'?`https://twitch.tv/${s.name}`:s.platform==='kick'?`https://kick.com/${s.name}`:`https://youtube.com/watch?v=${s.name}`;navigator.clipboard.writeText(u);addToast("Link copiado!",'success');break;case 'close':removeStreamer(sid);break} };
 
             const renderStreamItem = (s, i, w, h, exp=false, extraStyle={}) => s ? <StreamPlayer key={s.id} stream={s} index={i} widthClass={w} heightClass={h} style={extraStyle} isExpanded={exp} isDraggable={!exp && !expandedStreamId} onDragStart={(e,idx)=>{setIsDragging(true);dragItem.current=idx}} onDragEnter={(e,idx)=>dragOverItem.current=idx} onDragEnd={handleDragEnd} onToggleFocus={id=>{if(expandedStreamId!==id)setActiveChatTab(id);setExpandedStreamId(p=>p===id?null:id)}} onRemove={removeStreamer} onRefresh={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,refreshKey:Date.now()}:x))} hostname={hostname} isGlobalMuted={isGlobalMuted} soloStreamId={soloStreamId} onToggleSolo={id=>setSoloStreamId(p=>p===id?null:id)} isResizingAny={isResizing||isResizingMap||resizingStreamId!==null} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,customWidth:null}:x))} onContextMenu={(e,sid)=>{e.preventDefault();let x=e.clientX,y=e.clientY;if(x+192>window.innerWidth)x=window.innerWidth-192-10;if(y+160>window.innerHeight)y=window.innerHeight-160-10;setContextMenu({isOpen:true,x,y,streamId:sid})}} /> : null;
-            
             const renderStreams = () => {
                 const isFocusMode = !!expandedStreamId && streamers.some(s => s.id === expandedStreamId);
-                
                 if (isFocusMode) {
-                    const expandedStream = streamers.find(s => s.id === expandedStreamId);
-                    const expandedIndex = streamers.findIndex(s => s.id === expandedStreamId);
-                    const sideStreams = streamers.map((s, i) => ({ s, i })).filter(item => item.s.id !== expandedStreamId);
-                    
-                    return (
-                        <div className="w-full h-full flex flex-col md:flex-row bg-transparent overflow-hidden">
-                            <div className="flex-1 h-[40vh] md:h-full relative order-1 md:order-1 flex items-center justify-center bg-transparent mt-[130px] md:mt-0">
-                                {renderStreamItem(expandedStream, expandedIndex, "w-full max-w-full aspect-video max-h-full shadow-2xl", "h-auto", true)}
-                            </div>
-                            {sideStreams.length > 0 && (
-                                <div className="w-full md:w-[320px] h-auto md:h-full bg-surface/30 border-t md:border-t-0 md:border-l border-white/5 flex flex-row md:flex-col items-center md:justify-center p-2 gap-2 order-2 md:order-2 shrink-0 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden scrollbar-hide">
-                                    {sideStreams.map(({ s, i }) => renderStreamItem(s, i, "w-[240px] md:w-full shrink-0", "h-auto aspect-video", false))}
-                                    {!adsHidden && (
-                                        <div className="w-[240px] md:w-full shrink-0 aspect-video p-1">
-                                            <AdUnit outerClassName="w-full h-full" className="h-full bg-black/40" onExpire={() => setAdsHidden(true)} />
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    );
+                    const expandedStream = streamers.find(s => s.id === expandedStreamId), expandedIndex = streamers.findIndex(s => s.id === expandedStreamId), sideStreams = streamers.map((s, i) => ({ s, i })).filter(item => item.s.id !== expandedStreamId);
+                    return (<div className="w-full h-full flex flex-col md:flex-row bg-transparent overflow-hidden"><div className="flex-1 h-[40vh] md:h-full relative order-1 md:order-1 flex items-center justify-center bg-transparent mt-[130px] md:mt-0">{renderStreamItem(expandedStream, expandedIndex, "w-full max-w-full aspect-video max-h-full shadow-2xl", "h-auto", true)}</div>{sideStreams.length > 0 && (<div className="w-full md:w-[320px] h-auto md:h-full bg-surface/30 border-t md:border-t-0 md:border-l border-white/5 flex flex-row md:flex-col items-center md:justify-center p-2 gap-2 order-2 md:order-2 shrink-0 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden scrollbar-hide">{sideStreams.map(({ s, i }) => renderStreamItem(s, i, "w-[240px] md:w-full shrink-0", "h-auto aspect-video", false))}{!adsHidden && (<div className="w-[240px] md:w-full shrink-0 aspect-video p-1"><AdUnit outerClassName="w-full h-full" className="h-full bg-black/40" onExpire={() => setAdsHidden(true)} /></div>)}</div>)}</div>);
                 }
-
-                const cnt = streamers.length;
-                const getW = i => { 
-                    if (typeof window !== 'undefined' && window.innerWidth < 768) return "w-full"; // Fix mobile width
-                    if(layoutMode==='grid')return cnt<=1?"w-full":cnt<=4?"w-full md:w-[calc(50%-1rem)]":cnt<=9?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(25%-1rem)]";return cnt===1?"w-full":cnt===2||cnt===4?"w-full md:w-[calc(50%-1rem)]":cnt===3||cnt>=6?"w-full md:w-[calc(33.33%-1rem)]":i<3?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(50%-1rem)]"
-                };
-
-                return (
-                    <div className="w-full h-full z-20 relative stream-scroll-area">
-                        <div className="min-h-full flex flex-wrap content-start md:content-center justify-center items-center gap-4 p-4 mobile-stream-container">
-                            {streamers.map((s, i) => renderStreamItem(s, i, getW(i), "h-auto", false))}
-                            {streamers.length > 0 && !adsHidden && (
-                                <AdUnit 
-                                    outerClassName={`${typeof window !== 'undefined' && window.innerWidth < 768 ? 'w-full' : getW(streamers.length)} h-auto min-h-[200px] flex items-center justify-center p-1`} 
-                                    className="h-full w-full bg-black/20 hover:bg-black/40 transition-colors" 
-                                    onExpire={() => setAdsHidden(true)}
-                                />
-                            )}
-                        </div>
-                    </div>
-                );
+                const cnt = streamers.length, getW = i => { if (typeof window !== 'undefined' && window.innerWidth < 768) return "w-full"; if(layoutMode==='grid')return cnt<=1?"w-full":cnt<=4?"w-full md:w-[calc(50%-1rem)]":cnt<=9?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(25%-1rem)]";return cnt===1?"w-full":cnt===2||cnt===4?"w-full md:w-[calc(50%-1rem)]":cnt===3||cnt>=6?"w-full md:w-[calc(33.33%-1rem)]":i<3?"w-full md:w-[calc(33.33%-1rem)]":"w-full md:w-[calc(50%-1rem)]" };
+                return (<div className="w-full h-full z-20 relative stream-scroll-area"><div className="min-h-full flex flex-wrap content-start md:content-center justify-center items-center gap-4 p-4 mobile-stream-container">{streamers.map((s, i) => renderStreamItem(s, i, getW(i), "h-auto", false))}{streamers.length > 0 && !adsHidden && (<AdUnit outerClassName={`${typeof window !== 'undefined' && window.innerWidth < 768 ? 'w-full' : getW(streamers.length)} h-auto min-h-[200px] flex items-center justify-center p-1`} className="h-full w-full bg-black/20 hover:bg-black/40 transition-colors" onExpire={() => setAdsHidden(true)} />)}</div></div>);
             };
-
             const renderContent = () => pipWindow ? createPortal(<div className="h-full w-full bg-[#09090b] flex flex-col">{renderStreams()}</div>, pipWindow.document.body) || <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in"><div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-pulse-glow"><ExternalLinkIcon width={48} height={48} className="text-ice" /></div><h2 className="text-2xl font-bold text-white mb-2">{t('pip_active')}</h2><p className="text-gray-400 max-w-sm mb-8">{t('pip_desc')}</p><button onClick={togglePip} className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-bold hover:scale-105">{t('pip_bring_back')}</button></div> : renderStreams();
 
             return (
@@ -736,76 +330,27 @@
                         <div className="flex items-center"><Tooltip text={isSidebarOpen?t('tt_hide_chat'):t('tt_show_chat')}><button onClick={e=>{e.stopPropagation();setIsSidebarOpen(!isSidebarOpen)}} className={`p-2 rounded-full transition-all ${isSidebarOpen?'bg-indigo-500 text-white chat-toggle-active-mobile':'text-gray-400 hover:text-white'}`}><span className="md:hidden"><ChatIcon width={20} height={20}/></span><span className="hidden md:block"><PanelRightIcon width={20} height={20}/></span></button></Tooltip><div className={`w-[1px] h-5 bg-white/10 mx-1 ${isMobileChatOpen?'toolbar-separator-hidden':''}`}></div></div>
                         <div className={`flex items-center gap-2 transition-all duration-300 ${isMobileChatOpen?'toolbar-item-hidden':''}`}>
                             <Tooltip text={isTheaterMode?t('tt_cinema_exit'):t('tt_cinema_enter')}><button onClick={e=>{e.stopPropagation();toggleTheaterMode()}} className={`flex items-center justify-center p-2 rounded-full transition-all active:scale-90 shrink-0 ${isTheaterMode?'bg-amber-400 text-black shadow-glow':'bg-white/5 text-gray-300 hover:text-white'}`}>{isTheaterMode?<SunIcon width={20} height={20}/>:<MoonIcon width={20} height={20}/>}</button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-0.5 shrink-0"></div>
-                            {!(isToolbarActive||showSquadMenu||showSleepMenu)?<Tooltip text={t('tt_menu')}><div className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><SettingsIcon width={22} height={22}/></div></Tooltip>:( <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
-                                <Tooltip text={isGlobalMuted?t('tt_unmute_all'):t('tt_mute_all')}><button onClick={e=>{e.stopPropagation();setIsGlobalMuted(!isGlobalMuted)}} className={`p-2 rounded-full transition-all ${isGlobalMuted?'bg-red-500 text-white animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}>{isGlobalMuted?<VolumeXIcon width={20} height={20}/>:<Volume2Icon width={20} height={20}/>}</button></Tooltip>
-                                <div className="w-[1px] h-5 bg-white/10"></div>
-                                <Tooltip text={t('tt_pip')}><button onClick={e=>{e.stopPropagation();togglePip()}} className={`p-2 rounded-full transition-all ${pipWindow?'bg-ice text-black animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}><ExternalLinkIcon width={20} height={20}/></button></Tooltip><div className="w-[1px] h-5 bg-white/10"></div><Tooltip text={t('sleep_title')}><button onClick={e=>{e.stopPropagation();setShowSleepMenu(!showSleepMenu);setShowSquadMenu(false)}} className={`p-2 rounded-full transition-all ${showSleepMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${sleepTimer.active?'text-indigo-400 animate-pulse':''}`}><ClockIcon width={20} height={20}/></button></Tooltip><SleepTimerMenu isOpen={showSleepMenu} onClose={()=>setShowSleepMenu(false)} onSetTimer={m=>{if(!m)setSleepTimer({active:false,endTime:null,duration:null});else{setSleepTimer({active:true,endTime:Date.now()+m*60000,duration:m});addToast(`Timer: ${m} min`,'info')}}} activeTimer={sleepTimer.duration} lang={lang}/>
-                            <Tooltip text={t('layout_auto')}><button onClick={e=>{e.stopPropagation();changeLayout('auto')}} className={`p-2 rounded-full transition-all ${layoutMode==='auto'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutIcon width={20} height={20}/></button></Tooltip>
-                            <Tooltip text={t('layout_grid')}><button onClick={e=>{e.stopPropagation();changeLayout('grid')}} className={`p-2 rounded-full transition-all ${layoutMode==='grid'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><GridIcon width={20} height={20}/></button></Tooltip>
-                            <Tooltip text={t('layout_focus')}><button onClick={e=>{e.stopPropagation();changeLayout('focus')}} className={`p-2 rounded-full transition-all ${expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutTemplateIcon width={20} height={20}/></button></Tooltip>
-                            <div className="w-[1px] h-5 bg-white/10"></div><button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);setShowSleepMenu(false)}} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={16} height={16}/>{t('squads_title')}</button><SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success')}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false)}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info')}} lang={lang}/></div> )}
+                            {!(isToolbarActive||showSquadMenu||showSleepMenu)?<Tooltip text={t('tt_menu')}><div className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><SettingsIcon width={22} height={22}/></div></Tooltip>:( <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap"><Tooltip text={isGlobalMuted?t('tt_unmute_all'):t('tt_mute_all')}><button onClick={e=>{e.stopPropagation();setIsGlobalMuted(!isGlobalMuted)}} className={`p-2 rounded-full transition-all ${isGlobalMuted?'bg-red-500 text-white animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}>{isGlobalMuted?<VolumeXIcon width={20} height={20}/>:<Volume2Icon width={20} height={20}/>}</button></Tooltip><div className="w-[1px] h-5 bg-white/10"></div><Tooltip text={t('tt_pip')}><button onClick={e=>{e.stopPropagation();togglePip()}} className={`p-2 rounded-full transition-all ${pipWindow?'bg-ice text-black animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}><ExternalLinkIcon width={20} height={20}/></button></Tooltip><div className="w-[1px] h-5 bg-white/10"></div><Tooltip text={t('sleep_title')}><button onClick={e=>{e.stopPropagation();setShowSleepMenu(!showSleepMenu);setShowSquadMenu(false)}} className={`p-2 rounded-full transition-all ${showSleepMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${sleepTimer.active?'text-indigo-400 animate-pulse':''}`}><ClockIcon width={20} height={20}/></button></Tooltip><SleepTimerMenu isOpen={showSleepMenu} onClose={()=>setShowSleepMenu(false)} onSetTimer={m=>{if(!m)setSleepTimer({active:false,endTime:null,duration:null});else{setSleepTimer({active:true,endTime:Date.now()+m*60000,duration:m});addToast(`Timer: ${m} min`,'info')}}} activeTimer={sleepTimer.duration} lang={lang}/><Tooltip text={t('layout_auto')}><button onClick={e=>{e.stopPropagation();changeLayout('auto')}} className={`p-2 rounded-full transition-all ${layoutMode==='auto'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutIcon width={20} height={20}/></button></Tooltip><Tooltip text={t('layout_grid')}><button onClick={e=>{e.stopPropagation();changeLayout('grid')}} className={`p-2 rounded-full transition-all ${layoutMode==='grid'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><GridIcon width={20} height={20}/></button></Tooltip><Tooltip text={t('layout_focus')}><button onClick={e=>{e.stopPropagation();changeLayout('focus')}} className={`p-2 rounded-full transition-all ${expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutTemplateIcon width={20} height={20}/></button></Tooltip><div className="w-[1px] h-5 bg-white/10"></div><button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);setShowSleepMenu(false)}} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={16} height={16}/>{t('squads_title')}</button><SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success')}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false)}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info')}} lang={lang}/></div> )}
                         </div>
                     </div>
                     <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-1 md:pt-1 ${isTheaterMode?'!pt-0 !h-full':''} z-10 relative transition-all duration-700`}>
                         <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-0">{streamers.length===0?<div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in"><div className="p-8 max-w-md w-full mx-4 opacity-50"><p className="text-gray-500 text-sm mb-6 leading-relaxed mt-20">{t('empty_desc')}</p></div><AdUnit className="max-w-sm my-4"/></div>:renderContent()}</div>
-                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-50 relative
-                            fixed inset-0 w-full h-full bg-black/95 backdrop-blur-xl duration-300
-                            md:relative md:h-full md:bg-transparent md:backdrop-blur-none md:transition-all md:duration-300 md:inset-auto
-                            ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-10 md:opacity-0 md:overflow-hidden'}
-                            ${(!isSidebarOpen && typeof window !== 'undefined' && window.innerWidth < 768) ? 'invisible pointer-events-none' : ''}
-                        `} style={{
-                            width: typeof window !== 'undefined' && window.innerWidth >= 768 ? (isSidebarOpen ? `${sidebarWidth}px` : '0px') : '100%',
-                            transitionDuration: isResizing ? '0s' : '300ms'
-                        }}>
-                            {/* Close Button Mobile Only */}
-                            <button onClick={() => setIsSidebarOpen(false)} className="md:hidden absolute top-3 right-3 z-50 p-2 bg-white/10 rounded-full text-white hover:bg-white/20 backdrop-blur-md shadow-lg border border-white/5 active:scale-95">
-                                <XIcon width={20} height={20} />
-                            </button>
-
+                        <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-50 relative fixed inset-0 w-full h-full bg-black/95 backdrop-blur-xl duration-300 md:relative md:h-full md:bg-transparent md:backdrop-blur-none md:transition-all md:duration-300 md:inset-auto ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-10 md:opacity-0 md:overflow-hidden'} ${(!isSidebarOpen && typeof window !== 'undefined' && window.innerWidth < 768) ? 'invisible pointer-events-none' : ''}`} style={{ width: typeof window !== 'undefined' && window.innerWidth >= 768 ? (isSidebarOpen ? `${sidebarWidth}px` : '0px') : '100%', transitionDuration: isResizing ? '0s' : '300ms' }}>
+                            <button onClick={() => setIsSidebarOpen(false)} className="md:hidden absolute top-3 right-3 z-50 p-2 bg-white/10 rounded-full text-white hover:bg-white/20 backdrop-blur-md shadow-lg border border-white/5 active:scale-95"><XIcon width={20} height={20} /></button>
                             <div className="hidden md:flex absolute left-0 top-0 bottom-0 w-1.5 hover:w-3 items-center justify-center -ml-1.5 z-50 cursor-col-resize group/resizer" onMouseDown={startResizing} onTouchStart={startResizing}><div className="h-8 w-1 rounded-full bg-white/20 group-hover/resizer:bg-accent/80 transition-colors"></div></div>
                             <div className="flex flex-col h-full w-full overflow-hidden">
                                 <div className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col relative group bg-black/40 border-b border-white/5`} style={{height:showMap?`${mapHeight}px`:'0px',transitionDuration:isResizingMap?'0s':'300ms'}}><iframe src="https://rtirl.com/twitch:119611214" className={`w-full h-full border-none grayscale-[30%] invert-[5%] contrast-125 ${isResizingMap||isResizing?'pointer-events-none':''}`} scrolling="no"></iframe><div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-[#09090b] to-transparent pointer-events-none flex justify-between items-end"><span className="text-[10px] font-bold text-ice/80 tracking-widest uppercase mb-1 ml-1 drop-shadow-md">{t('realtime_loc')}</span></div>{showMap&&<div className="absolute bottom-0 left-0 right-0 h-2 flex justify-center items-center -mb-1 z-50 cursor-row-resize group/mapresizer" onMouseDown={startMapResizing} onTouchStart={startMapResizing}><div className="w-8 h-1 rounded-full bg-white/20 group-hover/mapresizer:bg-accent/80 transition-colors"></div></div>}</div>
                                 <div className="flex-1 flex min-h-0 overflow-hidden">
                                     <div className="w-[60px] flex flex-col items-center bg-[#09090b] border-r border-white/5 py-3 gap-3 shrink-0 z-20 overflow-y-auto scrollbar-hide pt-14 md:pt-3">
-                                        <Tooltip text={showMap?t('hide_btn'):t('map_btn')} className="w-10 h-10 hidden md:flex">
-                                           <button onClick={()=>setShowMap(!showMap)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${showMap?'bg-white/10 text-ice border border-ice/30':'text-gray-500 hover:text-white hover:bg-white/5'}`}>
-                                               <MapIcon width={20} height={20}/>
-                                           </button>
-                                        </Tooltip>
+                                        <Tooltip text={showMap?t('hide_btn'):t('map_btn')} className="w-10 h-10 hidden md:flex"><button onClick={()=>setShowMap(!showMap)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${showMap?'bg-white/10 text-ice border border-ice/30':'text-gray-500 hover:text-white hover:bg-white/5'}`}><MapIcon width={20} height={20}/></button></Tooltip>
                                         <div className="w-8 h-[1px] bg-white/10 hidden md:block"></div>
-                                        {streamers.map(s => (
-                                            <Tooltip key={s.id} text={s.name} className="w-10 h-10">
-                                                <button onClick={() => setActiveChatTab(s.id)} className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all border-2 overflow-hidden ${activeChatTab === s.id ? (s.platform==='twitch'?'border-[#9146ff] bg-[#9146ff]/20 text-white shadow-[0_0_10px_rgba(145,70,255,0.4)]' : s.platform==='kick'?'border-[#53fc18] bg-[#53fc18]/20 text-white shadow-[0_0_10px_rgba(83,252,24,0.4)]' : s.platform==='youtube'?'border-[#ff0000] bg-[#ff0000]/20 text-white shadow-[0_0_10px_rgba(255,0,0,0.4)]' : 'border-white text-white') : 'border-transparent bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'}`}>
-                                                    {activeChatTab === s.id && <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-r-full z-10"></div>}
-                                                    {s.avatar ? (
-                                                        <img src={s.avatar} alt={s.name} className="w-full h-full object-cover rounded-full" />
-                                                    ) : (
-                                                        <span className="font-bold text-xs uppercase">{s.name.substring(0, 2)}</span>
-                                                    )}
-                                                    <div className="absolute -bottom-1 -right-1 bg-[#121215] rounded-full p-[2px] z-10">
-                                                        <div className={`w-3 h-3 rounded-full flex items-center justify-center text-[6px] ${getPlatformColor(s.platform)}`}>{getPlatformIcon(s.platform)}</div>
-                                                    </div>
-                                                </button>
-                                            </Tooltip>
-                                        ))}
-                                        <div className="mt-auto"></div>
-                                        <Tooltip text="Split Chat" className="w-10 h-10">
-                                             <button onClick={()=>setSecondaryChatTab(secondaryChatTab?null:streamers.find(s=>s.id!==activeChatTab)?.id||activeChatTab)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${secondaryChatTab?'bg-accent text-white shadow-glow':'text-gray-500 hover:text-white hover:bg-white/5'}`}>
-                                                <SplitIcon width={18} height={18}/>
-                                             </button>
-                                        </Tooltip>
+                                        {streamers.map(s => (<Tooltip key={s.id} text={s.name} className="w-10 h-10"><button onClick={() => setActiveChatTab(s.id)} className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all border-2 overflow-hidden ${activeChatTab === s.id ? (s.platform==='twitch'?'border-[#9146ff] bg-[#9146ff]/20 text-white shadow-[0_0_10px_rgba(145,70,255,0.4)]' : s.platform==='kick'?'border-[#53fc18] bg-[#53fc18]/20 text-white shadow-[0_0_10px_rgba(83,252,24,0.4)]' : s.platform==='youtube'?'border-[#ff0000] bg-[#ff0000]/20 text-white shadow-[0_0_10px_rgba(255,0,0,0.4)]' : 'border-white text-white') : 'border-transparent bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'}`}>{activeChatTab === s.id && <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-r-full z-10"></div>}{s.avatar ? (<img src={s.avatar} alt={s.name} className="w-full h-full object-cover rounded-full" />) : (<span className="font-bold text-xs uppercase">{s.name.substring(0, 2)}</span>)}<div className="absolute -bottom-1 -right-1 bg-[#121215] rounded-full p-[2px] z-10"><div className={`w-3 h-3 rounded-full flex items-center justify-center text-[6px] ${getPlatformColor(s.platform)}`}>{getPlatformIcon(s.platform)}</div></div></button></Tooltip>))}
+                                        <div className="mt-auto"></div><Tooltip text="Split Chat" className="w-10 h-10"><button onClick={()=>setSecondaryChatTab(secondaryChatTab?null:streamers.find(s=>s.id!==activeChatTab)?.id||activeChatTab)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${secondaryChatTab?'bg-accent text-white shadow-glow':'text-gray-500 hover:text-white hover:bg-white/5'}`}><SplitIcon width={18} height={18}/></button></Tooltip>
                                     </div>
                                     <div className="flex-1 flex flex-col bg-[#0b0e11] min-w-0 relative">
-                                        <div className="md:hidden bg-indigo-600 text-white text-[10px] font-bold px-3 py-3 flex items-center justify-between shadow-lg z-30 pt-4">
-                                            <span>Chat Externo</span>
-                                            <button onClick={()=>{const s=streamers.find(st=>st.id===activeChatTab); if(s) {if(s.platform==='twitch')window.open(`https://www.twitch.tv/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else if(s.platform==='kick')window.open(`https://kick.com/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else window.open(`https://www.youtube.com/live_chat?v=${s.name}`,`c-${s.name}`,"width=400,height=600");}}} className="bg-white text-indigo-600 px-2 py-0.5 rounded uppercase tracking-wider hover:bg-indigo-50 flex items-center gap-1">
-                                                <PopoutIcon width={10} height={10} /> Abrir Janela
-                                            </button>
-                                        </div>
+                                        <div className="md:hidden bg-indigo-600 text-white text-[10px] font-bold px-3 py-3 flex items-center justify-between shadow-lg z-30 pt-4"><span>Chat Externo</span><button onClick={()=>{const s=streamers.find(st=>st.id===activeChatTab); if(s) {if(s.platform==='twitch')window.open(`https://www.twitch.tv/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else if(s.platform==='kick')window.open(`https://kick.com/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else window.open(`https://www.youtube.com/live_chat?v=${s.name}`,`c-${s.name}`,"width=400,height=600");}}} className="bg-white text-indigo-600 px-2 py-0.5 rounded uppercase tracking-wider hover:bg-indigo-50 flex items-center gap-1"><PopoutIcon width={10} height={10} /> Abrir Janela</button></div>
                                         <div className="flex-1 flex flex-col min-h-0 bg-[#09090b] overflow-hidden transition-opacity duration-500 ease-out md:opacity-80 md:hover:opacity-100">{[activeChatTab,secondaryChatTab].filter(Boolean).map((tid,idx)=>{const s=streamers.find(st=>st.id===tid);if(!s)return null;const isSec=idx===1;return <div key={isSec?'sec':'pri'} className={`flex-1 relative flex flex-col ${isSec?'border-t border-white/10':''}`}>{isSec?<div className="h-8 bg-surface/80 border-b border-white/5 flex items-center px-2 gap-2"><span className="text-[10px] font-bold text-accent uppercase">Chat 2</span><select className="bg-transparent text-xs text-white outline-none flex-1" value={secondaryChatTab} onChange={e=>setSecondaryChatTab(e.target.value)}>{streamers.map(st=><option key={st.id} value={st.id} className="text-black">{st.name}</option>)}</select><button onClick={()=>setSecondaryChatTab(null)} className="ml-auto text-gray-500 hover:text-white">✕</button></div>:<div className="h-9 bg-[#121215] border-b border-white/5 flex items-center justify-between px-3 shrink-0 z-20 shadow-sm"><div className="flex items-center gap-2"><div className={`flex items-center justify-center w-5 h-5 rounded bg-white/5 ${getPlatformColor(s.platform)}`}>{getPlatformIcon(s.platform)}</div><span className="text-xs font-bold text-white tracking-tight">{s.name}</span><span className="text-[9px] uppercase tracking-widest text-gray-500 border border-white/10 px-1.5 rounded bg-white/5">{s.platform} chat</span></div><div className="flex items-center gap-1"><button onClick={()=>setChatRefreshTriggers(p=>({...p,[s.id]:Date.now()}))} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors"><RefreshCwIcon width={12} height={12}/></button><button onClick={()=>{if(s.platform==='twitch')window.open(`https://www.twitch.tv/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else if(s.platform==='kick')window.open(`https://kick.com/popout/${s.name}/chat`,`c-${s.name}`,"width=400,height=600");else window.open(`https://www.youtube.com/live_chat?v=${s.name}`,`c-${s.name}`,"width=400,height=600")}} className="p-1.5 text-gray-500 hover:text-ice hover:bg-white/5 rounded transition-colors"><ExternalLinkIcon width={12} height={12}/></button><button onClick={()=>setIsSidebarOpen(false)} className="md:hidden ml-2 flex items-center justify-center w-8 h-8 text-gray-400 hover:text-white bg-white/5 border border-white/5 rounded active:bg-white/10"><ChevronDownIcon/></button></div></div>}<div className="flex-1 relative">{s.platform==='kick'?<KickChatEmbed key={chatRefreshTriggers[s.id]||'init'} streamName={s.name} isResizing={isResizing} idSuffix={isSec?'-sec':'-pri'}/>:s.platform==='youtube'?<div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">Chat YT N/A</div>:<iframe key={chatRefreshTriggers[s.id]||'init'} src={`https://www.twitch.tv/embed/${s.name}/chat?parent=${hostname}&parent=localhost&darkpopout`} className="w-full h-full border-0"/>}</div></div>})}{streamers.length===0&&<div className="flex-1 flex items-center justify-center text-gray-600 text-xs"><AdUnit className="max-w-sm" type="chat"/></div>}</div>
-                                        <div className="shrink-0">
-                                            {!adsHidden && <AdUnit outerClassName="shrink-0" className="border-t border-white/10 rounded-none bg-black/20" style={{minHeight: '90px'}} onExpire={() => setAdsHidden(true)} type="chat" />}
-                                        </div>
+                                        <div className="shrink-0">{!adsHidden && <AdUnit outerClassName="shrink-0" className="border-t border-white/10 rounded-none bg-black/20" style={{minHeight: '90px'}} onExpire={() => setAdsHidden(true)} type="chat" />}</div>
                                     </div>
                                 </div>
                             </div>
