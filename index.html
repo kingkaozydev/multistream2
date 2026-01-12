@@ -234,7 +234,7 @@
 
             return (
                 <div className={outerClassName} style={{ maxHeight: '280px', ...style }}>
-                    <div className={`w-full bg-[#121215]/50 border border-white/5 rounded-xl overflow-hidden relative min-h-[100px] flex items-center justify-center animate-fade-in ${className}`} style={{ maxHeight: '100%' }}>
+                    <div className={`w-full bg-[#121215]/50 border border-white/5 rounded-xl overflow-hidden relative flex items-center justify-center animate-fade-in ${className}`} style={{ maxHeight: '100%' }}>
                         <span className="text-[8px] text-gray-700 uppercase tracking-widest absolute top-1 left-2 z-10 font-bold pointer-events-none">Publicidade</span>
                         {onExpire && (
                             <button 
@@ -617,7 +617,8 @@
                     <div className="w-full h-full overflow-y-auto scrollbar-hide z-20 relative overscroll-y-contain touch-pan-y" style={{WebkitOverflowScrolling:'touch'}}>
                         <div className="min-h-full flex flex-wrap justify-center content-center items-center gap-4 p-4">
                             {streamers.map((s, i) => renderStreamItem(s, i, getW(i), "h-auto", false))}
-                            {streamers.length > 0 && !adsHidden && <AdUnit outerClassName={`${getW(streamers.length)} h-auto min-h-[100px] md:min-h-[200px] flex items-center justify-center p-1`} className="h-full w-full bg-black/20 hover:bg-black/40 transition-colors" onExpire={() => setAdsHidden(true)} />}
+                            {/* Ajustado: Altura fixa curta no mobile para banner horizontal e MD/Desktop min-h-200px */}
+                            {streamers.length > 0 && !adsHidden && <AdUnit outerClassName={`${getW(streamers.length)} h-[80px] md:h-auto md:min-h-[200px] flex items-center justify-center p-1`} className="h-full w-full bg-black/20 hover:bg-black/40 transition-colors" onExpire={() => setAdsHidden(true)} />}
                         </div>
                     </div>
                 );
