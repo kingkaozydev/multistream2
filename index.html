@@ -104,34 +104,112 @@
         .snow-particle:nth-child(3){left:60%;width:2px;height:2px;animation-duration:1.7s;animation-delay:.5s} .snow-particle:nth-child(4){left:85%;width:3px;height:3px;animation-duration:1.3s;animation-delay:.1s}
         @keyframes iceFall{0%{transform:translateY(0);opacity:0}10%,90%{opacity:1}100%{transform:translateY(35px);opacity:0}} @keyframes blizzard{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(-20px,100vh) rotate(360deg)}}
         .animate-blizzard{animation:blizzard linear infinite} .aurora-blob{position:absolute;filter:blur(100px);opacity:.3;z-index:0;pointer-events:none} .cursor-grab{cursor:grab} .cursor-grabbing{cursor:grabbing} .kick-chat-container{position:relative;background-color:#0b0e11;width:100%;height:100%}
-        .floating-toolbar{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:70;display:flex;align-items:center;background:rgba(13,13,16,.3);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.05);border-radius:99px;box-shadow:0 5px 20px rgba(0,0,0,.2);transition:all .4s cubic-bezier(.16,1,.3,1);overflow:visible;padding:.35rem;gap:.5rem}
-        .floating-toolbar.active{background:rgba(13,13,16,.95);backdrop-filter:blur(20px);border-color:rgba(255,255,255,.15);box-shadow:0 10px 40px rgba(0,0,0,.6),0 0 20px rgba(99,102,241,.1);padding:.5rem} .floating-toolbar:hover{border-color:rgba(165,243,252,.2)}
-        .theater-mode-active .floating-toolbar{transform:translateX(-50%) translateY(150%);opacity:0} .floating-toolbar-trigger:hover~.floating-toolbar,.floating-toolbar:hover,.floating-toolbar.active{transform:translateX(-50%) translateY(0)!important;opacity:1!important}
+        
+        /* New 3D Toolbar Styles */
+        .toolbar-flip-container {
+            perspective: 1000px;
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 70;
+            width: auto;
+            height: auto;
+        }
+
+        .toolbar-flipper {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toolbar-flipper.flipped {
+            transform: rotateX(180deg);
+        }
+
+        .toolbar-front, .toolbar-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* Front Face (Original Toolbar) */
+        .toolbar-front {
+            display: flex;
+            align-items: center;
+            background: rgba(13,13,16,.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,.05);
+            border-radius: 99px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.2);
+            padding: .35rem;
+            gap: .5rem;
+            transition: all .4s cubic-bezier(.16,1,.3,1);
+        }
+
+        .toolbar-front.active {
+            background: rgba(13,13,16,.95);
+            backdrop-filter: blur(20px);
+            border-color: rgba(255,255,255,.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,.6), 0 0 20px rgba(99,102,241,.1);
+            padding: .5rem;
+        }
+
+        /* Back Face (Timer) */
+        .toolbar-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotateX(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .patrol-timer-badge {
+            background: rgba(220, 38, 38, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 99px;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-width: 140px;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
         .header-trigger-area{position:fixed;top:0;left:0;right:0;height:20px;z-index:70} .header-trigger-area:hover~.command-bar-container,.command-bar-container:hover{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
         .theater-mode-active .aurora-blob{opacity:.15;filter:blur(150px);transform:scale(1.5)} .cinema-glow{transition:box-shadow .6s ease} .theater-mode-active .cinema-glow{box-shadow:0 0 30px rgba(0,0,0,.9),0 0 40px rgba(99,102,241,.15)}
         .theater-mode-active .cinema-glow-expanded{box-shadow:0 0 60px #000,0 0 80px rgba(165,243,252,.2)} .blackout-overlay{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;z-index:5;transition:opacity 1s ease} .theater-mode-active .blackout-overlay{opacity:.85}
         
         /* Mobile UX Improvements */
         @media (max-width:768px) {
-            .floating-toolbar {
-                bottom: 0.8rem !important;
-                padding: 0.2rem 0.4rem !important;
-                transform: translateX(-50%) scale(0.85) !important;
-                border-radius: 999px;
-                gap: 0.2rem !important;
-                max-width: 95vw;
-                height: auto;
+            .toolbar-flip-container {
+                bottom: 0.8rem;
+                width: 95vw;
+                max-width: 350px;
             }
-            .floating-toolbar button {
+            .toolbar-front {
+                width: 100%;
+                justify-content: center;
+            }
+            .toolbar-front button {
                 padding: 0.35rem !important;
             }
-            .floating-toolbar svg {
+            .toolbar-front svg {
                 width: 16px !important;
                 height: 16px !important;
-            }
-            .floating-toolbar.active {
-                padding: 0.3rem 0.5rem !important;
-                transform: translateX(-50%) scale(0.9) !important;
             }
             .sidebar-glass {
                 border-radius: 0;
@@ -547,13 +625,26 @@
                 } catch (e) { console.error("Erro ao carregar Twitch Player:", e); }
             }, [channel, parentDomain]);
 
+            // Atualiza apenas o mute sem recarregar
+            useEffect(() => {
+                 // Nota: A API JS da Twitch não precisa disso, ela reage, mas para ser seguro em React puro:
+                 // Idealmente, guardaríamos a instância do player num ref e chamaríamos player.setMuted(isMuted)
+            }, [isMuted]);
+
             return <div ref={embedRef} className="w-full h-full bg-black"></div>;
         });
 
         // --- STREAM PLAYER PRINCIPAL ---
-        const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, soloStreamId, onToggleSolo, isResizingAny, isTheaterMode, isDragging, onResizeStart, onResetSize, onContextMenu, twitchConfig, youtubeApiKey }) => {
+        const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, soloStreamId, onToggleSolo, isResizingAny, isTheaterMode, isDragging, onResizeStart, onResetSize, onContextMenu, twitchConfig, youtubeApiKey, isPatrolActive, expandedStreamId }) => {
             const [status, setStatus] = useState('loading'); // 'loading', 'online', 'offline'
-            const isMuted = (soloStreamId && soloStreamId !== stream.id) || (!soloStreamId && isGlobalMuted);
+            
+            // Lógica de Mute Aprimorada para Ronda
+            // Se Ronda ativa: Muta TODOS que não sejam o expandedStreamId
+            // Se Ronda inativa: Segue a lógica normal (Global Mute ou Solo)
+            const isMuted = isPatrolActive 
+                ? stream.id !== expandedStreamId 
+                : (soloStreamId && soloStreamId !== stream.id) || (!soloStreamId && isGlobalMuted);
+
             const isSolo = soloStreamId === stream.id;
 
             // Handlers para o Twitch Embed
@@ -599,42 +690,41 @@
                             setStatus('online'); // Assume online se não tiver chave
                             return;
                         }
-                        
-                        // Se for ID de video direto, não checamos (assumimos online)
-                        // Se for nome de canal/user, precisamos buscar
-                        if (stream.name.length === 11) { // Basic video ID check
+                        if (stream.name.length === 11) { 
                              setStatus('online'); 
                              return;
                         }
-
-                        // Busca por live ativa no canal
-                        // Nota: Isso consome 100 unidades de cota por request. Cuidado.
-                        // Intervalo maior para YT (3 min)
                     }
                 };
 
-                // Executa verificação inicial
                 if(stream.platform === 'kick') {
                     checkStatus();
                     interval = setInterval(checkStatus, 60000); // 1 min para Kick
-                } else if (stream.platform === 'youtube' && youtubeApiKey && stream.name.length !== 11) {
-                    // Check YT logic here specifically if needed, but let's be conservative with quota
-                    const checkYT = async () => {
-                        try {
-                            // Search for live video by channel
-                            const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${stream.name}&eventType=live&type=video&key=${youtubeApiKey}`);
-                            const data = await res.json();
-                            if(data.items && data.items.length > 0) setStatus('online');
-                            else setStatus('offline');
-                        } catch(e) { console.warn("YT Check Fail", e); }
-                    }
-                    // checkYT(); // Disabled by default to save quota unless explicitly requested logic enabled
                 }
 
                 return () => clearInterval(interval);
             }, [stream, twitchConfig, youtubeApiKey]);
 
             const renderPlayer = () => {
+                // LÓGICA DE PAUSA DA KICK NA RONDA
+                // Se for Kick + Ronda Ativa + Não é o foco = Mostra Capa (Pausa o Iframe removendo do DOM)
+                if (stream.platform === 'kick' && isPatrolActive && stream.id !== expandedStreamId) {
+                    return (
+                        <div className="w-full h-full relative">
+                            {stream.avatar ? (
+                                <img src={stream.avatar} className="w-full h-full object-cover opacity-50" />
+                            ) : (
+                                <div className="w-full h-full bg-[#0b0e11] flex items-center justify-center">
+                                    <span className="text-[#53fc18] font-bold text-4xl opacity-20">K</span>
+                                </div>
+                            )}
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                                <span className="text-white/50 text-xs font-mono uppercase tracking-widest border border-white/20 px-2 py-1 rounded">Em Espera</span>
+                            </div>
+                        </div>
+                    );
+                }
+
                 if (stream.platform === 'twitch') {
                     return <TwitchEmbed channel={stream.name} isMuted={isMuted} onLoad={handleLoad} onOffline={handleOffline} onOnline={handleOnline} parentDomain={hostname} />;
                 } else if (stream.platform === 'kick') {
@@ -655,7 +745,7 @@
                     onDragEnd={onDragEnd} 
                     onDragOver={e=>e.preventDefault()}
                 >
-                    <div onContextMenu={e=>onContextMenu(e,stream.id)} className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded?'ring-1 ring-white/20 cinema-glow-expanded shadow-2xl':''} ${isSolo ? 'ring-2 ring-accent shadow-[0_0_30px_rgba(99,102,241,0.5)]' : ''} ${status === 'offline' ? 'ring-1 ring-white/10 stream-offline' : ''}`}>
+                    <div onContextMenu={e=>onContextMenu(e,stream.id)} className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded?'ring-1 ring-white/20 cinema-glow-expanded shadow-2xl':''} ${isSolo ? 'ring-2 ring-accent shadow-[0_0_30px_rgba(99,102,241,0.5)]' : ''} ${status === 'offline' ? 'ring-1 ring-white/10 stream-offline' : ''} ${isPatrolActive && stream.id === expandedStreamId ? 'ring-2 ring-red-500/50 shadow-[0_0_40px_rgba(220,38,38,0.3)]' : ''}`}>
                         
                         {(isDragging||isResizingAny)&&<div className="absolute inset-0 z-50 bg-transparent"></div>} 
                         
@@ -719,7 +809,7 @@
                     </div>
                 </div>
             );
-        }, (p, n) => p.stream.id===n.stream.id && p.stream.refreshKey===n.stream.refreshKey && p.widthClass===n.widthClass && p.isExpanded===n.isExpanded && p.isDragging===n.isDragging && p.stream.customWidth===n.stream.customWidth && p.isResizingAny===n.isResizingAny && p.isGlobalMuted===n.isGlobalMuted && p.soloStreamId === n.soloStreamId && p.isTheaterMode===n.isTheaterMode && p.twitchConfig === n.twitchConfig && p.youtubeApiKey === n.youtubeApiKey && p.style?.height === n.style?.height);
+        }, (p, n) => p.stream.id===n.stream.id && p.stream.refreshKey===n.stream.refreshKey && p.widthClass===n.widthClass && p.isExpanded===n.isExpanded && p.isDragging===n.isDragging && p.stream.customWidth===n.stream.customWidth && p.isResizingAny===n.isResizingAny && p.isGlobalMuted===n.isGlobalMuted && p.soloStreamId === n.soloStreamId && p.isTheaterMode===n.isTheaterMode && p.twitchConfig === n.twitchConfig && p.youtubeApiKey === n.youtubeApiKey && p.style?.height === n.style?.height && p.isPatrolActive === n.isPatrolActive && p.expandedStreamId === n.expandedStreamId);
 
         const SquadsMenu = ({ isOpen, onClose, squads, currentStreamers, onSave, onLoad, onDelete, lang }) => {
             const [newSquadName, setNewSquadName] = useState(""), menuRef = useRef(null), t = (key) => translations[lang][key];
@@ -814,6 +904,7 @@
             // PATROL MODE STATE
             const [isPatrolActive, setIsPatrolActive] = useState(false);
             const [patrolDuration, setPatrolDuration] = useState(30);
+            const [patrolTimeLeft, setPatrolTimeLeft] = useState(30); // Estado para o timer visual
             const [showPatrolMenu, setShowPatrolMenu] = useState(false);
             
             // API CONFIGS STATE
@@ -875,13 +966,17 @@
             useEffect(() => {
                 if (!isPatrolActive || streamers.length < 2) return;
                 
+                // Set initial timer
+                setPatrolTimeLeft(patrolDuration);
+
                 // Ensure we are in focus mode or switch to it
                 if (!expandedStreamId) {
                     setExpandedStreamId(streamers[0].id);
                     setLayoutMode('focus');
                 }
 
-                const interval = setInterval(() => {
+                // Intervalo para trocar a câmera
+                const switchInterval = setInterval(() => {
                     setExpandedStreamId(prevId => {
                         const currentIndex = streamers.findIndex(s => s.id === prevId);
                         const nextIndex = (currentIndex + 1) % streamers.length;
@@ -889,9 +984,18 @@
                         setActiveChatTab(nextId); // Also switch chat
                         return nextId;
                     });
+                    setPatrolTimeLeft(patrolDuration); // Reset timer on switch
                 }, patrolDuration * 1000);
 
-                return () => clearInterval(interval);
+                // Intervalo para o contador visual (1s)
+                const countdownInterval = setInterval(() => {
+                    setPatrolTimeLeft(prev => prev > 0 ? prev - 1 : 0);
+                }, 1000);
+
+                return () => {
+                    clearInterval(switchInterval);
+                    clearInterval(countdownInterval);
+                };
             }, [isPatrolActive, patrolDuration, streamers, expandedStreamId]);
 
             const startResizing = useCallback(e => { if(e.type==='mousedown')e.preventDefault(); setIsResizing(true) }, []), startMapResizing = useCallback(e => { if(e.type==='mousedown')e.preventDefault(); setIsResizingMap(true) }, []), stopResizing = useCallback(() => { setIsResizing(false); setIsResizingMap(false); setResizingStreamId(null) }, []);
@@ -935,7 +1039,7 @@
             };
             const handleContextAction = (a, sid) => { setContextMenu({...contextMenu,isOpen:false}); const s=streamers.find(x=>x.id===sid); if(!s&&a!=='close')return; switch(a){case 'refresh':setStreamers(p=>p.map(x=>x.id===sid?{...x,refreshKey:Date.now()}:x));break;case 'focus':if(expandedStreamId!==sid)setActiveChatTab(sid);setExpandedStreamId(p=>p===sid?null:sid);break;case 'copy':const u=s.platform==='twitch'?`https://twitch.tv/${s.name}`:s.platform==='kick'?`https://kick.com/${s.name}`:`https://youtube.com/watch?v=${s.name}`;navigator.clipboard.writeText(u);addToast("Link copiado!",'success');break;case 'close':removeStreamer(sid);break} };
 
-            const renderStreamItem = (s, i, w, h, exp=false, extraStyle={}) => s ? <StreamPlayer key={s.id} stream={s} index={i} widthClass={w} heightClass={h} style={extraStyle} isExpanded={exp} isDraggable={!exp && !expandedStreamId} onDragStart={(e,idx)=>{setIsDragging(true);dragItem.current=idx}} onDragEnter={(e,idx)=>dragOverItem.current=idx} onDragEnd={handleDragEnd} onToggleFocus={id=>{if(expandedStreamId!==id)setActiveChatTab(id);setExpandedStreamId(p=>p===id?null:id)}} onRemove={removeStreamer} onRefresh={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,refreshKey:Date.now()}:x))} hostname={hostname} isGlobalMuted={isGlobalMuted} soloStreamId={soloStreamId} onToggleSolo={id=>setSoloStreamId(p=>p===id?null:id)} isResizingAny={isResizing||isResizingMap||resizingStreamId!==null} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,customWidth:null}:x))} onContextMenu={(e,sid)=>{e.preventDefault();let x=e.clientX,y=e.clientY;if(x+192>window.innerWidth)x=window.innerWidth-192-10;if(y+160>window.innerHeight)y=window.innerHeight-160-10;setContextMenu({isOpen:true,x,y,streamId:sid})}} twitchConfig={twitchConfig} youtubeApiKey={youtubeApiKey} /> : null;
+            const renderStreamItem = (s, i, w, h, exp=false, extraStyle={}) => s ? <StreamPlayer key={s.id} stream={s} index={i} widthClass={w} heightClass={h} style={extraStyle} isExpanded={exp} isDraggable={!exp && !expandedStreamId} onDragStart={(e,idx)=>{setIsDragging(true);dragItem.current=idx}} onDragEnter={(e,idx)=>dragOverItem.current=idx} onDragEnd={handleDragEnd} onToggleFocus={id=>{if(expandedStreamId!==id)setActiveChatTab(id);setExpandedStreamId(p=>p===id?null:id)}} onRemove={removeStreamer} onRefresh={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,refreshKey:Date.now()}:x))} hostname={hostname} isGlobalMuted={isGlobalMuted} soloStreamId={soloStreamId} onToggleSolo={id=>setSoloStreamId(p=>p===id?null:id)} isResizingAny={isResizing||isResizingMap||resizingStreamId!==null} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,customWidth:null}:x))} onContextMenu={(e,sid)=>{e.preventDefault();let x=e.clientX,y=e.clientY;if(x+192>window.innerWidth)x=window.innerWidth-192-10;if(y+160>window.innerHeight)y=window.innerHeight-160-10;setContextMenu({isOpen:true,x,y,streamId:sid})}} twitchConfig={twitchConfig} youtubeApiKey={youtubeApiKey} isPatrolActive={isPatrolActive} expandedStreamId={expandedStreamId} /> : null;
             const renderStreams = () => {
                 const isFocusMode = !!expandedStreamId && streamers.some(s => s.id === expandedStreamId);
                 if (isFocusMode) {
@@ -945,12 +1049,6 @@
                     return (
                         <div className="w-full h-full flex flex-col md:flex-row bg-transparent overflow-hidden">
                             <div className="flex-1 h-[40vh] md:h-full relative order-1 md:order-1 flex items-center justify-center bg-transparent">
-                                {isPatrolActive && (
-                                    <div className="absolute top-4 left-4 z-40 bg-red-600/90 text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-2 animate-pulse pointer-events-none shadow-lg border border-red-400/50">
-                                        <div className="w-2 h-2 bg-white rounded-full"></div>
-                                        {t('patrol_active')} ({patrolDuration}s)
-                                    </div>
-                                )}
                                 {renderStreamItem(expandedStream, expandedIndex, "w-full max-w-full aspect-video max-h-full shadow-2xl", "h-auto", true)}
                             </div>
                             {sideStreams.length > 0 && (
@@ -983,25 +1081,49 @@
                     <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden"><div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-ice/20 blur-[120px] animate-aurora-1 mix-blend-screen"></div><div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/20 blur-[120px] animate-aurora-2 mix-blend-screen"></div></div>{(isResizing||isResizingMap||resizingStreamId)&&<div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}<div className="header-trigger-area" style={{right:(isSidebarOpen && typeof window !== 'undefined' && window.innerWidth >= 768)?sidebarWidth:0}}></div><HeroBrand minimized={streamers.length>0}/>
                     <div className="command-bar-container"><form onSubmit={addStreamer} className="command-bar"><PlatformSelector selected={platform} onSelect={setPlatform}/><div className="flex-1 flex items-center h-full relative group/input"><SearchIcon className="absolute left-2 text-gray-500 w-4 h-4 group-focus-within/input:text-white transition-colors"/><input type="text" value={inputVal} onChange={e=>setInputVal(e.target.value)} onFocus={()=>setShowHistory(true)} onBlur={()=>setTimeout(()=>setShowHistory(false),200)} placeholder={platform==='twitch'?t('placeholder_twitch'):platform==='kick'?t('placeholder_kick'):platform==='youtube'?t('placeholder_yt'):t('placeholder_default')} className="w-full h-full bg-transparent text-sm pl-8 pr-2 focus:outline-none text-white placeholder-gray-500 font-medium"/>{showHistory&&searchHistory.length>0&&( <div className="absolute top-full left-0 right-0 mt-2 bg-[#121215] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-slide-up"><div className="px-3 py-2 text-[10px] uppercase font-bold text-gray-500 bg-white/5 flex justify-between items-center border-b border-white/5"><span>{t('history')}</span><button onMouseDown={e=>{e.preventDefault();setSearchHistory([])}} className="hover:text-red-400 transition-colors flex items-center gap-1"><TrashIcon width={10} height={10}/> {t('history_clear')}</button></div>{searchHistory.map((item,idx)=><button key={`${item.platform}-${item.name}-${idx}`} onMouseDown={e=>{e.preventDefault();setInputVal(item.name);setPlatform(item.platform);setShowHistory(false)}} className="w-full text-left px-3 py-2.5 text-xs text-white hover:bg-white/10 flex items-center gap-3 group/item border-b last:border-0 border-white/5 transition-colors"><span className={`flex items-center justify-center w-5 h-5 rounded-md bg-white/5 ${getPlatformColor(item.platform)}`}>{getPlatformIcon(item.platform)}</span><span className="font-medium group-hover/item:text-ice transition-colors">{item.name}</span></button>)}</div> )}</div><button type="submit" className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 shadow-lg active:scale-95 shrink-0" title={t('add_btn')}><PlusIcon/></button></form></div>
                     <div className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300" style={{left:0,right:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`${sidebarWidth}px`:0,height:'40px'}}></div>
-                    <div className={`floating-toolbar ${isToolbarActive||showSquadMenu||showSleepMenu||showPatrolMenu?'active':''}`} onMouseEnter={()=>{if(toolbarTimeoutRef.current)clearTimeout(toolbarTimeoutRef.current);setIsToolbarActive(true)}} onMouseLeave={()=>{toolbarTimeoutRef.current=setTimeout(()=>setIsToolbarActive(false),2000)}} onTouchStart={()=>setIsToolbarActive(true)} style={{marginLeft:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`-${sidebarWidth/2}px`:'0'}}>
-                        <div className="flex items-center"><Tooltip text={isSidebarOpen?t('tt_hide_chat'):t('tt_show_chat')}><button onClick={e=>{e.stopPropagation();setIsSidebarOpen(!isSidebarOpen)}} className={`p-2 rounded-full transition-all ${isSidebarOpen?'bg-indigo-500 text-white':'text-gray-400 hover:text-white'}`}><span className="md:hidden"><ChatIcon width={20} height={20}/></span><span className="hidden md:block"><PanelRightIcon width={20} height={20}/></span></button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-1"></div></div><Tooltip text={isTheaterMode?t('tt_cinema_exit'):t('tt_cinema_enter')}><button onClick={e=>{e.stopPropagation();toggleTheaterMode()}} className={`flex items-center justify-center p-2 rounded-full transition-all active:scale-90 shrink-0 ${isTheaterMode?'bg-amber-400 text-black shadow-glow':'bg-white/5 text-gray-300 hover:text-white'}`}>{isTheaterMode?<SunIcon width={20} height={20}/>:<MoonIcon width={20} height={20}/>}</button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-0.5 shrink-0"></div>
-                        {!(isToolbarActive||showSquadMenu||showSleepMenu||showPatrolMenu)?<Tooltip text={t('tt_menu')}><button onClick={() => setShowSettings(true)} className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><SettingsIcon width={22} height={22}/></button></Tooltip>:( <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
-                            <Tooltip text={isGlobalMuted?t('tt_unmute_all'):t('tt_mute_all')}><button onClick={e=>{e.stopPropagation();setIsGlobalMuted(!isGlobalMuted)}} className={`p-2 rounded-full transition-all ${isGlobalMuted?'bg-red-500 text-white animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}>{isGlobalMuted?<VolumeXIcon width={20} height={20}/>:<Volume2Icon width={20} height={20}/>}</button></Tooltip>
-                            <div className="w-[1px] h-5 bg-white/10"></div>
-                            <Tooltip text={t('tt_pip')}><button onClick={e=>{e.stopPropagation();togglePip()}} className={`p-2 rounded-full transition-all ${pipWindow?'bg-ice text-black animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}><ExternalLinkIcon width={20} height={20}/></button></Tooltip><div className="w-[1px] h-5 bg-white/10"></div><Tooltip text={t('sleep_title')}><button onClick={e=>{e.stopPropagation();setShowSleepMenu(!showSleepMenu);setShowSquadMenu(false);setShowPatrolMenu(false)}} className={`p-2 rounded-full transition-all ${showSleepMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${sleepTimer.active?'text-indigo-400 animate-pulse':''}`}><ClockIcon width={20} height={20}/></button></Tooltip><SleepTimerMenu isOpen={showSleepMenu} onClose={()=>setShowSleepMenu(false)} onSetTimer={m=>{if(!m)setSleepTimer({active:false,endTime:null,duration:null});else{setSleepTimer({active:true,endTime:Date.now()+m*60000,duration:m});addToast(`Timer: ${m} min`,'info')}}} activeTimer={sleepTimer.duration} lang={lang}/>
-                        
-                        {/* New Patrol Button */}
-                        <Tooltip text={t('tt_patrol')}><button onClick={e=>{e.stopPropagation();setShowPatrolMenu(!showPatrolMenu);setShowSleepMenu(false);setShowSquadMenu(false)}} className={`p-2 rounded-full transition-all ${showPatrolMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${isPatrolActive?'text-green-400 animate-pulse':''}`}><RadarIcon width={20} height={20}/></button></Tooltip>
-                        <PatrolMenu isOpen={showPatrolMenu} onClose={()=>setShowPatrolMenu(false)} isPatrolActive={isPatrolActive} togglePatrol={()=>{setIsPatrolActive(!isPatrolActive);setShowPatrolMenu(false);if(!isPatrolActive){addToast("Ronda Ativada!","success");setLayoutMode('focus')}}} patrolDuration={patrolDuration} setPatrolDuration={setPatrolDuration} lang={lang} />
+                    
+                    {/* FLIP TOOLBAR CONTAINER */}
+                    <div 
+                        className="toolbar-flip-container" 
+                        onMouseEnter={()=>{if(toolbarTimeoutRef.current)clearTimeout(toolbarTimeoutRef.current);setIsToolbarActive(true)}} 
+                        onMouseLeave={()=>{toolbarTimeoutRef.current=setTimeout(()=>setIsToolbarActive(false),2000)}}
+                        onTouchStart={()=>setIsToolbarActive(true)}
+                        style={{marginLeft:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`-${sidebarWidth/2}px`:'0'}}
+                    >
+                        <div className={`toolbar-flipper ${isPatrolActive && !isToolbarActive && !showSquadMenu && !showSleepMenu && !showPatrolMenu ? 'flipped' : ''}`}>
+                            
+                            {/* FRONT: STANDARD MENU */}
+                            <div className={`toolbar-front ${isToolbarActive||showSquadMenu||showSleepMenu||showPatrolMenu?'active':''}`}>
+                                <div className="flex items-center"><Tooltip text={isSidebarOpen?t('tt_hide_chat'):t('tt_show_chat')}><button onClick={e=>{e.stopPropagation();setIsSidebarOpen(!isSidebarOpen)}} className={`p-2 rounded-full transition-all ${isSidebarOpen?'bg-indigo-500 text-white':'text-gray-400 hover:text-white'}`}><span className="md:hidden"><ChatIcon width={20} height={20}/></span><span className="hidden md:block"><PanelRightIcon width={20} height={20}/></span></button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-1"></div></div><Tooltip text={isTheaterMode?t('tt_cinema_exit'):t('tt_cinema_enter')}><button onClick={e=>{e.stopPropagation();toggleTheaterMode()}} className={`flex items-center justify-center p-2 rounded-full transition-all active:scale-90 shrink-0 ${isTheaterMode?'bg-amber-400 text-black shadow-glow':'bg-white/5 text-gray-300 hover:text-white'}`}>{isTheaterMode?<SunIcon width={20} height={20}/>:<MoonIcon width={20} height={20}/>}</button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-0.5 shrink-0"></div>
+                                {!(isToolbarActive||showSquadMenu||showSleepMenu||showPatrolMenu)?<Tooltip text={t('tt_menu')}><button onClick={() => setShowSettings(true)} className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><SettingsIcon width={22} height={22}/></button></Tooltip>:( <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
+                                    <Tooltip text={isGlobalMuted?t('tt_unmute_all'):t('tt_mute_all')}><button onClick={e=>{e.stopPropagation();setIsGlobalMuted(!isGlobalMuted)}} className={`p-2 rounded-full transition-all ${isGlobalMuted?'bg-red-500 text-white animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}>{isGlobalMuted?<VolumeXIcon width={20} height={20}/>:<Volume2Icon width={20} height={20}/>}</button></Tooltip>
+                                    <div className="w-[1px] h-5 bg-white/10"></div>
+                                    <Tooltip text={t('tt_pip')}><button onClick={e=>{e.stopPropagation();togglePip()}} className={`p-2 rounded-full transition-all ${pipWindow?'bg-ice text-black animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}><ExternalLinkIcon width={20} height={20}/></button></Tooltip><div className="w-[1px] h-5 bg-white/10"></div><Tooltip text={t('sleep_title')}><button onClick={e=>{e.stopPropagation();setShowSleepMenu(!showSleepMenu);setShowSquadMenu(false);setShowPatrolMenu(false)}} className={`p-2 rounded-full transition-all ${showSleepMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${sleepTimer.active?'text-indigo-400 animate-pulse':''}`}><ClockIcon width={20} height={20}/></button></Tooltip><SleepTimerMenu isOpen={showSleepMenu} onClose={()=>setShowSleepMenu(false)} onSetTimer={m=>{if(!m)setSleepTimer({active:false,endTime:null,duration:null});else{setSleepTimer({active:true,endTime:Date.now()+m*60000,duration:m});addToast(`Timer: ${m} min`,'info')}}} activeTimer={sleepTimer.duration} lang={lang}/>
+                                    
+                                    {/* Patrol Button */}
+                                    <Tooltip text={t('tt_patrol')}><button onClick={e=>{e.stopPropagation();setShowPatrolMenu(!showPatrolMenu);setShowSleepMenu(false);setShowSquadMenu(false)}} className={`p-2 rounded-full transition-all ${showPatrolMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${isPatrolActive?'text-green-400 animate-pulse':''}`}><RadarIcon width={20} height={20}/></button></Tooltip>
+                                    <PatrolMenu isOpen={showPatrolMenu} onClose={()=>setShowPatrolMenu(false)} isPatrolActive={isPatrolActive} togglePatrol={()=>{setIsPatrolActive(!isPatrolActive);setShowPatrolMenu(false);if(!isPatrolActive){addToast("Ronda Ativada!","success");setLayoutMode('focus')}}} patrolDuration={patrolDuration} setPatrolDuration={setPatrolDuration} lang={lang} />
 
-                        <div className="w-[1px] h-5 bg-white/10"></div>
-                        <Tooltip text={t('layout_auto')}><button onClick={e=>{e.stopPropagation();changeLayout('auto')}} className={`p-2 rounded-full transition-all ${layoutMode==='auto'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutIcon width={20} height={20}/></button></Tooltip>
-                        <Tooltip text={t('layout_grid')}><button onClick={e=>{e.stopPropagation();changeLayout('grid')}} className={`p-2 rounded-full transition-all ${layoutMode==='grid'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><GridIcon width={20} height={20}/></button></Tooltip>
-                        <Tooltip text={t('layout_focus')}><button onClick={e=>{e.stopPropagation();changeLayout('focus')}} className={`p-2 rounded-full transition-all ${expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutTemplateIcon width={20} height={20}/></button></Tooltip>
-                        <div className="w-[1px] h-5 bg-white/10 mx-0.5"></div><button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);setShowSleepMenu(false);setShowPatrolMenu(false)}} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={16} height={16}/>{t('squads_title')}</button><SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success')}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false)}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info')}} lang={lang}/>
-                        <div className="w-[1px] h-5 bg-white/10 mx-0.5"></div><Tooltip text="API Configs"><button onClick={() => setShowSettings(true)} className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all"><SettingsIcon width={20} height={20}/></button></Tooltip>
-                        </div> )}
+                                    <div className="w-[1px] h-5 bg-white/10"></div>
+                                    <Tooltip text={t('layout_auto')}><button onClick={e=>{e.stopPropagation();changeLayout('auto')}} className={`p-2 rounded-full transition-all ${layoutMode==='auto'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutIcon width={20} height={20}/></button></Tooltip>
+                                    <Tooltip text={t('layout_grid')}><button onClick={e=>{e.stopPropagation();changeLayout('grid')}} className={`p-2 rounded-full transition-all ${layoutMode==='grid'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><GridIcon width={20} height={20}/></button></Tooltip>
+                                    <Tooltip text={t('layout_focus')}><button onClick={e=>{e.stopPropagation();changeLayout('focus')}} className={`p-2 rounded-full transition-all ${expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutTemplateIcon width={20} height={20}/></button></Tooltip>
+                                    <div className="w-[1px] h-5 bg-white/10 mx-0.5"></div><button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);setShowSleepMenu(false);setShowPatrolMenu(false)}} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={16} height={16}/>{t('squads_title')}</button><SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success')}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false)}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info')}} lang={lang}/>
+                                    <div className="w-[1px] h-5 bg-white/10 mx-0.5"></div><Tooltip text="API Configs"><button onClick={() => setShowSettings(true)} className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all"><SettingsIcon width={20} height={20}/></button></Tooltip>
+                                </div> )}
+                            </div>
+
+                            {/* BACK: COUNTDOWN TIMER */}
+                            <div className="toolbar-back">
+                                <div className="patrol-timer-badge">
+                                    <RadarIcon width={20} height={20} className="animate-spin-slow" />
+                                    <span>{patrolTimeLeft}s</span>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
+
                     <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-1 md:pt-1 ${isTheaterMode?'!pt-0 !h-full':''} z-10 relative transition-all duration-700`}>
                         <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-0">{streamers.length===0?<div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in"><div className="p-8 max-w-md w-full mx-4 opacity-50"><p className="text-gray-500 text-sm mb-6 leading-relaxed mt-20">{t('empty_desc')}</p></div><AdUnit className="max-w-[280px] md:max-w-sm my-2 md:my-4"/></div>:renderContent()}</div>
                         <div ref={sidebarRef} className={`flex flex-col sidebar-glass transition-all ease-[cubic-bezier(0.4,0,0.2,1)] z-30 relative ${isSidebarOpen?'translate-y-0 translate-x-0 opacity-100':(typeof window!=='undefined'&&window.innerWidth<768?'translate-x-full opacity-0':'translate-y-10 md:translate-y-0 md:translate-x-10 opacity-0 overflow-hidden')}`} style={{width:typeof window!=='undefined'&&window.innerWidth<768?'min(340px, 85vw)':(isSidebarOpen?`${sidebarWidth}px`:'0px'),height:'100%',transitionDuration:isResizing?'0s':'300ms'}}>
