@@ -1150,7 +1150,12 @@
                     {/* FLIP TOOLBAR CONTAINER */}
                     <div 
                         className="toolbar-flip-container" 
-                        onMouseEnter={()=>{if(toolbarTimeoutRef.current)clearTimeout(toolbarTimeoutRef.current);setIsToolbarActive(true)}} 
+                        onMouseEnter={()=>{
+                            // FIX: Impede que o 'hover' do toque reabra o menu imediatamente após fechar
+                            if (Date.now() - lastCloseRef.current < 1000) return;
+                            if(toolbarTimeoutRef.current)clearTimeout(toolbarTimeoutRef.current);
+                            setIsToolbarActive(true)
+                        }} 
                         onMouseLeave={()=>{toolbarTimeoutRef.current=setTimeout(()=>setIsToolbarActive(false),2000)}}
                         style={{marginLeft:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`-${sidebarWidth/2}px`:'0'}}
                     >
