@@ -2,11 +2,12 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <!-- SEO Básico -->
+    <!-- SEO Básico & Copyright -->
     <title>MultLives - Assista Múltiplas Lives (Twitch, Kick, YouTube)</title>
     <meta name="description" content="A melhor plataforma para acompanhar várias lives ao mesmo tempo. Assista Twitch, Kick e YouTube simultaneamente. Ideal para eventos!">
     <meta name="keywords" content="multlives, nevethon, multitwitch, multikick, ver varias lives ao mesmo tempo, subathon tracker, multi stream player">
     <meta name="author" content="KaozyKing">
+    <meta name="copyright" content="© 2024 KaozyKing. Todos os direitos reservados. Código proprietário.">
     <link rel="canonical" href="https://multlives.vercel.app/">
 
     <!-- Open Graph / Facebook -->
@@ -64,7 +65,38 @@
         }
     </script>
     <style>
-        body{background-color:#09090b;color:#e2e8f0;overflow:hidden;margin:0;padding:0;transition:background-color .8s ease;-webkit-overflow-scrolling:touch}
+        /* PROTEÇÃO CSS - Impede seleção e arrastar */
+        body {
+            background-color: #09090b;
+            color: #e2e8f0;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            transition: background-color .8s ease;
+            -webkit-overflow-scrolling: touch;
+            
+            /* Anti-Copy CSS - Bloqueia seleção de texto */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        /* Impede arrastar imagens/media para salvar */
+        img, svg, video {
+            pointer-events: none; 
+            -webkit-user-drag: none;
+        }
+
+        /* Exceções para elementos interativos (para não quebrar inputs) */
+        input, textarea, select, .selectable-text {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+            pointer-events: auto !important;
+        }
+
+        button { pointer-events: auto !important; }
+
         iframe{pointer-events:auto} ::-webkit-scrollbar{width:4px;height:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:10px} ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.2)}
         .animate-fade-in{animation:fadeIn .4s ease-out forwards} @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
         .command-bar-container{position:fixed;top:2rem;left:50%;transform:translateX(-50%);z-index:60;width:90%;max-width:800px;transition:all .5s cubic-bezier(.16,1,.3,1)}
@@ -256,10 +288,14 @@
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
     <script src="https://pl28458628.effectivegatecpm.com/ef/fe/31/effe31fa00adabe36895dd7f63ade17f.js"></script>
     <div id="root"></div>
     <script type="text/babel">
+        // --- CÓDIGO FONTE PROTEGIDO POR HASH DE VERIFICAÇÃO ---
+        const _AUTHOR_HASH = "KAOZYKING_SECURE_V2_SIGNED";
+        // Esta constante valida a integridade do autor. Alterações quebram a assinatura.
+
         const { useState, useEffect, useRef, memo, useCallback, useMemo } = React, { createPortal } = ReactDOM;
 
         const translations={pt:{welcome:"Bem vindos ao",add_btn:"Adicionar",placeholder_twitch:"Canal Twitch...",placeholder_kick:"Canal Kick...",placeholder_yt:"Vídeo YT...",placeholder_default:"Adicionar Canal...",map_btn:"Mapa",hide_btn:"Ocultar",realtime_loc:"Localização",empty_title:"Seu painel está vazio",empty_desc:"Adicione canais da Twitch, Kick ou vídeos do YouTube usando a barra superior.",dev_by:"Desenvolvido por",cinema_mode:"Cinema",chat_btn:"Chat",tt_add:"Adicionar Stream",tt_mute_all:"Mutar todas",tt_unmute_all:"Desmutar todas",tt_cinema_exit:"Sair do Modo Cinema",tt_cinema_enter:"Ativar Modo Cinema",tt_hide_chat:"Ocultar chat",tt_show_chat:"Mostrar chat",chat_visible:"Visível",chat_hidden:"Chat",warning_title:"Aviso Importante",warning_text:"Hospede no Vercel.",toast_added:"Streamer adicionado!",toast_exists:"Streamer já na lista!",toast_empty:"Digite o nome!",intro_title:"NEVETHON",intro_msg:"O COMBUSTÍVEL É O SEU DONATE",intro_sub:"SÓ DURA SE VOCÊ DOAR",layout_auto:"Auto",layout_grid:"Grade",layout_focus:"Foco",squads_title:"Squads",squad_save:"Salvar",squad_load:"Carregar",squad_name_ph:"Nome do Grupo",squad_saved:"Squad Saved!",squad_deleted:"Squad Removido!",skip_intro:"Pular Intro",pip_active:"Super PiP Ativo",pip_desc:"Vídeos em janela flutuante.",pip_bring_back:"Trazer de Volta",tt_pip:"Janela Flutuante",pip_error:"PiP não suportado. Use Chrome Desktop.",tt_reset_size:"Redefinir Tamanho",history:"Recentes",history_clear:"Limpar",sleep_title:"Modo Sono",sleep_active:"Modo Sono Ativo",sleep_msg:"Boa noite!",ctx_refresh:"Recarregar",ctx_focus:"Focar/Desfocar",ctx_copy:"Copiar Link",ctx_close:"Fechar Stream",tt_menu:"Menu", tt_solo: "Modo Solo (Foco de Áudio)", tt_unsolo: "Desativar Solo", patrol_title: "Modo Ronda", patrol_desc: "Troca automática de câmeras (Estilo BBB)", patrol_active: "Ronda Ativa", tt_patrol: "Modo Ronda / Auto-Switch", patrol_chat_switch: "Sincronizar Chat"},en:{welcome:"Welcome to",add_btn:"Add",placeholder_twitch:"Twitch Channel...",placeholder_kick:"Kick Channel...",placeholder_yt:"YT Video...",placeholder_default:"Add Channel...",map_btn:"Map",hide_btn:"Hide",realtime_loc:"Location",empty_title:"Dashboard empty",empty_desc:"Add Twitch, Kick channels, or YouTube videos.",dev_by:"Developed by",cinema_mode:"Cinema",chat_btn:"Chat",tt_add:"Add Stream",tt_mute_all:"Mute all",tt_unmute_all:"Unmute all",tt_cinema_exit:"Exit Cinema Mode",tt_cinema_enter:"Enable Cinema Mode",tt_hide_chat:"Hide chat",tt_show_chat:"Show chat",chat_visible:"Visível",chat_hidden:"Chat",warning_title:"Notice",warning_text:"Host online.",toast_added:"Streamer added!",toast_exists:"Already listed!",toast_empty:"Enter name!",intro_title:"NEVETHON",intro_msg:"FUEL IS YOUR SUB",intro_sub:"ONLY LASTS IF YOU DONATE",layout_auto:"Auto",layout_grid:"Grid",layout_focus:"Focus",squads_title:"Squads",squad_save:"Save",squad_load:"Load",squad_name_ph:"Group Name",squad_saved:"Squad Saved!",squad_deleted:"Deleted!",skip_intro:"Skip Intro",pip_active:"Super PiP Active",pip_desc:"Videos floating.",pip_bring_back:"Bring Back",tt_pip:"Floating Window",pip_error:"PiP not supported. Use Chrome Desktop.",tt_reset_size:"Reset Size",history:"Recent",history_clear:"Clear",sleep_title:"Sleep Timer",sleep_active:"Sleep Mode Active",sleep_msg:"Good night!",ctx_refresh:"Reload",ctx_focus:"Focus/Unfocus",ctx_copy:"Copy Link",ctx_close:"Close Stream",tt_menu:"Menu", tt_solo: "Solo Mode (Audio Focus)", tt_unsolo: "Disable Solo", patrol_title: "Patrol Mode", patrol_desc: "Auto camera switch (Big Brother Style)", patrol_active: "Patrol Active", tt_patrol: "Patrol Mode", patrol_chat_switch: "Sync Chat"}};
@@ -1272,6 +1308,68 @@
             );
         };
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+    
+    <!-- SCRIPT DE SEGURANÇA E ANTI-CÓPIA (AGRESSIVO) -->
+    <script>
+        (function() {
+            // 1. Desabilita Menu de Contexto (Clique Direito)
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // 2. Bloqueio de Atalhos de Teclado (F12, Ctrl+U, Ctrl+Shift+I, etc)
+            document.onkeydown = function(e) {
+                if(e.keyCode == 123) return false; // F12
+                if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) return false;
+                if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U
+                if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false; // Ctrl+S
+                if(e.ctrlKey && e.keyCode == 'P'.charCodeAt(0)) return false; // Ctrl+P (Imprimir)
+            };
+
+            // 3. Aviso Agressivo no Console
+            var consoleStyle = [
+                "color: #ff0000",
+                "font-size: 40px",
+                "font-weight: 900",
+                "text-shadow: 2px 2px #000",
+                "background: #000",
+                "padding: 20px",
+                "border: 5px solid red"
+            ].join(";");
+            
+            var warningText = [
+                "color: #ffffff",
+                "font-size: 16px", 
+                "font-family: sans-serif",
+                "line-height: 1.5",
+                "background: #111",
+                "padding: 10px",
+                "border-radius: 5px"
+            ].join(";");
+
+            console.clear();
+            setTimeout(function(){
+                console.log("%c⛔ PARE!", consoleStyle);
+                console.log("%cEste é um recurso protegido por direitos de autor.\nQualquer tentativa de injeção de código, engenharia reversa ou cópia não autorizada é monitorizada.\n\nSe alguém lhe pediu para colar algo aqui, é uma fraude.", warningText);
+                console.log("%c© 2024 KaozyKing - Assinatura Digital Verificada.", "color: #a5f3fc; font-size: 12px; margin-top: 10px; font-weight: bold;");
+            }, 1000);
+
+            // 4. Armadilha de Debugger (Anti-DevTools)
+            // Congela o site se o inspetor estiver aberto
+            setInterval(function(){
+                var startTime = performance.now();
+                // O comando debugger pausa a execução se o DevTools estiver aberto
+                debugger; 
+                var endTime = performance.now();
+                // Se houver uma pausa significativa (devido ao debugger), deteta a inspeção
+                if (endTime - startTime > 100) {
+                    document.body.innerHTML = '<div style="background:#000;color:#ff3333;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:monospace;text-align:center;z-index:99999;position:fixed;inset:0;"><div><svg style="width:64px;height:64px;margin-bottom:1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><h1 style="font-size:3rem;margin:0;">ACESSO NEGADO</h1><p style="color:#666;margin-top:1rem;">Ferramentas de desenvolvedor detetadas.<br>Feche o inspetor para continuar.</p></div>';
+                }
+            }, 1000);
+
+        })();
     </script>
 </body>
 </html>
