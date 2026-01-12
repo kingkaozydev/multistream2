@@ -137,6 +137,9 @@
 
         /* Front Face (Original Toolbar) */
         .toolbar-front {
+            position: relative;
+            z-index: 2;
+            transform: rotateX(0deg);
             display: flex;
             align-items: center;
             background: rgba(13,13,16,.3);
@@ -157,7 +160,7 @@
             padding: .5rem;
         }
 
-        /* Back Face (Timer) */
+        /* Back Face (Countdown) - FIXED POSITIONING */
         .toolbar-back {
             position: absolute;
             top: 0;
@@ -171,49 +174,67 @@
         }
 
         .patrol-timer-badge {
-            background: rgba(220, 38, 38, 0.9);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 99px;
-            padding: 0.5rem 1.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: white;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            min-width: 140px;
-            justify-content: center;
-            white-space: nowrap;
+            background: rgba(13,13,16,.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+            padding: 0.4rem 1.2rem;
+            border-radius: 99px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.5);
+            font-weight: 800;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
         }
 
-        .header-trigger-area{position:fixed;top:0;left:0;right:0;height:20px;z-index:70} .header-trigger-area:hover~.command-bar-container,.command-bar-container:hover{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
-        .theater-mode-active .aurora-blob{opacity:.15;filter:blur(150px);transform:scale(1.5)} .cinema-glow{transition:box-shadow .6s ease} .theater-mode-active .cinema-glow{box-shadow:0 0 30px rgba(0,0,0,.9),0 0 40px rgba(99,102,241,.15)}
-        .theater-mode-active .cinema-glow-expanded{box-shadow:0 0 60px #000,0 0 80px rgba(165,243,252,.2)} .blackout-overlay{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;z-index:5;transition:opacity 1s ease} .theater-mode-active .blackout-overlay{opacity:.85}
+        .blackout-overlay{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;z-index:5;transition:opacity 1s ease} .theater-mode-active .blackout-overlay{opacity:.85}
         
-        /* Mobile UX Improvements */
+        /* Mobile UX Improvements - Formato 2 Linhas (Control Pad) */
         @media (max-width:768px) {
             .toolbar-flip-container {
-                bottom: 0.8rem;
-                width: 95vw;
-                max-width: 350px;
+                bottom: 1.5rem;
+                width: 90vw;
+                max-width: 380px; 
             }
+            
             .toolbar-front {
                 width: 100%;
                 justify-content: center;
+                flex-wrap: wrap; /* Permite quebrar em 2 linhas */
+                gap: 12px !important;
+                padding: 12px 16px !important;
+                border-radius: 24px !important;
+                background: rgba(13,13,16,.9) !important;
+                border: 1px solid rgba(255,255,255,0.1);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
             }
+
+            .toolbar-front.active {
+                padding: 16px !important;
+                border-color: rgba(99,102,241,0.3);
+            }
+
             .toolbar-front button {
-                padding: 0.35rem !important;
+                padding: 0.6rem !important;
+                border-radius: 12px !important;
+                background-color: rgba(255,255,255,0.05);
+                flex: 0 0 auto;
+                transition: transform 0.2s, background-color 0.2s;
             }
+            
+            .toolbar-front button:active {
+                transform: scale(0.95);
+                background-color: rgba(255,255,255,0.15);
+            }
+
             .toolbar-front svg {
-                width: 16px !important;
-                height: 16px !important;
+                width: 22px !important;
+                height: 22px !important;
             }
-            .sidebar-glass {
-                border-radius: 0;
-            }
+            
+            /* Removi as regras CSS complexas (divisores e botões) daqui para usar classes Tailwind no HTML */
         }
 
         /* Efeitos de Estado Offline */
@@ -282,6 +303,7 @@
         const SignalOffIcon = ({width, height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||24} height={height||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/></svg>;
         const WifiOffIcon = ({width, height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||24} height={height||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>;
         const KeyIcon = ({width, height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>;
+        const MenuIcon = ({width, height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||24} height={height||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>;
         const RadarIcon = ({width, height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||20} height={height||20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 12c-3-3-3-8 0-11"/><path d="M16.9 7.1c2.5 2.5 2.5 6.5 0 9"/><path d="M19.8 4.2c4.3 4.3 4.3 11.3 0 15.6"/><path d="M7.1 16.9c-2.5-2.5-2.5-6.5 0-9"/><path d="M4.2 19.8c-4.3-4.3-4.3-11.3 0-15.6"/><circle cx="12" cy="12" r="1"/></svg>;
 
         const fetchAvatar = async (platform, name) => {
@@ -1134,13 +1156,13 @@
                     >
                         <div className={`toolbar-flipper ${isPatrolActive && !isToolbarActive && !showSquadMenu && !showSleepMenu && !showPatrolMenu ? 'flipped' : ''}`}>
                             
-                            {/* FRONT: STANDARD MENU */}
+                            {/* FRONT: STANDARD MENU - Updated with Responsive Classes */}
                             <div className={`toolbar-front ${isToolbarActive||showSquadMenu||showSleepMenu||showPatrolMenu?'active':''}`}>
-                                <div className="flex items-center"><Tooltip text={isSidebarOpen?t('tt_hide_chat'):t('tt_show_chat')}><button onClick={e=>{e.stopPropagation();setIsSidebarOpen(!isSidebarOpen)}} className={`p-2 rounded-full transition-all ${isSidebarOpen?'bg-indigo-500 text-white':'text-gray-400 hover:text-white'}`}><span className="md:hidden"><ChatIcon width={20} height={20}/></span><span className="hidden md:block"><PanelRightIcon width={20} height={20}/></span></button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-1"></div></div><Tooltip text={isTheaterMode?t('tt_cinema_exit'):t('tt_cinema_enter')}><button onClick={e=>{e.stopPropagation();toggleTheaterMode()}} className={`flex items-center justify-center p-2 rounded-full transition-all active:scale-90 shrink-0 ${isTheaterMode?'bg-amber-400 text-black shadow-glow':'bg-white/5 text-gray-300 hover:text-white'}`}>{isTheaterMode?<SunIcon width={20} height={20}/>:<MoonIcon width={20} height={20}/>}</button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-0.5 shrink-0"></div>
-                                {!(isToolbarActive||showSquadMenu||showSleepMenu||showPatrolMenu)?<Tooltip text={t('tt_menu')}><button onClick={() => setShowSettings(true)} className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><SettingsIcon width={22} height={22}/></button></Tooltip>:( <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
+                                <div className="flex items-center"><Tooltip text={isSidebarOpen?t('tt_hide_chat'):t('tt_show_chat')}><button onClick={e=>{e.stopPropagation();setIsSidebarOpen(!isSidebarOpen)}} className={`p-2 rounded-full transition-all ${isSidebarOpen?'bg-indigo-500 text-white':'text-gray-400 hover:text-white'}`}><span className="md:hidden"><ChatIcon width={20} height={20}/></span><span className="hidden md:block"><PanelRightIcon width={20} height={20}/></span></button></Tooltip><div className="hidden md:block w-px h-5 bg-white/10 mx-1"></div></div><Tooltip text={isTheaterMode?t('tt_cinema_exit'):t('tt_cinema_enter')}><button onClick={e=>{e.stopPropagation();toggleTheaterMode()}} className={`flex items-center justify-center p-2 rounded-full transition-all active:scale-90 shrink-0 ${isTheaterMode?'bg-amber-400 text-black shadow-glow':'bg-white/5 text-gray-300 hover:text-white'}`}>{isTheaterMode?<SunIcon width={20} height={20}/>:<MoonIcon width={20} height={20}/>}</button></Tooltip><div className="hidden md:block w-px h-5 bg-white/10 mx-0.5 shrink-0"></div>
+                                {!(isToolbarActive||showSquadMenu||showSleepMenu||showPatrolMenu)?<Tooltip text={t('tt_menu')}><button onClick={() => setIsToolbarActive(true)} className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><MenuIcon width={22} height={22}/></button></Tooltip>:( <div className="flex flex-wrap md:flex-nowrap items-center justify-center md:justify-start gap-3 md:gap-2 animate-fade-in w-full md:w-auto">
                                     <Tooltip text={isGlobalMuted?t('tt_unmute_all'):t('tt_mute_all')}><button onClick={e=>{e.stopPropagation();setIsGlobalMuted(!isGlobalMuted)}} className={`p-2 rounded-full transition-all ${isGlobalMuted?'bg-red-500 text-white animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}>{isGlobalMuted?<VolumeXIcon width={20} height={20}/>:<Volume2Icon width={20} height={20}/>}</button></Tooltip>
-                                    <div className="w-[1px] h-5 bg-white/10"></div>
-                                    <Tooltip text={t('tt_pip')}><button onClick={e=>{e.stopPropagation();togglePip()}} className={`p-2 rounded-full transition-all ${pipWindow?'bg-ice text-black animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}><ExternalLinkIcon width={20} height={20}/></button></Tooltip><div className="w-[1px] h-5 bg-white/10"></div><Tooltip text={t('sleep_title')}><button onClick={e=>{e.stopPropagation();setShowSleepMenu(!showSleepMenu);setShowSquadMenu(false);setShowPatrolMenu(false)}} className={`p-2 rounded-full transition-all ${showSleepMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${sleepTimer.active?'text-indigo-400 animate-pulse':''}`}><ClockIcon width={20} height={20}/></button></Tooltip><SleepTimerMenu isOpen={showSleepMenu} onClose={()=>setShowSleepMenu(false)} onSetTimer={m=>{if(!m)setSleepTimer({active:false,endTime:null,duration:null});else{setSleepTimer({active:true,endTime:Date.now()+m*60000,duration:m});addToast(`Timer: ${m} min`,'info')}}} activeTimer={sleepTimer.duration} lang={lang}/>
+                                    <div className="hidden md:block w-px h-5 bg-white/10"></div>
+                                    <Tooltip text={t('tt_pip')}><button onClick={e=>{e.stopPropagation();togglePip()}} className={`p-2 rounded-full transition-all ${pipWindow?'bg-ice text-black animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}><ExternalLinkIcon width={20} height={20}/></button></Tooltip><div className="hidden md:block w-px h-5 bg-white/10"></div><Tooltip text={t('sleep_title')}><button onClick={e=>{e.stopPropagation();setShowSleepMenu(!showSleepMenu);setShowSquadMenu(false);setShowPatrolMenu(false)}} className={`p-2 rounded-full transition-all ${showSleepMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${sleepTimer.active?'text-indigo-400 animate-pulse':''}`}><ClockIcon width={20} height={20}/></button></Tooltip><SleepTimerMenu isOpen={showSleepMenu} onClose={()=>setShowSleepMenu(false)} onSetTimer={m=>{if(!m)setSleepTimer({active:false,endTime:null,duration:null});else{setSleepTimer({active:true,endTime:Date.now()+m*60000,duration:m});addToast(`Timer: ${m} min`,'info')}}} activeTimer={sleepTimer.duration} lang={lang}/>
                                     
                                     {/* Patrol Button */}
                                     <Tooltip text={t('tt_patrol')}><button onClick={e=>{e.stopPropagation();setShowPatrolMenu(!showPatrolMenu);setShowSleepMenu(false);setShowSquadMenu(false)}} className={`p-2 rounded-full transition-all ${showPatrolMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${isPatrolActive?'text-green-400 animate-pulse':''}`}><RadarIcon width={20} height={20}/></button></Tooltip>
@@ -1159,12 +1181,11 @@
                                         lang={lang} 
                                     />
 
-                                    <div className="w-[1px] h-5 bg-white/10"></div>
+                                    <div className="hidden md:block w-px h-5 bg-white/10"></div>
                                     <Tooltip text={t('layout_auto')}><button onClick={e=>{e.stopPropagation();changeLayout('auto')}} className={`p-2 rounded-full transition-all ${layoutMode==='auto'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutIcon width={20} height={20}/></button></Tooltip>
                                     <Tooltip text={t('layout_grid')}><button onClick={e=>{e.stopPropagation();changeLayout('grid')}} className={`p-2 rounded-full transition-all ${layoutMode==='grid'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><GridIcon width={20} height={20}/></button></Tooltip>
                                     <Tooltip text={t('layout_focus')}><button onClick={e=>{e.stopPropagation();changeLayout('focus')}} className={`p-2 rounded-full transition-all ${expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutTemplateIcon width={20} height={20}/></button></Tooltip>
-                                    <div className="w-[1px] h-5 bg-white/10 mx-0.5"></div><button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);setShowSleepMenu(false);setShowPatrolMenu(false)}} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={16} height={16}/>{t('squads_title')}</button><SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success')}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false)}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info')}} lang={lang}/>
-                                    <div className="w-[1px] h-5 bg-white/10 mx-0.5"></div><Tooltip text="API Configs"><button onClick={() => setShowSettings(true)} className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all"><SettingsIcon width={20} height={20}/></button></Tooltip>
+                                    <div className="hidden md:block w-px h-5 bg-white/10 mx-0.5"></div><button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);setShowSleepMenu(false);setShowPatrolMenu(false)}} className={`flex items-center justify-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all w-full md:w-auto mt-1 md:mt-0 ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={16} height={16}/>{t('squads_title')}</button><SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success')}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false)}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info')}} lang={lang}/>
                                 </div> )}
                             </div>
 
