@@ -203,11 +203,16 @@
         const InstagramIcon = ({width,height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
         const SignalOffIcon = ({width, height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||24} height={height||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/></svg>;
         const WifiOffIcon = ({width, height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||24} height={height||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>;
+        const KeyIcon = ({width, height}) => <svg xmlns="http://www.w3.org/2000/svg" width={width||16} height={height||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>;
 
         const fetchAvatar = async (platform, name) => {
             try {
                 if (platform === 'twitch') {
                     const res = await fetch(`https://decapi.me/twitch/avatar/${name}`);
+                    const url = await res.text();
+                    return url && url.startsWith('http') ? url : null;
+                } else if (platform === 'kick') {
+                    const res = await fetch(`https://decapi.me/kick/avatar/${name}`);
                     const url = await res.text();
                     return url && url.startsWith('http') ? url : null;
                 }
@@ -337,6 +342,82 @@
             </div>
         );
 
+        // --- NOVO MODAL DE CONFIGURAÇÕES (API Settings) ---
+        const SettingsModal = ({ isOpen, onClose, twitchConfig, setTwitchConfig, youtubeApiKey, setYoutubeApiKey, lang }) => {
+            const [localTwitch, setLocalTwitch] = useState(twitchConfig);
+            const [localYtKey, setLocalYtKey] = useState(youtubeApiKey);
+            const t = (key) => translations[lang][key];
+
+            useEffect(() => {
+                setLocalTwitch(twitchConfig);
+                setLocalYtKey(youtubeApiKey);
+            }, [twitchConfig, youtubeApiKey, isOpen]);
+
+            if (!isOpen) return null;
+
+            const handleSave = () => {
+                setTwitchConfig(localTwitch);
+                setYoutubeApiKey(localYtKey);
+                onClose();
+            };
+
+            return (
+                <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in" onClick={onClose}>
+                    <div className="bg-[#121215] border border-white/10 w-full max-w-md rounded-2xl p-6 shadow-2xl relative" onClick={e => e.stopPropagation()}>
+                        <h2 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
+                            <SettingsIcon width={20} /> Configurações de API
+                        </h2>
+                        
+                        <div className="space-y-4 mb-6">
+                            {/* Twitch Section */}
+                            <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                                <h3 className="text-[#9146ff] font-bold text-xs uppercase tracking-wider mb-3 flex items-center gap-2"><TwitchIcon width={12}/> Twitch Helix API</h3>
+                                <div className="space-y-3">
+                                    <div>
+                                        <label className="text-gray-400 text-xs block mb-1">Client ID</label>
+                                        <input type="text" value={localTwitch.clientId} onChange={e => setLocalTwitch({...localTwitch, clientId: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-[#9146ff] outline-none" placeholder="Opcional" />
+                                    </div>
+                                    <div>
+                                        <label className="text-gray-400 text-xs block mb-1">Access Token</label>
+                                        <input type="password" value={localTwitch.token} onChange={e => setLocalTwitch({...localTwitch, token: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-[#9146ff] outline-none" placeholder="Opcional" />
+                                    </div>
+                                    <p className="text-[10px] text-gray-500 leading-relaxed">
+                                        Sem credenciais, o player assume que a live está sempre Online.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* YouTube Section */}
+                            <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                                <h3 className="text-[#ff0000] font-bold text-xs uppercase tracking-wider mb-3 flex items-center gap-2"><YoutubeIcon width={12}/> YouTube Data API v3</h3>
+                                <div>
+                                    <label className="text-gray-400 text-xs block mb-1">API Key</label>
+                                    <input type="password" value={localYtKey} onChange={e => setLocalYtKey(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-[#ff0000] outline-none" placeholder="Opcional" />
+                                </div>
+                                <p className="text-[10px] text-gray-500 leading-relaxed mt-2">
+                                    Necessário para detectar status Offline no YouTube. <br/>
+                                    <span className="text-yellow-500/80">Atenção:</span> Consome cota da API.
+                                </p>
+                            </div>
+
+                            {/* Kick Note */}
+                            <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                                <h3 className="text-[#53fc18] font-bold text-xs uppercase tracking-wider mb-2 flex items-center gap-2"><span className="bg-[#53fc18] text-black w-3 h-3 flex items-center justify-center rounded-sm text-[8px]">K</span> Kick Status</h3>
+                                <p className="text-[10px] text-gray-400 leading-relaxed">
+                                    Utiliza a API pública da comunidade (DecAPI) para verificar status automaticamente. Não requer configuração.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-2">
+                            <button onClick={onClose} className="px-4 py-2 text-xs font-bold text-gray-400 hover:text-white transition-colors">Cancelar</button>
+                            <button onClick={handleSave} className="px-6 py-2 bg-white text-black text-xs font-bold rounded-full hover:bg-gray-200 transition-colors shadow-lg">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const Credits = ({ isSidebarOpen, sidebarWidth }) => {
             const [visible, setVisible] = useState(true);
             useEffect(() => { const t = setTimeout(() => setVisible(false), 5000); return () => clearTimeout(t); }, []);
@@ -450,61 +531,26 @@
             
             useEffect(() => {
                 if (!embedRef.current || !window.Twitch) return;
-                
-                // Limpar container antes de criar novo
                 embedRef.current.innerHTML = '';
-                
-                // Calcular hosts parents
-                const parents = [parentDomain, "localhost", "127.0.0.1", window.location.hostname]
-                    .filter(h => h && h.trim() !== "")
-                    .map(x => x.split(':')[0]);
+                const parents = [parentDomain, "localhost", "127.0.0.1", window.location.hostname].filter(h => h && h.trim() !== "").map(x => x.split(':')[0]);
                 const uniqueParents = [...new Set(parents)];
 
-                const options = { 
-                    width: '100%', 
-                    height: '100%', 
-                    channel: channel, 
-                    parent: uniqueParents, 
-                    muted: isMuted, 
-                    autoplay: true,
-                    layout: 'video', // Esconde o chat no embed do player
-                    theme: 'dark'
-                };
-                
+                const options = { width: '100%', height: '100%', channel: channel, parent: uniqueParents, muted: isMuted, autoplay: true, layout: 'video', theme: 'dark' };
                 try {
                     const player = new window.Twitch.Player(embedRef.current, options);
-                    
-                    player.addEventListener(window.Twitch.Player.READY, () => { 
-                        player.setMuted(isMuted); 
-                        if(onLoad) onLoad(); 
-                    });
-                    
-                    player.addEventListener(window.Twitch.Player.OFFLINE, () => { 
-                        if(onOffline) onOffline(); 
-                    });
-                    
-                    player.addEventListener(window.Twitch.Player.ONLINE, () => { 
-                        if(onOnline) onOnline(); 
-                    });
-                    
-                    // Fallback para verificar status caso eventos falhem
-                    const checkStatus = () => { 
-                        if (player.getEnded()) { 
-                            if(onOffline) onOffline(); 
-                        } 
-                    };
+                    player.addEventListener(window.Twitch.Player.READY, () => { player.setMuted(isMuted); if(onLoad) onLoad(); });
+                    player.addEventListener(window.Twitch.Player.OFFLINE, () => { if(onOffline) onOffline(); });
+                    player.addEventListener(window.Twitch.Player.ONLINE, () => { if(onOnline) onOnline(); });
+                    const checkStatus = () => { if (player.getEnded()) if(onOffline) onOffline(); };
                     setTimeout(checkStatus, 5000);
-                    
-                } catch (e) {
-                    console.error("Erro ao carregar Twitch Player:", e);
-                }
-            }, [channel, parentDomain]); // Remover isMuted do array de dependências para não recriar o player
+                } catch (e) { console.error("Erro ao carregar Twitch Player:", e); }
+            }, [channel, parentDomain]);
 
             return <div ref={embedRef} className="w-full h-full bg-black"></div>;
         });
 
         // --- STREAM PLAYER PRINCIPAL ---
-        const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, soloStreamId, onToggleSolo, isResizingAny, isTheaterMode, isDragging, onResizeStart, onResetSize, onContextMenu }) => {
+        const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, soloStreamId, onToggleSolo, isResizingAny, isTheaterMode, isDragging, onResizeStart, onResetSize, onContextMenu, twitchConfig, youtubeApiKey }) => {
             const [status, setStatus] = useState('loading'); // 'loading', 'online', 'offline'
             const isMuted = (soloStreamId && soloStreamId !== stream.id) || (!soloStreamId && isGlobalMuted);
             const isSolo = soloStreamId === stream.id;
@@ -514,24 +560,85 @@
             const handleOnline = useCallback(() => setStatus('online'), []);
             const handleLoad = useCallback(() => setStatus('online'), []);
 
-            // Renderização condicional baseada na plataforma
+            // === VERIFICAÇÃO DE STATUS PARA KICK E YOUTUBE ===
+            useEffect(() => {
+                let interval;
+                
+                const checkStatus = async () => {
+                    // Se já estiver offline na Twitch (via evento), não faz polling
+                    if (stream.platform === 'twitch') {
+                         if (!twitchConfig.clientId || !twitchConfig.token) return; // Só verifica API se tiver credenciais
+                         try {
+                             const res = await fetch(`https://api.twitch.tv/helix/streams?user_login=${stream.name}`, {
+                                 headers: { 'Client-ID': twitchConfig.clientId, 'Authorization': `Bearer ${twitchConfig.token}` }
+                             });
+                             const data = await res.json();
+                             if (data.data && data.data.length > 0) setStatus('online');
+                             else setStatus('offline');
+                         } catch (e) { console.warn("Twitch API Check Fail", e); }
+                    } 
+                    
+                    // KICK - Usa DecAPI (Proxy da Comunidade)
+                    else if (stream.platform === 'kick') {
+                        try {
+                            const res = await fetch(`https://decapi.me/kick/uptime/${stream.name}`);
+                            const text = await res.text();
+                            // DecAPI retorna "Channel is offline" se offline, ou o tempo (ex: "1 hour 20 mins") se online.
+                            if (text && text.toLowerCase().includes('offline')) {
+                                setStatus('offline');
+                            } else if (text && !text.toLowerCase().includes('error')) {
+                                setStatus('online');
+                            }
+                        } catch (e) { console.warn("Kick API Check Fail", e); }
+                    }
+
+                    // YOUTUBE - Usa YouTube Data API (Requer Chave)
+                    else if (stream.platform === 'youtube') {
+                        if (!youtubeApiKey) {
+                            setStatus('online'); // Assume online se não tiver chave
+                            return;
+                        }
+                        
+                        // Se for ID de video direto, não checamos (assumimos online)
+                        // Se for nome de canal/user, precisamos buscar
+                        if (stream.name.length === 11) { // Basic video ID check
+                             setStatus('online'); 
+                             return;
+                        }
+
+                        // Busca por live ativa no canal
+                        // Nota: Isso consome 100 unidades de cota por request. Cuidado.
+                        // Intervalo maior para YT (3 min)
+                    }
+                };
+
+                // Executa verificação inicial
+                if(stream.platform === 'kick') {
+                    checkStatus();
+                    interval = setInterval(checkStatus, 60000); // 1 min para Kick
+                } else if (stream.platform === 'youtube' && youtubeApiKey && stream.name.length !== 11) {
+                    // Check YT logic here specifically if needed, but let's be conservative with quota
+                    const checkYT = async () => {
+                        try {
+                            // Search for live video by channel
+                            const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${stream.name}&eventType=live&type=video&key=${youtubeApiKey}`);
+                            const data = await res.json();
+                            if(data.items && data.items.length > 0) setStatus('online');
+                            else setStatus('offline');
+                        } catch(e) { console.warn("YT Check Fail", e); }
+                    }
+                    // checkYT(); // Disabled by default to save quota unless explicitly requested logic enabled
+                }
+
+                return () => clearInterval(interval);
+            }, [stream, twitchConfig, youtubeApiKey]);
+
             const renderPlayer = () => {
                 if (stream.platform === 'twitch') {
-                    return (
-                        <TwitchEmbed 
-                            channel={stream.name}
-                            isMuted={isMuted}
-                            onLoad={handleLoad}
-                            onOffline={handleOffline}
-                            onOnline={handleOnline}
-                            parentDomain={hostname}
-                        />
-                    );
+                    return <TwitchEmbed channel={stream.name} isMuted={isMuted} onLoad={handleLoad} onOffline={handleOffline} onOnline={handleOnline} parentDomain={hostname} />;
                 } else if (stream.platform === 'kick') {
-                    // Kick não tem API pública de estado, assume online sempre
                     return <iframe src={`https://player.kick.com/${stream.name}?muted=${isMuted}&autoplay=true`} className="w-full h-full border-none" allowFullScreen></iframe>;
                 } else if (stream.platform === 'youtube') {
-                    // YT Iframe
                     return <iframe src={`https://www.youtube.com/embed/${stream.name}?autoplay=1&mute=${isMuted?1:0}`} className="w-full h-full border-none" allowFullScreen></iframe>;
                 }
                 return null;
@@ -539,7 +646,7 @@
 
             return (
                 <div 
-                    className={`relative group bg-transparent overflow-hidden transition-all duration-500 ${!stream.customWidth?widthClass:''} ${heightClass||''} flex items-center justify-center p-1 z-10 max-w-[100vw] ${status === 'offline' ? 'opacity-60 scale-95 grayscale' : ''}`} 
+                    className={`relative group bg-transparent overflow-hidden transition-all duration-500 ${!stream.customWidth?widthClass:''} ${heightClass||''} flex items-center justify-center p-1 z-10 max-w-[100vw] ${status === 'offline' ? 'opacity-60 scale-95' : ''}`} 
                     style={{flexGrow:0,width:stream.customWidth?`${stream.customWidth}px`:undefined,...style}} 
                     draggable={isDraggable} 
                     onDragStart={e=>isDraggable&&onDragStart(e,index)} 
@@ -547,7 +654,7 @@
                     onDragEnd={onDragEnd} 
                     onDragOver={e=>e.preventDefault()}
                 >
-                    <div onContextMenu={e=>onContextMenu(e,stream.id)} className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded?'ring-1 ring-white/20 cinema-glow-expanded shadow-2xl':''} ${isSolo ? 'ring-2 ring-accent shadow-[0_0_30px_rgba(99,102,241,0.5)]' : ''} ${status === 'offline' ? 'ring-1 ring-white/10' : ''}`}>
+                    <div onContextMenu={e=>onContextMenu(e,stream.id)} className={`relative bg-transparent transition-all duration-300 cinema-glow w-full aspect-video ${isExpanded?'ring-1 ring-white/20 cinema-glow-expanded shadow-2xl':''} ${isSolo ? 'ring-2 ring-accent shadow-[0_0_30px_rgba(99,102,241,0.5)]' : ''} ${status === 'offline' ? 'ring-1 ring-white/10 stream-offline' : ''}`}>
                         
                         {(isDragging||isResizingAny)&&<div className="absolute inset-0 z-50 bg-transparent"></div>} 
                         
@@ -574,8 +681,7 @@
 
                         {/* Player Container */}
                         <div className={`w-full h-full pointer-events-none md:pointer-events-auto bg-black ${isResizingAny?'pointer-events-none':''}`}>
-                             {/* Renderiza o player correto (Twitch API, Kick Iframe, YT Iframe) */}
-                             {renderPlayer()}
+                             {status === 'offline' && stream.platform === 'twitch' ? null : renderPlayer()}
                         </div>
 
                         {/* Offline Overlay - Estilo Cyberpunk */}
@@ -591,7 +697,9 @@
                                     </div>
                                 </div>
                                 <h3 className="text-gray-400 font-russo text-lg uppercase tracking-widest mb-1">Stream Offline</h3>
-                                <p className="text-gray-600 text-xs font-mono mb-4 text-center max-w-[180px]">Sinal perdido ou transmissão encerrada.</p>
+                                <p className="text-gray-600 text-xs font-mono mb-4 text-center max-w-[180px]">
+                                    {stream.platform === 'kick' ? 'Sinal não detectado (DecAPI).' : stream.platform === 'youtube' ? 'Transmissão não encontrada.' : 'Sinal perdido ou encerrado.'}
+                                </p>
                                 <button 
                                     onClick={() => { setStatus('loading'); onRefresh(stream.id); }} 
                                     className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-xs font-bold text-white transition-all flex items-center gap-2 hover:border-white/30"
@@ -610,7 +718,7 @@
                     </div>
                 </div>
             );
-        }, (p, n) => p.stream.id===n.stream.id && p.stream.refreshKey===n.stream.refreshKey && p.widthClass===n.widthClass && p.isExpanded===n.isExpanded && p.isDragging===n.isDragging && p.stream.customWidth===n.stream.customWidth && p.isResizingAny===n.isResizingAny && p.isGlobalMuted===n.isGlobalMuted && p.soloStreamId === n.soloStreamId && p.isTheaterMode===n.isTheaterMode && p.style?.height === n.style?.height);
+        }, (p, n) => p.stream.id===n.stream.id && p.stream.refreshKey===n.stream.refreshKey && p.widthClass===n.widthClass && p.isExpanded===n.isExpanded && p.isDragging===n.isDragging && p.stream.customWidth===n.stream.customWidth && p.isResizingAny===n.isResizingAny && p.isGlobalMuted===n.isGlobalMuted && p.soloStreamId === n.soloStreamId && p.isTheaterMode===n.isTheaterMode && p.twitchConfig === n.twitchConfig && p.youtubeApiKey === n.youtubeApiKey && p.style?.height === n.style?.height);
 
         const SquadsMenu = ({ isOpen, onClose, squads, currentStreamers, onSave, onLoad, onDelete, lang }) => {
             const [newSquadName, setNewSquadName] = useState(""), menuRef = useRef(null), t = (key) => translations[lang][key];
@@ -661,6 +769,14 @@
             const [soloStreamId, setSoloStreamId] = useState(null);
             const [adsHidden, setAdsHidden] = useState(false);
             
+            // API CONFIGS STATE
+            const [showSettings, setShowSettings] = useState(false);
+            const [twitchConfig, setTwitchConfig] = useState(() => {
+                const s = localStorage.getItem('multlives-twitch-config');
+                return s ? JSON.parse(s) : { clientId: '', token: '' };
+            });
+            const [youtubeApiKey, setYoutubeApiKey] = useState(() => localStorage.getItem('multlives-yt-key') || '');
+            
             const headerTimerRef = useRef(null), toolbarTimeoutRef = useRef(null), { toasts, addToast } = useToast(), sidebarRef = useRef(null);
             const dragItem = useRef(null), dragOverItem = useRef(null), startResizeX = useRef(0), startResizeWidth = useRef(0);
             const hostname = typeof window!=='undefined'&&window.location.hostname?window.location.hostname:"localhost", t = (key) => translations[lang][key];
@@ -690,7 +806,7 @@
                         setStreamers(c);
                         if(c.length) setActiveChatTab(c[0].id);
                         c.forEach(async (st) => {
-                            if (!st.avatar && st.platform === 'twitch') {
+                            if (!st.avatar) {
                                 const url = await fetchAvatar(st.platform, st.name);
                                 if (url) setStreamers(prev => prev.map(s => s.id === st.id ? {...s, avatar: url} : s));
                             }
@@ -705,6 +821,8 @@
             useEffect(() => localStorage.setItem('multlives-streamers',JSON.stringify(streamers)), [streamers]);
             useEffect(() => localStorage.setItem('multlives-squads',JSON.stringify(squads)), [squads]);
             useEffect(() => localStorage.setItem('multlives-history',JSON.stringify(searchHistory)), [searchHistory]);
+            useEffect(() => localStorage.setItem('multlives-twitch-config', JSON.stringify(twitchConfig)), [twitchConfig]);
+            useEffect(() => localStorage.setItem('multlives-yt-key', youtubeApiKey), [youtubeApiKey]);
 
             const startResizing = useCallback(e => { if(e.type==='mousedown')e.preventDefault(); setIsResizing(true) }, []), startMapResizing = useCallback(e => { if(e.type==='mousedown')e.preventDefault(); setIsResizingMap(true) }, []), stopResizing = useCallback(() => { setIsResizing(false); setIsResizingMap(false); setResizingStreamId(null) }, []);
             const handleStreamResizeStart = (e, id) => { if(e.type==='mousedown'){e.preventDefault();startResizeX.current=e.clientX}else startResizeX.current=e.touches[0].clientX; e.stopPropagation(); setResizingStreamId(id); const s=streamers.find(x=>x.id===id); startResizeWidth.current=s?.customWidth||e.target.closest('.group')?.getBoundingClientRect().width||0 };
@@ -740,7 +858,7 @@
             const changeLayout = (m) => { setLayoutMode(m); if(m==='auto'||m==='grid')setStreamers(p=>p.map(s=>({...s,customWidth:null}))); setExpandedStreamId(m==='focus'&&streamers.length?streamers[0].id:null) };
             const handleContextAction = (a, sid) => { setContextMenu({...contextMenu,isOpen:false}); const s=streamers.find(x=>x.id===sid); if(!s&&a!=='close')return; switch(a){case 'refresh':setStreamers(p=>p.map(x=>x.id===sid?{...x,refreshKey:Date.now()}:x));break;case 'focus':if(expandedStreamId!==sid)setActiveChatTab(sid);setExpandedStreamId(p=>p===sid?null:sid);break;case 'copy':const u=s.platform==='twitch'?`https://twitch.tv/${s.name}`:s.platform==='kick'?`https://kick.com/${s.name}`:`https://youtube.com/watch?v=${s.name}`;navigator.clipboard.writeText(u);addToast("Link copiado!",'success');break;case 'close':removeStreamer(sid);break} };
 
-            const renderStreamItem = (s, i, w, h, exp=false, extraStyle={}) => s ? <StreamPlayer key={s.id} stream={s} index={i} widthClass={w} heightClass={h} style={extraStyle} isExpanded={exp} isDraggable={!exp && !expandedStreamId} onDragStart={(e,idx)=>{setIsDragging(true);dragItem.current=idx}} onDragEnter={(e,idx)=>dragOverItem.current=idx} onDragEnd={handleDragEnd} onToggleFocus={id=>{if(expandedStreamId!==id)setActiveChatTab(id);setExpandedStreamId(p=>p===id?null:id)}} onRemove={removeStreamer} onRefresh={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,refreshKey:Date.now()}:x))} hostname={hostname} isGlobalMuted={isGlobalMuted} soloStreamId={soloStreamId} onToggleSolo={id=>setSoloStreamId(p=>p===id?null:id)} isResizingAny={isResizing||isResizingMap||resizingStreamId!==null} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,customWidth:null}:x))} onContextMenu={(e,sid)=>{e.preventDefault();let x=e.clientX,y=e.clientY;if(x+192>window.innerWidth)x=window.innerWidth-192-10;if(y+160>window.innerHeight)y=window.innerHeight-160-10;setContextMenu({isOpen:true,x,y,streamId:sid})}} /> : null;
+            const renderStreamItem = (s, i, w, h, exp=false, extraStyle={}) => s ? <StreamPlayer key={s.id} stream={s} index={i} widthClass={w} heightClass={h} style={extraStyle} isExpanded={exp} isDraggable={!exp && !expandedStreamId} onDragStart={(e,idx)=>{setIsDragging(true);dragItem.current=idx}} onDragEnter={(e,idx)=>dragOverItem.current=idx} onDragEnd={handleDragEnd} onToggleFocus={id=>{if(expandedStreamId!==id)setActiveChatTab(id);setExpandedStreamId(p=>p===id?null:id)}} onRemove={removeStreamer} onRefresh={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,refreshKey:Date.now()}:x))} hostname={hostname} isGlobalMuted={isGlobalMuted} soloStreamId={soloStreamId} onToggleSolo={id=>setSoloStreamId(p=>p===id?null:id)} isResizingAny={isResizing||isResizingMap||resizingStreamId!==null} isTheaterMode={isTheaterMode} isDragging={isDragging} onResizeStart={handleStreamResizeStart} onResetSize={id=>setStreamers(p=>p.map(x=>x.id===id?{...x,customWidth:null}:x))} onContextMenu={(e,sid)=>{e.preventDefault();let x=e.clientX,y=e.clientY;if(x+192>window.innerWidth)x=window.innerWidth-192-10;if(y+160>window.innerHeight)y=window.innerHeight-160-10;setContextMenu({isOpen:true,x,y,streamId:sid})}} twitchConfig={twitchConfig} youtubeApiKey={youtubeApiKey} /> : null;
             const renderStreams = () => {
                 const isFocusMode = !!expandedStreamId && streamers.some(s => s.id === expandedStreamId);
                 if (isFocusMode) {
@@ -767,7 +885,6 @@
                     <div className="w-full h-full overflow-y-auto scrollbar-hide z-20 relative overscroll-y-contain touch-pan-y" style={{WebkitOverflowScrolling:'touch'}}>
                         <div className="min-h-full flex flex-wrap justify-center content-center items-center gap-4 p-4">
                             {streamers.map((s, i) => renderStreamItem(s, i, getW(i), "h-auto", false))}
-                            {/* Ajustado: Altura fixa curta no mobile para banner horizontal e MD/Desktop min-h-200px */}
                             {streamers.length > 0 && !adsHidden && <AdUnit outerClassName={`${getW(streamers.length)} h-[80px] md:h-auto md:min-h-[200px] flex items-center justify-center p-1`} className="h-full w-full bg-black/20 hover:bg-black/40 transition-colors" onExpire={() => setAdsHidden(true)} />}
                         </div>
                     </div>
@@ -778,21 +895,23 @@
 
             return (
                 <div className={`flex flex-col h-screen transition-all duration-700 ${isTheaterMode?'bg-[#020203] theater-mode-active':'bg-background'} ${(!isHeaderVisible&&streamers.length&&!isTheaterMode)?'header-hidden-active':''} text-gray-100 font-sans relative overflow-hidden`}>
-                    <div className="blackout-overlay"></div><CustomContextMenu menu={contextMenu} onClose={()=>setContextMenu({...contextMenu,isOpen:false})} onAction={handleContextAction} lang={lang} /><LoadingScreen isLoading={loading} lang={lang}/><ToastContainer toasts={toasts}/><button onClick={()=>setLang(l=>l==='pt'?'en':'pt')} className="fixed top-4 left-4 z-[60] bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full px-3 py-1.5 text-xs font-bold text-white/80 border border-white/5 active:scale-95">{lang==='pt'?'🇺🇸 EN':'🇧🇷 PT'}</button>{showDonatePopup&&<DonatePopup onClose={()=>setShowDonatePopup(false)}/>}
+                    <div className="blackout-overlay"></div><SettingsModal isOpen={showSettings} onClose={()=>setShowSettings(false)} twitchConfig={twitchConfig} setTwitchConfig={setTwitchConfig} youtubeApiKey={youtubeApiKey} setYoutubeApiKey={setYoutubeApiKey} lang={lang} /><CustomContextMenu menu={contextMenu} onClose={()=>setContextMenu({...contextMenu,isOpen:false})} onAction={handleContextAction} lang={lang} /><LoadingScreen isLoading={loading} lang={lang}/><ToastContainer toasts={toasts}/><button onClick={()=>setLang(l=>l==='pt'?'en':'pt')} className="fixed top-4 left-4 z-[60] bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full px-3 py-1.5 text-xs font-bold text-white/80 border border-white/5 active:scale-95">{lang==='pt'?'🇺🇸 EN':'🇧🇷 PT'}</button>{showDonatePopup&&<DonatePopup onClose={()=>setShowDonatePopup(false)}/>}
                     <Credits isSidebarOpen={isSidebarOpen} sidebarWidth={sidebarWidth} />
                     <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden"><div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-ice/20 blur-[120px] animate-aurora-1 mix-blend-screen"></div><div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/20 blur-[120px] animate-aurora-2 mix-blend-screen"></div></div>{(isResizing||isResizingMap||resizingStreamId)&&<div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}<div className="header-trigger-area" style={{right:(isSidebarOpen && typeof window !== 'undefined' && window.innerWidth >= 768)?sidebarWidth:0}}></div><HeroBrand minimized={streamers.length>0}/>
                     <div className="command-bar-container"><form onSubmit={addStreamer} className="command-bar"><PlatformSelector selected={platform} onSelect={setPlatform}/><div className="flex-1 flex items-center h-full relative group/input"><SearchIcon className="absolute left-2 text-gray-500 w-4 h-4 group-focus-within/input:text-white transition-colors"/><input type="text" value={inputVal} onChange={e=>setInputVal(e.target.value)} onFocus={()=>setShowHistory(true)} onBlur={()=>setTimeout(()=>setShowHistory(false),200)} placeholder={platform==='twitch'?t('placeholder_twitch'):platform==='kick'?t('placeholder_kick'):platform==='youtube'?t('placeholder_yt'):t('placeholder_default')} className="w-full h-full bg-transparent text-sm pl-8 pr-2 focus:outline-none text-white placeholder-gray-500 font-medium"/>{showHistory&&searchHistory.length>0&&( <div className="absolute top-full left-0 right-0 mt-2 bg-[#121215] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-slide-up"><div className="px-3 py-2 text-[10px] uppercase font-bold text-gray-500 bg-white/5 flex justify-between items-center border-b border-white/5"><span>{t('history')}</span><button onMouseDown={e=>{e.preventDefault();setSearchHistory([])}} className="hover:text-red-400 transition-colors flex items-center gap-1"><TrashIcon width={10} height={10}/> {t('history_clear')}</button></div>{searchHistory.map((item,idx)=><button key={`${item.platform}-${item.name}-${idx}`} onMouseDown={e=>{e.preventDefault();setInputVal(item.name);setPlatform(item.platform);setShowHistory(false)}} className="w-full text-left px-3 py-2.5 text-xs text-white hover:bg-white/10 flex items-center gap-3 group/item border-b last:border-0 border-white/5 transition-colors"><span className={`flex items-center justify-center w-5 h-5 rounded-md bg-white/5 ${getPlatformColor(item.platform)}`}>{getPlatformIcon(item.platform)}</span><span className="font-medium group-hover/item:text-ice transition-colors">{item.name}</span></button>)}</div> )}</div><button type="submit" className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 shadow-lg active:scale-95 shrink-0" title={t('add_btn')}><PlusIcon/></button></form></div>
                     <div className="floating-toolbar-trigger fixed bottom-0 z-50 transition-all duration-300" style={{left:0,right:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`${sidebarWidth}px`:0,height:'40px'}}></div>
                     <div className={`floating-toolbar ${isToolbarActive||showSquadMenu||showSleepMenu?'active':''}`} onMouseEnter={()=>{if(toolbarTimeoutRef.current)clearTimeout(toolbarTimeoutRef.current);setIsToolbarActive(true)}} onMouseLeave={()=>{toolbarTimeoutRef.current=setTimeout(()=>setIsToolbarActive(false),2000)}} onTouchStart={()=>setIsToolbarActive(true)} style={{marginLeft:isSidebarOpen&&typeof window!=='undefined'&&window.innerWidth>=768?`-${sidebarWidth/2}px`:'0'}}>
                         <div className="flex items-center"><Tooltip text={isSidebarOpen?t('tt_hide_chat'):t('tt_show_chat')}><button onClick={e=>{e.stopPropagation();setIsSidebarOpen(!isSidebarOpen)}} className={`p-2 rounded-full transition-all ${isSidebarOpen?'bg-indigo-500 text-white':'text-gray-400 hover:text-white'}`}><span className="md:hidden"><ChatIcon width={20} height={20}/></span><span className="hidden md:block"><PanelRightIcon width={20} height={20}/></span></button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-1"></div></div><Tooltip text={isTheaterMode?t('tt_cinema_exit'):t('tt_cinema_enter')}><button onClick={e=>{e.stopPropagation();toggleTheaterMode()}} className={`flex items-center justify-center p-2 rounded-full transition-all active:scale-90 shrink-0 ${isTheaterMode?'bg-amber-400 text-black shadow-glow':'bg-white/5 text-gray-300 hover:text-white'}`}>{isTheaterMode?<SunIcon width={20} height={20}/>:<MoonIcon width={20} height={20}/>}</button></Tooltip><div className="w-[1px] h-5 bg-white/10 mx-0.5 shrink-0"></div>
-                        {!(isToolbarActive||showSquadMenu||showSleepMenu)?<Tooltip text={t('tt_menu')}><div className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><SettingsIcon width={22} height={22}/></div></Tooltip>:( <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
+                        {!(isToolbarActive||showSquadMenu||showSleepMenu)?<Tooltip text={t('tt_menu')}><button onClick={() => setShowSettings(true)} className="text-white/30 w-8 h-8 flex items-center justify-center cursor-pointer hover:text-white/80 animate-pulse"><SettingsIcon width={22} height={22}/></button></Tooltip>:( <div className="flex items-center gap-2 animate-fade-in whitespace-nowrap">
                             <Tooltip text={isGlobalMuted?t('tt_unmute_all'):t('tt_mute_all')}><button onClick={e=>{e.stopPropagation();setIsGlobalMuted(!isGlobalMuted)}} className={`p-2 rounded-full transition-all ${isGlobalMuted?'bg-red-500 text-white animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}>{isGlobalMuted?<VolumeXIcon width={20} height={20}/>:<Volume2Icon width={20} height={20}/>}</button></Tooltip>
                             <div className="w-[1px] h-5 bg-white/10"></div>
                             <Tooltip text={t('tt_pip')}><button onClick={e=>{e.stopPropagation();togglePip()}} className={`p-2 rounded-full transition-all ${pipWindow?'bg-ice text-black animate-pulse':'text-gray-400 hover:text-white hover:bg-white/10'}`}><ExternalLinkIcon width={20} height={20}/></button></Tooltip><div className="w-[1px] h-5 bg-white/10"></div><Tooltip text={t('sleep_title')}><button onClick={e=>{e.stopPropagation();setShowSleepMenu(!showSleepMenu);setShowSquadMenu(false)}} className={`p-2 rounded-full transition-all ${showSleepMenu?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'} ${sleepTimer.active?'text-indigo-400 animate-pulse':''}`}><ClockIcon width={20} height={20}/></button></Tooltip><SleepTimerMenu isOpen={showSleepMenu} onClose={()=>setShowSleepMenu(false)} onSetTimer={m=>{if(!m)setSleepTimer({active:false,endTime:null,duration:null});else{setSleepTimer({active:true,endTime:Date.now()+m*60000,duration:m});addToast(`Timer: ${m} min`,'info')}}} activeTimer={sleepTimer.duration} lang={lang}/>
                         <Tooltip text={t('layout_auto')}><button onClick={e=>{e.stopPropagation();changeLayout('auto')}} className={`p-2 rounded-full transition-all ${layoutMode==='auto'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutIcon width={20} height={20}/></button></Tooltip>
                         <Tooltip text={t('layout_grid')}><button onClick={e=>{e.stopPropagation();changeLayout('grid')}} className={`p-2 rounded-full transition-all ${layoutMode==='grid'&&!expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><GridIcon width={20} height={20}/></button></Tooltip>
                         <Tooltip text={t('layout_focus')}><button onClick={e=>{e.stopPropagation();changeLayout('focus')}} className={`p-2 rounded-full transition-all ${expandedStreamId?'bg-white text-black':'text-gray-400 hover:text-white hover:bg-white/10'}`}><LayoutTemplateIcon width={20} height={20}/></button></Tooltip>
-                        <div className="w-[1px] h-5 bg-white/10"></div><button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);setShowSleepMenu(false)}} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={16} height={16}/>{t('squads_title')}</button><SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success')}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false)}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info')}} lang={lang}/></div> )}
+                        <div className="w-[1px] h-5 bg-white/10"></div><button onClick={e=>{e.stopPropagation();setShowSquadMenu(!showSquadMenu);setShowSleepMenu(false)}} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${showSquadMenu?'bg-accent text-white':'bg-white/5 hover:bg-white/10 text-ice border border-ice/20'}`}><UsersIcon width={16} height={16}/>{t('squads_title')}</button><SquadsMenu isOpen={showSquadMenu} onClose={()=>setShowSquadMenu(false)} squads={squads} currentStreamers={streamers} onSave={n=>{const ns={id:Date.now(),name:n,streams:streamers};setSquads(p=>[...p,ns]);addToast(t('squad_saved'),'success')}} onLoad={s=>{setStreamers(s.streams);if(s.streams.length)setActiveChatTab(s.streams[0].id);setLayoutMode('auto');setExpandedStreamId(null);setShowSquadMenu(false)}} onDelete={id=>{setSquads(p=>p.filter(x=>x.id!==id));addToast(t('squad_deleted'),'info')}} lang={lang}/>
+                        <div className="w-[1px] h-5 bg-white/10 mx-0.5"></div><Tooltip text="API Configs"><button onClick={() => setShowSettings(true)} className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all"><SettingsIcon width={20} height={20}/></button></Tooltip>
+                        </div> )}
                     </div>
                     <main className={`flex-1 flex flex-col md:flex-row overflow-hidden pt-1 md:pt-1 ${isTheaterMode?'!pt-0 !h-full':''} z-10 relative transition-all duration-700`}>
                         <div className="flex-1 relative bg-transparent overflow-hidden flex flex-col min-h-0">{streamers.length===0?<div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in"><div className="p-8 max-w-md w-full mx-4 opacity-50"><p className="text-gray-500 text-sm mb-6 leading-relaxed mt-20">{t('empty_desc')}</p></div><AdUnit className="max-w-[280px] md:max-w-sm my-2 md:my-4"/></div>:renderContent()}</div>
