@@ -6,7 +6,7 @@
     <meta name="referrer" content="no-referrer">
     
     <!-- SEO Principal -->
-    <title>MultLives - Multistream Player (Twitch, Kick, YouTube) | Nevethon</title>
+    <title>MultLives - Multistream Player (Twitch, Kick, YouTube)</title>
     <meta name="description" content="Assista Twitch, Kick e YouTube simultaneamente na mesma tela. Multistream player gratuito com chat integrado, modo cinema, PiP e suporte a squads. Acompanhe o Nevethon e seus streamers favoritos juntos.">
     <meta name="keywords" content="multistream, multiview, twitch, kick, youtube, assistir lives, chat integrado, nevethon, multlives, squad stream, player multiplo, ao vivo, stream, gamer">
     <meta name="author" content="KaozyKing">
@@ -70,6 +70,13 @@
         @media (max-width:768px){.command-bar-container{top:1rem;width:95%}.command-bar{height:3.5rem;padding:.25rem .5rem}}
         .hero-brand{padding-top:8rem;padding-bottom:2rem;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .8s cubic-bezier(.16,1,.3,1);position:relative;z-index:10;pointer-events:none;max-height:500px;opacity:1;overflow:visible}
         .hero-brand.minimized{padding-top:5.5rem;padding-bottom:0;transform:scale(.6);opacity:.9;margin-bottom:-1.5rem;height:auto}
+        @media (max-width: 768px) {
+            .hero-brand.minimized {
+                padding-top: 4rem; /* Menos padding no mobile */
+                margin-bottom: -1rem;
+                transform: scale(0.5);
+            }
+        }
         .brand-flip-container{perspective:1000px;width:280px;height:80px;position:relative} .brand-flipper{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,0,.2,1)}
         .brand-front,.brand-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;align-items:center;justify-content:center} .brand-back{transform:rotateY(180deg)} .flipped .brand-flipper{transform:rotateY(180deg)}
         .header-hidden-active .command-bar-container{transform:translateX(-50%) translateY(-150%);opacity:0;pointer-events:none}
@@ -670,7 +677,7 @@
             const renderContent = () => pipWindow ? createPortal(<div className="h-full w-full bg-[#09090b] flex flex-col">{renderStreams()}</div>, pipWindow.document.body) || <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in"><div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-pulse-glow"><ExternalLinkIcon width={48} height={48} className="text-ice" /></div><h2 className="text-2xl font-bold text-white mb-2">{t('pip_active')}</h2><p className="text-gray-400 max-w-sm mb-8">{t('pip_desc')}</p><button onClick={togglePip} className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-bold hover:scale-105">{t('pip_bring_back')}</button></div> : renderStreams();
 
             return (
-                <div className={`flex flex-col h-screen transition-all duration-700 ${isTheaterMode?'bg-[#020203] theater-mode-active':'bg-background'} ${(!isHeaderVisible&&streamers.length&&!isTheaterMode)?'header-hidden-active':''} text-gray-100 font-sans relative overflow-hidden`}>
+                <div className={`flex flex-col h-[100dvh] transition-all duration-700 ${isTheaterMode?'bg-[#020203] theater-mode-active':'bg-background'} ${(!isHeaderVisible&&streamers.length&&!isTheaterMode)?'header-hidden-active':''} text-gray-100 font-sans relative overflow-hidden`}>
                     <div className="blackout-overlay"></div><CustomContextMenu menu={contextMenu} onClose={()=>setContextMenu({...contextMenu,isOpen:false})} onAction={handleContextAction} lang={lang} /><LoadingScreen isLoading={loading} lang={lang}/><ToastContainer toasts={toasts}/><button onClick={()=>setLang(l=>l==='pt'?'en':'pt')} className="fixed top-4 left-4 z-[60] bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full px-3 py-1.5 text-xs font-bold text-white/80 border border-white/5 active:scale-95">{lang==='pt'?'🇺🇸 EN':'🇧🇷 PT'}</button>{showDonatePopup&&<DonatePopup onClose={()=>setShowDonatePopup(false)}/>}
                     <Credits isSidebarOpen={isSidebarOpen} sidebarWidth={sidebarWidth} />
                     <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden"><div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-ice/20 blur-[120px] animate-aurora-1 mix-blend-screen"></div><div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/20 blur-[120px] animate-aurora-2 mix-blend-screen"></div></div>{(isResizing||isResizingMap||resizingStreamId)&&<div className="fixed inset-0 z-50 cursor-col-resize select-none bg-transparent"></div>}<div className="header-trigger-area" style={{right:(isSidebarOpen && typeof window !== 'undefined' && window.innerWidth >= 768)?sidebarWidth:0}}></div><HeroBrand minimized={streamers.length>0}/>
@@ -696,6 +703,7 @@
                             fixed inset-0 w-full h-full bg-black/95 backdrop-blur-xl duration-300
                             md:relative md:h-full md:bg-transparent md:backdrop-blur-none md:transition-all md:duration-300 md:inset-auto
                             ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-10 md:opacity-0 md:overflow-hidden'}
+                            ${(!isSidebarOpen && typeof window !== 'undefined' && window.innerWidth < 768) ? 'invisible pointer-events-none' : ''}
                         `} style={{
                             width: typeof window !== 'undefined' && window.innerWidth >= 768 ? (isSidebarOpen ? `${sidebarWidth}px` : '0px') : '100%',
                             transitionDuration: isResizing ? '0s' : '300ms'
