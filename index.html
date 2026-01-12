@@ -72,9 +72,17 @@
         .hero-brand.minimized{padding-top:5.5rem;padding-bottom:0;transform:scale(.6);opacity:.9;margin-bottom:-1.5rem;height:auto}
         @media (max-width: 768px) {
             .hero-brand.minimized {
-                padding-top: 4rem; /* Menos padding no mobile */
-                margin-bottom: -1rem;
-                transform: scale(0.5);
+                padding-top: 1rem !important; /* Reduzido drasticamente no mobile */
+                margin-bottom: 0 !important;
+                transform: scale(0.6);
+                height: 80px !important; /* Altura fixa para evitar empurrar o conteúdo */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .hero-brand {
+                padding-top: 4rem;
+                min-height: 150px; /* Garante altura mínima quando não minimizado */
             }
         }
         .brand-flip-container{perspective:1000px;width:280px;height:80px;position:relative} .brand-flipper{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,0,.2,1)}
@@ -90,6 +98,14 @@
             /* Mobile Sidebar Overrides are now handled in the component class list for "fixed inset-0" */
             .sidebar-glass{border-left:none;border-top:none;box-shadow:none;}
             .theater-mode-active .sidebar-glass{display:flex !important;height:100% !important; background:rgba(0,0,0,0.95) !important}
+        }
+        /* Mobile Content Adjustment */
+        @media (max-width: 768px) {
+            .mobile-stream-container {
+                align-content: flex-start !important; /* Garante que os itens comecem do topo */
+                padding-top: 1rem !important;
+                padding-bottom: 5rem !important; /* Espaço para a toolbar */
+            }
         }
         .nevethon-text{color:#fff;font-weight:900;letter-spacing:.1em;position:relative;display:inline-block;text-shadow:0 0 10px rgba(165,243,252,.8),0 0 20px rgba(165,243,252,.5),0 0 40px rgba(99,102,241,.3);font-size:2.5rem;font-family:'Russo One',sans-serif;font-style:italic}
         .multlives-wrapper{display:flex;align-items:center;gap:1rem} .snow-particle{position:absolute;top:-10px;background:#fff;border-radius:50%;pointer-events:none;animation:iceFall 2s linear infinite;box-shadow:0 0 4px rgba(255,255,255,.9)}
@@ -660,7 +676,7 @@
 
                 return (
                     <div className="w-full h-full overflow-y-auto scrollbar-hide z-20 relative overscroll-y-contain touch-pan-y" style={{WebkitOverflowScrolling:'touch'}}>
-                        <div className="min-h-full flex flex-wrap justify-center content-center items-center gap-4 p-4">
+                        <div className="min-h-full flex flex-wrap content-start md:content-center justify-center items-center gap-4 p-4 mobile-stream-container">
                             {streamers.map((s, i) => renderStreamItem(s, i, getW(i), "h-auto", false))}
                             {streamers.length > 0 && !adsHidden && (
                                 <AdUnit 
