@@ -112,7 +112,77 @@ const LoadingScreen = ({ isLoading }) => {const [visible,setVisible]=useState(()
 const getPlatformColor=p=>p==='twitch'?'text-[#9146ff]':p==='kick'?'text-[#53fc18]':p==='youtube'?'text-[#ff0000]':'text-white';
 const getPlatformIcon=p=>p==='twitch'?<TwitchIcon/>:p==='kick'?<span className="text-[10px] font-bold">K</span>:p==='youtube'?<YoutubeIcon/>:null;
 const PlatformSelector=({selected,onSelect})=>(<div className="flex items-center gap-1 mr-2 bg-white/5 rounded-full p-1 border border-white/5">{[{id:'twitch',bg:'bg-[#9146ff]',icon:<TwitchIcon/>},{id:'kick',bg:'bg-[#53fc18]',icon:<span className="font-bold text-[10px]">K</span>},{id:'youtube',bg:'bg-[#ff0000]',icon:<YoutubeIcon/>}].map(p=><button key={p.id} type="button" onClick={()=>onSelect(p.id)} className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${selected===p.id?`${p.bg} text-black shadow-[0_0_10px_rgba(0,0,0,0.5)] scale-110`:'text-gray-500 hover:text-white hover:bg-white/10'}`} title={p.id}>{p.icon}</button>)}</div>);
-const TwitchEmbed=memo(({channel,isMuted,parentDomain})=>{const embedRef=useRef(null);const playerRef=useRef(null);useEffect(()=>{let interval;const initPlayer=()=>{if(!embedRef.current)return;if(!window.Twitch)return;clearInterval(interval);embedRef.current.innerHTML='';const parents=[parentDomain,"localhost","127.0.0.1",window.location.hostname,"multlives.vercel.app"].filter(h=>h&&h.trim()!=="").map(x=>x.split(':')[0]);const uniqueParents=[...new Set(parents)];const options={width:'100%',height:'100%',channel:channel,parent:uniqueParents,muted:isMuted,autoplay:true,layout:'video',theme:'dark'};try{const player=new window.Twitch.Player(embedRef.current,options);playerRef.current=player;player.addEventListener(window.Twitch.Player.READY,()=>{player.setMuted(isMuted)})}catch(e){console.error("Erro ao carregar Twitch Player:",e)}};if(window.Twitch){initPlayer()}else{interval=setInterval(initPlayer,500)}return ()=>clearInterval(interval)},[channel,parentDomain]);useEffect(()=>{if(playerRef.current){try{playerRef.current.setMuted(isMuted)}catch(e){}}},[isMuted]);return <div ref={embedRef} onContextMenu={e=>e.preventDefault()} className="w-full h-full bg-black"></div>});
+const TwitchEmbed=memo(({channel,isMuted,parentDomain})=>{
+    const embedRef=useRef(null);
+    const playerRef=useRef(null);
+    useEffect(()=>{
+        let interval;
+        const initPlayer=()=>{
+            if(!embedRef.current)return;
+            if(!window.Twitch)return;
+            clearInterval(interval);
+            embedRef.current.innerHTML='';
+            
+            // Lógica robusta para 'parent' - corrige o erro de classificação de conteúdo
+            let currentHost = window.location.hostname;
+            if (!currentHost) currentHost = "localhost";
+            
+            // Remove porta se houver
+            currentHost = currentHost.split(':')[0];
+
+            const parents = new Set([
+                currentHost,
+                "multlives.vercel.app",
+                "multlives.app", 
+                "localhost",
+                "127.0.0.1"
+            ]);
+            
+            if (parentDomain) {
+                parents.add(parentDomain.split(':')[0]);
+            }
+
+            // Garante que www e non-www estejam cobertos
+            if(currentHost.startsWith('www.')) parents.add(currentHost.replace('www.', ''));
+            else parents.add('www.' + currentHost);
+
+            const uniqueParents = Array.from(parents).filter(p => p && p.trim() !== "");
+
+            const options={
+                width:'100%',
+                height:'100%',
+                channel:channel,
+                parent:uniqueParents,
+                muted:isMuted,
+                autoplay:true,
+                layout:'video',
+                theme:'dark'
+            };
+            
+            try {
+                const player=new window.Twitch.Player(embedRef.current,options);
+                playerRef.current=player;
+                player.addEventListener(window.Twitch.Player.READY,()=>{
+                    if(isMuted) player.setMuted(true);
+                });
+            } catch(e) {
+                console.error("Twitch init error:", e);
+            }
+        };
+        
+        if(window.Twitch){initPlayer()}else{interval=setInterval(initPlayer,500)}
+        return ()=>{
+            clearInterval(interval);
+            if(embedRef.current) embedRef.current.innerHTML = '';
+        }
+    },[channel,parentDomain]);
+
+    useEffect(()=>{
+        if(playerRef.current){try{playerRef.current.setMuted(isMuted)}catch(e){}}
+    },[isMuted]);
+
+    return <div ref={embedRef} onContextMenu={e=>e.preventDefault()} className="w-full h-full bg-black"></div>
+});
 const StreamPlayer = memo(({ stream, index, widthClass, heightClass, style, isExpanded, isDraggable, onDragStart, onDragEnter, onDragEnd, onToggleFocus, onRemove, onRefresh, hostname, isGlobalMuted, soloStreamId, onToggleSolo, isResizingAny, isTheaterMode, isDragging, onResizeStart, onResetSize, onContextMenu, twitchConfig, youtubeApiKey, isPatrolActive, expandedStreamId, isDragOver }) => {
     // Simplificando o player: Removida a lógica de verificação de API. Sempre "online".
     const isMuted=isPatrolActive?stream.id!==expandedStreamId:(soloStreamId&&soloStreamId!==stream.id)||(!soloStreamId&&isGlobalMuted);const isSolo=soloStreamId===stream.id;
