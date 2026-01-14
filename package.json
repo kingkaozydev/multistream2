@@ -1,0 +1,27 @@
+{
+  "name": "multlives",
+  "version": "1.0.0",
+  "description": "MultLives - Watch multiple streams simultaneously. Support for Twitch, Kick, and YouTube.",
+  "type": "module",
+  "main": "index.html",
+  "scripts": {
+    "dev": "echo 'Development server - use vercel dev'",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "vercel deploy"
+  },
+  "keywords": [
+    "multlives",
+    "multistream",
+    "twitch",
+    "kick",
+    "youtube",
+    "streaming",
+    "multi-stream"
+  ],
+  "author": "KaozyKing",
+  "license": "PROPRIETARY",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kingkaozydev/multistream2.git"
+  }
+}
