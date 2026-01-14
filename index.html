@@ -232,7 +232,7 @@ useEffect(()=>{const h=(e)=>{const isOverSidebar=isSidebarOpen&&window.innerWidt
 // Fix for centering: removed min-h-[101%] and pb-40 from parent. Used min-h-full and content-center on inner div.
 return(
     <div className="w-full h-full overflow-y-auto scrollbar-hide z-20 relative overscroll-y-contain touch-pan-y" style={{WebkitOverflowScrolling:'touch'}}>
-        <div className="min-h-full w-full flex flex-wrap justify-center content-center items-center gap-3 md:gap-4 p-4 pb-32 transition-all duration-300">
+        <div className="min-h-full w-full flex flex-wrap justify-center content-center items-center gap-3 md:gap-4 px-4 py-20 md:py-24 transition-all duration-300">
             {streamers.map((s,i)=>renderStreamItem(s,i,getW(i),"h-auto",false))}
         </div>
     </div>
