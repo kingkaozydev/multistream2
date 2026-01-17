@@ -454,8 +454,7 @@ const handleToolbarMouseDown = (e) => {
 useEffect(() => {
     if (streamers.length === 1) {
         setShowVerticalAd(true);
-        const timer = setTimeout(() => setShowVerticalAd(false), 15000); // 15 segundos
-        return () => clearTimeout(timer);
+        // REMOVE TIMEOUT HERE - Fixed disappearing bug
     } else {
         setShowVerticalAd(false);
     }
@@ -514,7 +513,7 @@ useEffect(()=>{window.addEventListener("mousemove",resize);window.addEventListen
                 
                 <div className="w-full flex-1 flex items-center justify-center gap-4 relative min-h-0">
                     {/* Vertical Ad */}
-                    {showVerticalAd && <SweatcoinVerticalAd onClose={() => setShowVerticalAd(false)} />}
+                    {showVerticalAd && <SweatcoinVerticalAd onClose={() => {setShowVerticalAd(false); setShowAd(false);}} />}
                     
                     {/* Player Container - Added min-w-0 and overflow-hidden to force flex shrink */}
                     <div className="flex-1 h-full flex items-center justify-center min-w-0 overflow-hidden">
